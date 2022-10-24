@@ -102,11 +102,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AdapterView.OnIt
         nine = assignId(R.id.nine)
         c = assignId(R.id.c)
         dot = assignId(R.id.dot)
-
     }
 
     private fun assignId(id: Int): MaterialButton {
-        var btn:MaterialButton = findViewById(id)
+        val btn: MaterialButton = findViewById(id)
         btn.setOnClickListener(this)
         return btn
     }
@@ -127,8 +126,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AdapterView.OnIt
 
     private fun clearCalculator() {
         solutionTv.text = ""
-        resultTv.text = "0.0"
-        currencyTv.text = "0.0"
+        resultTv.text = resources.getString(R.string.init_value)
+        currencyTv.text = resources.getString(R.string.init_value)
     }
 
     private fun toTwoDecimals(num: String): String {
@@ -143,16 +142,16 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AdapterView.OnIt
         var dataToCalculate = solutionTv.text.toString()
 
         when (buttonText) {
-            "C" -> {
+            resources.getString(R.string.clear_button) -> {
                 clearCalculator()
                 return
             }
-            "=" -> {
+            resources.getString(R.string.equal_button) -> {
                 updateCurrency()
                 solutionTv.text = resultTv.text
                 return
             }
-            "X" -> {
+            resources.getString(R.string.delete_button) -> {
                 if (solutionTv.text != "") {
                     dataToCalculate = dataToCalculate.substring(0, dataToCalculate.length - 1)
                     if (dataToCalculate == "") {

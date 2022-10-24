@@ -39,7 +39,7 @@
             android:layout_width="270dp"
             android:layout_height="match_parent"
             android:id="@+id/result_tv"
-            android:text="0"
+            android:text="@string/init_value"
             android:textSize="32dp"
             android:textAlignment="textEnd"
             android:textColor="@color/purple_700"
@@ -64,7 +64,7 @@
             android:layout_width="270dp"
             android:layout_height="match_parent"
             android:id="@+id/currency_tv"
-            android:text="0"
+            android:text="@string/init_value"
             android:textSize="32dp"
             android:textAlignment="textEnd"
             android:textColor="@color/purple_700"
@@ -95,7 +95,7 @@
                 android:layout_margin="12dp"
                 android:id="@+id/x"
                 android:backgroundTint="@color/red"
-                android:text="X" />
+                android:text="@string/delete_button" />
 
 
             <com.google.android.material.button.MaterialButton
@@ -307,8 +307,9 @@
                 android:textColor="@color/white"
                 android:layout_margin="12dp"
                 android:id="@+id/c"
-                android:text="C"
+                android:text="@string/clear_button"
                 android:backgroundTint="@color/red"/>
+
             <com.google.android.material.button.MaterialButton
                 android:layout_width="72dp"
                 android:layout_height="72dp"
@@ -329,6 +330,7 @@
                 android:layout_margin="12dp"
                 android:id="@+id/dot"
                 android:text="." />
+
             <com.google.android.material.button.MaterialButton
                 android:layout_width="72dp"
                 android:layout_height="72dp"
@@ -339,7 +341,7 @@
                 android:layout_margin="12dp"
                 android:id="@+id/equals"
                 android:backgroundTint="@color/orange"
-                android:text="=" />
+                android:text="@string/equal_button" />
 
         </LinearLayout>
     </LinearLayout>
