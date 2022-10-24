@@ -20,7 +20,7 @@ class CurrencyCalculatorModel(
     var previousFrom: String = "EUR"
 
     init {
-        getUserPage(previousTo, previousFrom,previousAmount)
+        getUserPage(previousTo, previousFrom, previousAmount)
     }
 
     fun getUserPage(to: String, from: String, amount: Float) =  viewModelScope.launch {
