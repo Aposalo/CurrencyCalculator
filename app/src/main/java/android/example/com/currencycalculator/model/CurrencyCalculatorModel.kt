@@ -28,6 +28,8 @@ class CurrencyCalculatorModel(
             data.postValue(Resource.Loading())
             val response = repository.getFixerConvert(to, from, amount)
             previousAmount = amount
+            previousTo = to
+            previousFrom = from
             data.postValue(handlePageResponse(response))
         }
     }

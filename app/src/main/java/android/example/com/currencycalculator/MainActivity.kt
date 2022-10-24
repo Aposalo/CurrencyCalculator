@@ -131,9 +131,15 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AdapterView.OnIt
     }
 
     private fun toTwoDecimals(num: String): String {
-        val number:Float = num.toFloat()
-        val solution:Float = String.format("%.2f", number).toFloat()
-        return solution.toString()
+        val number: Float = num.toFloat()
+        val solution: Float = String.format("%.2f", number).toFloat()
+
+        var solutionString = solution.toString()
+
+        if (solutionString.endsWith(".0")) {
+            solutionString = solutionString.replace(".0", "")
+        }
+        return solutionString
     }
 
     override fun onClick(view: View) {
