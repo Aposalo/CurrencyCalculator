@@ -8,5 +8,5 @@ import retrofit2.http.Query
 interface CurrencyCalculatorApi {
 
     @GET("fixer/convert")
-    suspend fun getFixerConvert(@Query("to") to: String, @Query("from") from: String, @Query("amount") amount: Int): Response<Fixer>
+    suspend fun getFixerConvert(@Query("to") to: String, @Query("from") from: String, @Query("amount") amount: Float): Response<Fixer>
 }

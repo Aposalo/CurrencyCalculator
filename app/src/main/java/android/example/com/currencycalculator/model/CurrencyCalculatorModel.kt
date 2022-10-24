@@ -1,4 +1,4 @@
-package android.example.com.userleaderboard.model
+package android.example.com.currencycalculator.model
 
 import android.example.com.currencycalculator.api.dataclass.Fixer
 import android.example.com.currencycalculator.repository.CurrencyCalculatorRepository
@@ -13,27 +13,34 @@ class CurrencyCalculatorModel(
     private val repository: CurrencyCalculatorRepository
 ) : ViewModel() {
 
-    var pageResponse: Fixer? = null
-    val pageData: MutableLiveData<Resource<Fixer>> = MutableLiveData()
+    var response: Fixer? = null
+    val data: MutableLiveData<Resource<Fixer>> = MutableLiveData()
+    var previousAmount: Float = 0.0f
+    var previousTo: String = "GBP"
+    var previousFrom: String = "EUR"
 
     init {
-        getUserPage("GBP", "EUR",0)
+        getUserPage(previousTo, previousFrom,previousAmount)
     }
 
-    fun getUserPage(to: String, from: String, amount: Int) =  viewModelScope.launch {
-        pageData.postValue(Resource.Loading())
-        val response = repository.getFixerConvert(to, from, amount)
-        pageData.postValue(handlePageResponse(response))
+    fun getUserPage(to: String, from: String, amount: Float) =  viewModelScope.launch {
+        if (previousTo != to || previousFrom != from || previousAmount != amount) {
+            data.postValue(Resource.Loading())
+            val response = repository.getFixerConvert(to, from, amount)
+            previousAmount = amount
+            data.postValue(handlePageResponse(response))
+        }
     }
 
     private fun handlePageResponse(response: Response<Fixer>) : Resource<Fixer> {
+
         if (response.isSuccessful) {
             response.body()?.let { resultResponse ->
-                pageResponse = resultResponse
+                this.response = resultResponse
                 return Resource.Success(resultResponse)
             }
         }
-        var msg = response.message()
+        val msg = response.message()
         return Resource.Error(msg)
     }
 }

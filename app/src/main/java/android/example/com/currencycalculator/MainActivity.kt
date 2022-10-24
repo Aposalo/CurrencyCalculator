@@ -2,7 +2,7 @@ package android.example.com.currencycalculator
 
 import android.example.com.currencycalculator.repository.CurrencyCalculatorRepository
 import android.example.com.currencycalculator.util.Resource
-import android.example.com.userleaderboard.model.CurrencyCalculatorModel
+import android.example.com.currencycalculator.model.CurrencyCalculatorModel
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -31,26 +31,26 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AdapterView.OnIt
     private lateinit var resultSpinner: Spinner
     private lateinit var currencySpinner: Spinner
 
-    var x: MaterialButton? = null
-    var openBracket: MaterialButton? = null
-    var closeBracket: MaterialButton? = null
-    var divide: MaterialButton? = null
-    var multiply: MaterialButton? = null
-    var plus: MaterialButton? = null
-    var minus: MaterialButton? = null
-    var equals: MaterialButton? = null
-    var zero: MaterialButton? = null
-    var one: MaterialButton? = null
-    var two: MaterialButton? = null
-    var three: MaterialButton? = null
-    var four: MaterialButton? = null
-    var five: MaterialButton? = null
-    var six: MaterialButton? = null
-    var seven: MaterialButton? = null
-    var eight: MaterialButton? = null
-    var nine: MaterialButton? = null
-    var c: MaterialButton? = null
-    var dot: MaterialButton? = null
+    private lateinit var x: MaterialButton
+    private lateinit var openBracket: MaterialButton
+    private lateinit var closeBracket: MaterialButton
+    private lateinit var divide: MaterialButton
+    private lateinit var multiply: MaterialButton
+    private lateinit var plus: MaterialButton
+    private lateinit var minus: MaterialButton
+    private lateinit var equals: MaterialButton
+    private lateinit var zero: MaterialButton
+    private lateinit var one: MaterialButton
+    private lateinit var two: MaterialButton
+    private lateinit var three: MaterialButton
+    private lateinit var four: MaterialButton
+    private lateinit var five: MaterialButton
+    private lateinit var six: MaterialButton
+    private lateinit var seven: MaterialButton
+    private lateinit var eight: MaterialButton
+    private lateinit var nine: MaterialButton
+    private lateinit var c: MaterialButton
+    private lateinit var dot: MaterialButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,57 +64,51 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AdapterView.OnIt
 
         val repository = CurrencyCalculatorRepository()
         viewModel = CurrencyCalculatorModel(repository)
-        viewModel.pageData.observe(this) { response ->
+        viewModel.data.observe(this) { response ->
             when (response) {
                 is Resource.Success -> {
                     response.data?.let { fixerResponse ->
-                        currencyTv.text = fixerResponse.result.toString()
-                        //userLeaderboardAdapter.differ.submitList(viewModel.getItemModels())
-                        //isLastPage = viewModel.currentPageNumber == fixerResponse.totalPages
+                        currencyTv.text = toTwoDecimals(fixerResponse.result.toString())
                     }
                 }
                 is Resource.Error -> {
-                    //hideProgressBar()
-
                     response.message?.let { message ->
-                        currencyTv.text = message
                         Log.e(TAG, "An error occured: $message")
                     }
                 }
                 is Resource.Loading -> {
                     currencyTv.text = "..."
-                    //showProgressBar()
                 }
             }
         }
 
-        assignId(x, R.id.x)
-        assignId(openBracket, R.id.open_bracket)
-        assignId(closeBracket, R.id.close_bracket)
-        assignId(divide, R.id.divide)
-        assignId(multiply, R.id.multiply)
-        assignId(plus, R.id.plus)
-        assignId(minus, R.id.minus)
-        assignId(equals, R.id.equals)
-        assignId(zero, R.id.zero)
-        assignId(one, R.id.one)
-        assignId(two, R.id.two)
-        assignId(three, R.id.three)
-        assignId(four, R.id.four)
-        assignId(five, R.id.five)
-        assignId(six, R.id.six)
-        assignId(seven, R.id.seven)
-        assignId(eight, R.id.eight)
-        assignId(nine, R.id.nine)
-        assignId(c, R.id.c)
-        assignId(dot, R.id.dot)
+        x = assignId(R.id.x)
+        openBracket = assignId(R.id.open_bracket)
+        closeBracket = assignId(R.id.close_bracket)
+        divide = assignId(R.id.divide)
+        multiply = assignId(R.id.multiply)
+        plus = assignId(R.id.plus)
+        minus = assignId(R.id.minus)
+        equals = assignId(R.id.equals)
+        zero = assignId(R.id.zero)
+        one = assignId(R.id.one)
+        two = assignId(R.id.two)
+        three = assignId(R.id.three)
+        four = assignId(R.id.four)
+        five = assignId(R.id.five)
+        six = assignId(R.id.six)
+        seven = assignId(R.id.seven)
+        eight = assignId(R.id.eight)
+        nine = assignId(R.id.nine)
+        c = assignId(R.id.c)
+        dot = assignId(R.id.dot)
 
     }
 
-    private fun assignId(btn: MaterialButton?, id: Int) {
-        var btn = btn
-        btn = findViewById(id)
+    private fun assignId(id: Int): MaterialButton {
+        var btn:MaterialButton = findViewById(id)
         btn.setOnClickListener(this)
+        return btn
     }
 
     private fun setSpinner(id: Int, selection : Int): Spinner {
@@ -125,10 +119,22 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AdapterView.OnIt
         return spinner
     }
 
+    private fun updateCurrency() {
+        val fromSelectedItem = currencyArray[resultSpinner.selectedItemId.toInt()]
+        val toSelectedItem = currencyArray[currencySpinner.selectedItemId.toInt()]
+        viewModel.getUserPage(toSelectedItem, fromSelectedItem, resultTv.text.toString().toFloat())
+    }
+
     private fun clearCalculator() {
         solutionTv.text = ""
-        resultTv.text = "0"
-        currencyTv.text = "0"
+        resultTv.text = "0.0"
+        currencyTv.text = "0.0"
+    }
+
+    private fun toTwoDecimals(num: String): String {
+        val number:Float = num.toFloat()
+        val solution:Float = String.format("%.2f", number).toFloat()
+        return solution.toString()
     }
 
     override fun onClick(view: View) {
@@ -142,9 +148,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AdapterView.OnIt
                 return
             }
             "=" -> {
-                val fromSelectedItem = currencyArray[resultSpinner.selectedItemId.toInt()]
-                val toSelectedItem = currencyArray[currencySpinner.selectedItemId.toInt()]
-                viewModel.getUserPage(toSelectedItem, fromSelectedItem, resultTv.text.toString().toInt())
+                updateCurrency()
                 solutionTv.text = resultTv.text
                 return
             }
@@ -171,38 +175,25 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AdapterView.OnIt
 
         if (finalResult != "Err") {
             resultTv.text = finalResult
-            val fromSelectedItem = currencyArray[resultSpinner.selectedItemId.toInt()]
-            val toSelectedItem = currencyArray[currencySpinner.selectedItemId.toInt()]
-            viewModel.getUserPage(toSelectedItem, fromSelectedItem,resultTv.text.toString().toInt())
+            updateCurrency()
         }
-
     }
 
     private fun getResult(data: String?): String {
         return try {
-
             val context: Context = Context.enter()
             context.optimizationLevel = -1
-
             val scriptable: Scriptable = context.initStandardObjects()
-
-            var finalResult: String =
-                context.evaluateString(scriptable, data, "Javascript", 1, null).toString()
-
-            if (finalResult.endsWith(".0")) {
-                finalResult = finalResult.replace(".0", "")
-            }
-            finalResult
-
-        } catch (e: Exception) {
+            val res = context.evaluateString(scriptable, data, "Javascript", 1, null).toString()
+            toTwoDecimals(res)
+        }
+        catch (e: Exception) {
             "Err"
         }
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        val fromSelectedItem = currencyArray[resultSpinner.selectedItemId.toInt()]
-        val toSelectedItem = currencyArray[currencySpinner.selectedItemId.toInt()]
-        viewModel.getUserPage(toSelectedItem, fromSelectedItem, resultTv.text.toString().toInt())
+        updateCurrency()
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
