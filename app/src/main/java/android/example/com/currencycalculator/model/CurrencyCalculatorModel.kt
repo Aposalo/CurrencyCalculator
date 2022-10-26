@@ -34,6 +34,10 @@ class CurrencyCalculatorModel(
         }
     }
 
+    fun clearCalculator() {
+        previousAmount = 0.0f
+    }
+
     private fun handlePageResponse(response: Response<Fixer>) : Resource<Fixer> {
 
         if (response.isSuccessful) {

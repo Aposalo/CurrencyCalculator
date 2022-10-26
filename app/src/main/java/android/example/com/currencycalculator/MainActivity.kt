@@ -77,7 +77,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AdapterView.OnIt
                     }
                 }
                 is Resource.Loading -> {
-                    currencyTv.text = "..."
+                    currencyTv.text = resources.getString(R.string.loader)
                 }
             }
         }
@@ -118,16 +118,17 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AdapterView.OnIt
         return spinner
     }
 
-    private fun updateCurrency() {
+    private fun updateCurrency(result: String) {
         val fromSelectedItem = currencyArray[resultSpinner.selectedItemId.toInt()]
         val toSelectedItem = currencyArray[currencySpinner.selectedItemId.toInt()]
-        viewModel.getUserPage(toSelectedItem, fromSelectedItem, resultTv.text.toString().toFloat())
+        viewModel.getUserPage(toSelectedItem, fromSelectedItem, result.toFloat())
     }
 
     private fun clearCalculator() {
         solutionTv.text = ""
         resultTv.text = resources.getString(R.string.init_value)
         currencyTv.text = resources.getString(R.string.init_value)
+        viewModel.clearCalculator()
     }
 
     private fun toTwoDecimals(num: String): String {
@@ -153,7 +154,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AdapterView.OnIt
                 return
             }
             resources.getString(R.string.equal_button) -> {
-                updateCurrency()
+                updateCurrency(resultTv.text.toString())
                 solutionTv.text = resultTv.text
                 return
             }
@@ -180,7 +181,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AdapterView.OnIt
 
         if (finalResult != "Err") {
             resultTv.text = finalResult
-            updateCurrency()
+            updateCurrency(finalResult)
         }
     }
 
@@ -198,7 +199,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AdapterView.OnIt
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        updateCurrency()
+        updateCurrency(resultTv.text.toString())
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
