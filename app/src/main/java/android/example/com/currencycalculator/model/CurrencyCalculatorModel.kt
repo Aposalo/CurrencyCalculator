@@ -29,14 +29,14 @@ class CurrencyCalculatorModel(
             previousAmount = amount
             previousTo = to
             previousFrom = from
-            if (amount == 0.0f)
+            if (amount <= 0.0f)
                 data.postValue(handlePageResponse(null))
             val response = repository.getFixerConvert(to, from, amount)
             data.postValue(handlePageResponse(response))
         }
     }
 
-    fun isCurrentPage(): Boolean {
+    fun isCurrentAmount(): Boolean {
         return response?.query?.amount == previousAmount
     }
 
