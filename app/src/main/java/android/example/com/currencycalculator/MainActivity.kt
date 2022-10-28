@@ -1,9 +1,11 @@
 package android.example.com.currencycalculator
 
+import android.example.com.currencycalculator.model.CurrencyCalculatorModel
 import android.example.com.currencycalculator.repository.CurrencyCalculatorRepository
 import android.example.com.currencycalculator.util.Resource
-import android.example.com.currencycalculator.model.CurrencyCalculatorModel
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
@@ -67,9 +69,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AdapterView.OnIt
         viewModel.data.observe(this) { response ->
             when (response) {
                 is Resource.Success -> {
-                    response.data?.let { fixerResponse ->
-                        currencyTv.text = toTwoDecimals(fixerResponse.result.toString())
-                    }
+                    if (response.data == null)
+                        currencyTv.text = resources.getString(R.string.init_value)
+                    else if (viewModel.isCurrentPage())
+                        currencyTv.text = toTwoDecimals(response.data.result.toString())
                 }
                 is Resource.Error -> {
                     response.message?.let { message ->
@@ -81,6 +84,22 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AdapterView.OnIt
                 }
             }
         }
+
+        resultTv.addTextChangedListener(object : TextWatcher {
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+            }
+
+            override fun beforeTextChanged(
+                s: CharSequence, start: Int, count: Int,
+                after: Int
+            ) {
+            }
+
+            override fun afterTextChanged(s: Editable) {
+                val textChanged = s.toString()
+                updateCurrency(textChanged)
+            }
+        })
 
         x = assignId(R.id.x)
         openBracket = assignId(R.id.open_bracket)
@@ -127,8 +146,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AdapterView.OnIt
     private fun clearCalculator() {
         solutionTv.text = ""
         resultTv.text = resources.getString(R.string.init_value)
-        currencyTv.text = resources.getString(R.string.init_value)
-        viewModel.clearCalculator()
     }
 
     private fun toTwoDecimals(num: String): String {
@@ -154,7 +171,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AdapterView.OnIt
                 return
             }
             resources.getString(R.string.equal_button) -> {
-                updateCurrency(resultTv.text.toString())
                 solutionTv.text = resultTv.text
                 return
             }
@@ -181,16 +197,20 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AdapterView.OnIt
 
         if (finalResult != "Err") {
             resultTv.text = finalResult
-            updateCurrency(finalResult)
         }
     }
 
-    private fun getResult(data: String?): String {
+    private fun getResult(data: String): String {
         return try {
+            var newData = data
+
+            while (newData.startsWith("0") && newData.length > 1)
+                newData = newData.substring(1)
+
             val context: Context = Context.enter()
             context.optimizationLevel = -1
             val scriptable: Scriptable = context.initStandardObjects()
-            val res = context.evaluateString(scriptable, data, "Javascript", 1, null).toString()
+            val res = context.evaluateString(scriptable, newData, "Javascript", 1, null).toString()
             toTwoDecimals(res)
         }
         catch (e: Exception) {
