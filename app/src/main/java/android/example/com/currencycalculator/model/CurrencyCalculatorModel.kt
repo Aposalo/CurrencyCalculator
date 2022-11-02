@@ -24,20 +24,22 @@ class CurrencyCalculatorModel(
     }
 
     fun getUserPage(to: String, from: String, amount: Float) =  viewModelScope.launch {
-        if (previousTo != to || previousFrom != from || previousAmount != amount) {
+        previousAmount = amount
+        previousTo = to
+        previousFrom = from
+        if (amount <= 0.0f)
+            data.postValue(handlePageResponse(null))
+        else {
             data.postValue(Resource.Loading())
-            previousAmount = amount
-            previousTo = to
-            previousFrom = from
-            if (amount <= 0.0f)
-                data.postValue(handlePageResponse(null))
             val response = repository.getFixerConvert(to, from, amount)
             data.postValue(handlePageResponse(response))
         }
     }
 
-    fun isCurrentAmount(): Boolean {
+    fun isCurrentResponse(): Boolean {
         return response?.query?.amount == previousAmount
+                && response?.query?.to == previousTo
+                && response?.query?.from == previousFrom
     }
 
     private fun handlePageResponse(response: Response<Fixer>?) : Resource<Fixer> {

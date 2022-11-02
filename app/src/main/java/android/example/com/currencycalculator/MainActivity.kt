@@ -71,7 +71,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AdapterView.OnIt
                 is Resource.Success -> {
                     if (response.data == null)
                         currencyTv.text = resources.getString(R.string.init_value)
-                    else if (viewModel.isCurrentAmount())
+
+                    else if (viewModel.isCurrentResponse())
                         currencyTv.text = toTwoDecimals(response.data.result.toString())
                 }
                 is Resource.Error -> {
