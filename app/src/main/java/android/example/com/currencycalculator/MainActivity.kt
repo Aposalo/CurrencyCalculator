@@ -65,15 +65,18 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AdapterView.OnIt
         currencySpinner = setSpinner(R.id.currency_spinner, 0)
 
         val repository = CurrencyCalculatorRepository()
-        viewModel = CurrencyCalculatorModel(repository)
+        val initAmount = resources.getString(R.string.init_value).toFloat()
+        val initTo = resources.getString(R.string.GBP)
+        val initFrom = resources.getString(R.string.EUR)
+        viewModel = CurrencyCalculatorModel(repository, initAmount, initTo, initFrom)
         viewModel.data.observe(this) { response ->
             when (response) {
                 is Resource.Success -> {
-                    if (response.data == null)
-                        currencyTv.text = resources.getString(R.string.init_value)
-
-                    else if (viewModel.isCurrentResponse())
-                        currencyTv.text = toTwoDecimals(response.data.result.toString())
+                    (if (response.data == null)
+                        resources.getString(R.string.init_value)
+                    else
+                        toTwoDecimals(response.data.result.toString())).
+                    also { currencyTv.text = it }
                 }
                 is Resource.Error -> {
                     response.message?.let { message ->
@@ -125,13 +128,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AdapterView.OnIt
     }
 
     private fun assignId(id: Int): MaterialButton {
-        val btn: MaterialButton = findViewById(id)
+        val btn = findViewById<MaterialButton>(id)
         btn.setOnClickListener(this)
         return btn
     }
 
     private fun setSpinner(id: Int, selection : Int): Spinner {
-        val spinner : Spinner = findViewById(id)
+        val spinner = findViewById<Spinner>(id)
         spinner.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, currencyArray)
         spinner.onItemSelectedListener = this;
         spinner.setSelection(selection)
@@ -150,8 +153,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AdapterView.OnIt
     }
 
     private fun toTwoDecimals(num: String): String {
-        val number: Float = num.toFloat()
-        val solution: Float = String.format("%.2f", number).toFloat()
+        val number = num.toFloat()
+        val solution = String.format("%.2f", number).toFloat()
 
         var solutionString = solution.toString()
 
@@ -208,7 +211,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AdapterView.OnIt
             while (newData.startsWith("0") && newData.length > 1)
                 newData = newData.substring(1)
 
-            val context: Context = Context.enter()
+            val context = Context.enter()
             context.optimizationLevel = -1
             val scriptable: Scriptable = context.initStandardObjects()
             val res = context.evaluateString(scriptable, newData, "Javascript", 1, null).toString()
