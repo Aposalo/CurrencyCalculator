@@ -1,5 +1,6 @@
 package android.example.com.currencycalculator
 
+import android.example.com.currencycalculator.databinding.ActivityMainBinding
 import android.example.com.currencycalculator.model.CurrencyCalculatorModel
 import android.example.com.currencycalculator.repository.CurrencyCalculatorRepository
 import android.example.com.currencycalculator.util.Extensions.Companion.getCalculation
@@ -13,10 +14,8 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.button.MaterialButton
-
 
 const val TAG = "MainActivity"
 
@@ -26,41 +25,17 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AdapterView.OnIt
 
     private lateinit var viewModel: CurrencyCalculatorModel
 
-    private lateinit var resultTv: TextView
-    private lateinit var solutionTv: TextView
-    private lateinit var currencyTv: TextView
-
     private lateinit var resultSpinner: Spinner
     private lateinit var currencySpinner: Spinner
 
-    private lateinit var x: MaterialButton
-    private lateinit var openBracket: MaterialButton
-    private lateinit var closeBracket: MaterialButton
-    private lateinit var divide: MaterialButton
-    private lateinit var multiply: MaterialButton
-    private lateinit var plus: MaterialButton
-    private lateinit var minus: MaterialButton
-    private lateinit var equals: MaterialButton
-    private lateinit var zero: MaterialButton
-    private lateinit var one: MaterialButton
-    private lateinit var two: MaterialButton
-    private lateinit var three: MaterialButton
-    private lateinit var four: MaterialButton
-    private lateinit var five: MaterialButton
-    private lateinit var six: MaterialButton
-    private lateinit var seven: MaterialButton
-    private lateinit var eight: MaterialButton
-    private lateinit var nine: MaterialButton
-    private lateinit var c: MaterialButton
-    private lateinit var dot: MaterialButton
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+
         currencyArray= resources.getStringArray(R.array.currency_array)
-        resultTv = findViewById(R.id.result_tv)
-        solutionTv = findViewById(R.id.solution_tv)
-        currencyTv = findViewById(R.id.currency_tv)
         resultSpinner = setSpinner(R.id.result_spinner, 1)
         currencySpinner = setSpinner(R.id.currency_spinner, 0)
 
@@ -76,7 +51,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AdapterView.OnIt
                         resources.getString(R.string.init_value)
                     else
                         response.data.result.toString().toTwoDecimals()).
-                    also { currencyTv.text = it }
+                    also { binding.currencyTv.text = it }
                 }
                 is Resource.Error -> {
                     response.message?.let { message ->
@@ -84,12 +59,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AdapterView.OnIt
                     }
                 }
                 is Resource.Loading -> {
-                    currencyTv.text = resources.getString(R.string.loader)
+                    binding.currencyTv.text = resources.getString(R.string.loader)
                 }
             }
         }
 
-        resultTv.addTextChangedListener(object : TextWatcher {
+        binding.resultTv.addTextChangedListener(object : TextWatcher {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
             }
 
@@ -100,37 +75,30 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AdapterView.OnIt
             }
 
             override fun afterTextChanged(s: Editable) {
-                val textChanged = s.toString()
-                updateCurrency(textChanged)
+                updateCurrency(s.toString())
             }
         })
 
-        x = assignId(R.id.x)
-        openBracket = assignId(R.id.open_bracket)
-        closeBracket = assignId(R.id.close_bracket)
-        divide = assignId(R.id.divide)
-        multiply = assignId(R.id.multiply)
-        plus = assignId(R.id.plus)
-        minus = assignId(R.id.minus)
-        equals = assignId(R.id.equals)
-        zero = assignId(R.id.zero)
-        one = assignId(R.id.one)
-        two = assignId(R.id.two)
-        three = assignId(R.id.three)
-        four = assignId(R.id.four)
-        five = assignId(R.id.five)
-        six = assignId(R.id.six)
-        seven = assignId(R.id.seven)
-        eight = assignId(R.id.eight)
-        nine = assignId(R.id.nine)
-        c = assignId(R.id.c)
-        dot = assignId(R.id.dot)
-    }
-
-    private fun assignId(id: Int): MaterialButton {
-        val btn = findViewById<MaterialButton>(id)
-        btn.setOnClickListener(this)
-        return btn
+        binding.x.setOnClickListener(this)
+        binding.openBracket.setOnClickListener(this)
+        binding.closeBracket.setOnClickListener(this)
+        binding.divide.setOnClickListener(this)
+        binding.multiply.setOnClickListener(this)
+        binding.plus.setOnClickListener(this)
+        binding.minus.setOnClickListener(this)
+        binding.equals.setOnClickListener(this)
+        binding.zero.setOnClickListener(this)
+        binding.one.setOnClickListener(this)
+        binding.two.setOnClickListener(this)
+        binding.three.setOnClickListener(this)
+        binding.four.setOnClickListener(this)
+        binding.five.setOnClickListener(this)
+        binding.six.setOnClickListener(this)
+        binding.seven.setOnClickListener(this)
+        binding.eight.setOnClickListener(this)
+        binding.nine.setOnClickListener(this)
+        binding.c.setOnClickListener(this)
+        binding.dot.setOnClickListener(this)
     }
 
     private fun setSpinner(id: Int, selection : Int): Spinner {
@@ -148,14 +116,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AdapterView.OnIt
     }
 
     private fun clearCalculator() {
-        solutionTv.text = ""
-        resultTv.text = resources.getString(R.string.init_value)
+        binding.solutionTv.text = ""
+        binding.resultTv.text = resources.getString(R.string.init_value)
     }
 
     override fun onClick(view: View) {
         val button = view as MaterialButton
         val buttonText = button.text.toString()
-        var dataToCalculate = solutionTv.text.toString()
+        var dataToCalculate = binding.solutionTv.text.toString()
 
         when (buttonText) {
             resources.getString(R.string.clear_button) -> {
@@ -163,11 +131,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AdapterView.OnIt
                 return
             }
             resources.getString(R.string.equal_button) -> {
-                solutionTv.text = resultTv.text
+                binding.solutionTv.text = binding.resultTv.text
                 return
             }
             resources.getString(R.string.delete_button) -> {
-                if (solutionTv.text != "") {
+                if (binding.solutionTv.text != "") {
                     dataToCalculate = dataToCalculate.substring(0, dataToCalculate.length - 1)
                     if (dataToCalculate == "") {
                         clearCalculator()
@@ -183,17 +151,17 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AdapterView.OnIt
                 dataToCalculate += buttonText
             }
         }
-        solutionTv.text = dataToCalculate
+        binding.solutionTv.text = dataToCalculate
 
         val finalResult = dataToCalculate.getCalculation()
 
         if (finalResult != "Err") {
-            resultTv.text = finalResult
+            binding.resultTv.text = finalResult
         }
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        updateCurrency(resultTv.text.toString())
+        updateCurrency(binding.resultTv.text.toString())
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
