@@ -2,6 +2,8 @@ package android.example.com.currencycalculator
 
 import android.example.com.currencycalculator.model.CurrencyCalculatorModel
 import android.example.com.currencycalculator.repository.CurrencyCalculatorRepository
+import android.example.com.currencycalculator.util.Extensions.Companion.getCalculation
+import android.example.com.currencycalculator.util.Extensions.Companion.toTwoDecimals
 import android.example.com.currencycalculator.util.Resource
 import android.os.Bundle
 import android.text.Editable
@@ -14,8 +16,6 @@ import android.widget.Spinner
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.button.MaterialButton
-import org.mozilla.javascript.Context
-import org.mozilla.javascript.Scriptable
 
 
 const val TAG = "MainActivity"
@@ -75,12 +75,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AdapterView.OnIt
                     (if (response.data == null)
                         resources.getString(R.string.init_value)
                     else
-                        toTwoDecimals(response.data.result.toString())).
+                        response.data.result.toString().toTwoDecimals()).
                     also { currencyTv.text = it }
                 }
                 is Resource.Error -> {
                     response.message?.let { message ->
-                        Log.e(TAG, "An error occured: $message")
+                        Log.e(TAG, "An error occurred: $message")
                     }
                 }
                 is Resource.Loading -> {
@@ -136,7 +136,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AdapterView.OnIt
     private fun setSpinner(id: Int, selection : Int): Spinner {
         val spinner = findViewById<Spinner>(id)
         spinner.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, currencyArray)
-        spinner.onItemSelectedListener = this;
+        spinner.onItemSelectedListener = this
         spinner.setSelection(selection)
         return spinner
     }
@@ -150,18 +150,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AdapterView.OnIt
     private fun clearCalculator() {
         solutionTv.text = ""
         resultTv.text = resources.getString(R.string.init_value)
-    }
-
-    private fun toTwoDecimals(num: String): String {
-        val number = num.toFloat()
-        val solution = String.format("%.2f", number).toFloat()
-
-        var solutionString = solution.toString()
-
-        if (solutionString.endsWith(".0")) {
-            solutionString = solutionString.replace(".0", "")
-        }
-        return solutionString
     }
 
     override fun onClick(view: View) {
@@ -197,28 +185,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AdapterView.OnIt
         }
         solutionTv.text = dataToCalculate
 
-        val finalResult = getResult(dataToCalculate)
+        val finalResult = dataToCalculate.getCalculation()
 
         if (finalResult != "Err") {
             resultTv.text = finalResult
-        }
-    }
-
-    private fun getResult(data: String): String {
-        return try {
-            var newData = data
-
-            while (newData.startsWith("0") && newData.length > 1)
-                newData = newData.substring(1)
-
-            val context = Context.enter()
-            context.optimizationLevel = -1
-            val scriptable: Scriptable = context.initStandardObjects()
-            val res = context.evaluateString(scriptable, newData, "Javascript", 1, null).toString()
-            toTwoDecimals(res)
-        }
-        catch (e: Exception) {
-            "Err"
         }
     }
 

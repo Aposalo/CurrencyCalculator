@@ -1,7 +1,7 @@
 package android.example.com.currencycalculator.model
 
-import android.example.com.currencycalculator.repository.dto.FixerDto
 import android.example.com.currencycalculator.repository.CurrencyCalculatorRepository
+import android.example.com.currencycalculator.repository.dto.FixerDto
 import android.example.com.currencycalculator.util.Resource
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -18,37 +18,44 @@ class CurrencyCalculatorModel(
 
     val data: MutableLiveData<Resource<FixerDto>> = MutableLiveData()
 
+    private var finalResponse: Response<FixerDto>? = null
+
     fun getUserPage(to: String, from: String, amount: Float) =  viewModelScope.launch {
         previousTo = to
         previousFrom = from
         previousAmount = amount
-        if (amount <= 0.0f)
-            data.postValue(handlePageResponse(null))
+        if (amount <= 0.0f) {
+            finalResponse = null
+            data.postValue(handlePageResponse())
+        }
         else {
             data.postValue(Resource.Loading())
             val response = repository.getFixerConvert(to, from, amount)
-            if (isCurrentResponse(response))
-                data.postValue(handlePageResponse(response))
-        }
-    }
-
-    private fun isCurrentResponse(response: Response<FixerDto>?): Boolean {
-        return response?.body()?.query?.amount == previousAmount
-                && response.body()?.query?.to == previousTo
-                && response.body()?.query?.from == previousFrom
-    }
-
-    private fun handlePageResponse(response: Response<FixerDto>?) : Resource<FixerDto> {
-
-        if (response == null)
-            return Resource.Success(null)
-
-        if (response.isSuccessful) {
-            response.body()?.let {
-                    resultResponse -> return Resource.Success(resultResponse)
+            if (response.isCurrentResponse()){
+                finalResponse = response
+                data.postValue(handlePageResponse())
             }
         }
-        val msg = response.message()
+    }
+
+    private fun Response<FixerDto>?.isCurrentResponse(): Boolean {
+        return this?.body()?.query?.amount == previousAmount
+                && this.body()?.query?.to == previousTo
+                && this.body()?.query?.from == previousFrom
+    }
+
+    private fun handlePageResponse() : Resource<FixerDto> {
+
+        if (finalResponse == null)
+            return Resource.Success(null)
+
+        if (finalResponse!!.isSuccessful) {
+            finalResponse!!.body()?.let {
+                    resultResponse ->
+                        return Resource.Success(resultResponse)
+            }
+        }
+        val msg = finalResponse!!.message()
         return Resource.Error(msg)
     }
 }
