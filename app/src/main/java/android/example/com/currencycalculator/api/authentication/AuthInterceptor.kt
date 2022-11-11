@@ -13,5 +13,4 @@ class AuthInterceptor(private val value: String) : Interceptor {
             .build()
         return chain.proceed(authenticatedRequest)
     }
-
 }

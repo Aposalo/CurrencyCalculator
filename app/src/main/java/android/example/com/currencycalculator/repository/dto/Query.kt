@@ -1,4 +1,4 @@
-package android.example.com.currencycalculator.api.dataclass
+package android.example.com.currencycalculator.repository.dto
 
 data class Query(
     val amount: Float,
