@@ -4,6 +4,7 @@
     <string name="clear_button">C</string>
     <string name="equal_button">=</string>
     <string name="delete_button">X</string>
+    <string name="dot_button">.</string>
     <string name="loader">...</string>
     <string name="GBP">GBP</string>
     <string name="EUR">EUR</string>

@@ -329,7 +329,7 @@
                 android:textColor="@color/white"
                 android:layout_margin="12dp"
                 android:id="@+id/dot"
-                android:text="." />
+                android:text="@string/dot_button" />
 
             <com.google.android.material.button.MaterialButton
                 android:layout_width="72dp"
