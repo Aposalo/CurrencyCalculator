@@ -18,23 +18,26 @@ import org.mozilla.javascript.Scriptable
                  context.optimizationLevel = -1
                  val scriptable: Scriptable = context.initStandardObjects()
                  val res = context.evaluateString(scriptable, newData, "Javascript", 1, null).toString()
-                 res.toTwoDecimals()
+                 res.toTwoDecimalsString()
              }
              catch (e: Exception) {
                  "Err"
              }
          }
 
-         fun String.toTwoDecimals(): String {
-             val number = this.toFloat()
-             val solution = String.format("%.2f", number).toFloat()
-
-             var solutionString = solution.toString()
+         fun String.toTwoDecimalsString(): String {
+             var solutionString = this.toFloat().toTwoDecimals()
 
              if (solutionString.endsWith(".0")) {
                  solutionString = solutionString.replace(".0", "")
              }
              return solutionString
+         }
+
+         fun Float.toTwoDecimals(): String {
+             val number = this.toFloat()
+             val solution = String.format("%.2f", number).toFloat()
+             return solution.toString()
          }
      }
 }

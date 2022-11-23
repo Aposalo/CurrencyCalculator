@@ -3,7 +3,7 @@ package android.example.com.currencycalculator
 import android.example.com.currencycalculator.model.CurrencyCalculatorModel
 import android.example.com.currencycalculator.repository.CurrencyCalculatorRepository
 import android.example.com.currencycalculator.util.Extensions.Companion.getCalculation
-import android.example.com.currencycalculator.util.Extensions.Companion.toTwoDecimals
+import android.example.com.currencycalculator.util.Extensions.Companion.toTwoDecimalsString
 import android.example.com.currencycalculator.util.Resource
 import android.os.Bundle
 import android.text.Editable
@@ -73,11 +73,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AdapterView.OnIt
         viewModel.data.observe(this) { response ->
             when (response) {
                 is Resource.Success -> {
-                    (if (response.data == null)
-                        resources.getString(R.string.init_value)
-                    else
-                        response.data.result.toString().toTwoDecimals()).
-                    also { currencyTv.text = it }
+                    currencyTv.text = response.data?.result?.toString()?.toTwoDecimalsString() ?: resources.getString(R.string.init_value)
                 }
                 is Resource.Error -> {
                     response.message?.let { message ->
@@ -145,9 +141,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AdapterView.OnIt
     private fun updateCurrency(result: String) {
         val fromSelectedItem = currencyArray[resultSpinner.selectedItemId.toInt()]
         val toSelectedItem = currencyArray[currencySpinner.selectedItemId.toInt()]
-        if (!isLastCharacterDot)
+        if (!isLastCharacterDot) {
             viewModel.getUserPage(toSelectedItem, fromSelectedItem, result.toFloat())
-        isLastCharacterDot = false
+            isLastCharacterDot = false
+        }
     }
 
     private fun clearCalculator() {
@@ -159,6 +156,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AdapterView.OnIt
         val button = view as MaterialButton
         val buttonText = button.text.toString()
         var dataToCalculate = solutionTv.text.toString()
+        isLastCharacterDot = false
         when (buttonText) {
             resources.getString(R.string.clear_button) -> {
                 clearCalculator()
@@ -169,12 +167,15 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AdapterView.OnIt
                 return
             }
             resources.getString(R.string.delete_button) -> {
-                if (solutionTv.text != "") {
+                if (!solutionTv.text.isNullOrEmpty()) {
+                    val lastCharacter = dataToCalculate.takeLast(1)//dataToCalculate.substring(dataToCalculate.length - 1, dataToCalculate.length)
                     dataToCalculate = dataToCalculate.substring(0, dataToCalculate.length - 1)
-                    if (dataToCalculate == "") {
+                    if (dataToCalculate.isEmpty()) {
                         clearCalculator()
                         return
                     }
+                    else if (lastCharacter == resources.getString(R.string.dot_button))
+                        isLastCharacterDot = true
                 }
                 else {
                     clearCalculator()
@@ -183,6 +184,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AdapterView.OnIt
             }
             resources.getString(R.string.dot_button) -> {
                 isLastCharacterDot = true
+                dataToCalculate += buttonText
             }
             else -> {
                 dataToCalculate += buttonText
