@@ -7,6 +7,6 @@ import retrofit2.http.Query
 
 interface CurrencyCalculatorApi {
 
-    @GET("fixer/convert")
+    @GET("exchangerates_data/convert")
     suspend fun getFixerConvert(@Query("to") to: String, @Query("from") from: String, @Query("amount") amount: Float): Response<FixerDto>
 }
