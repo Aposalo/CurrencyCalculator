@@ -23,7 +23,7 @@ import kotlinx.coroutines.launch
 
 const val TAG = "MainActivity"
 
-class MainActivity : AppCompatActivity(), View.OnClickListener, AdapterView.OnItemSelectedListener {
+class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private lateinit var currencyArray: Array<String>
 
@@ -103,6 +103,19 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AdapterView.OnIt
     private fun Spinner.setSpinner(selection : Int) {
         this.adapter = ArrayAdapter(context, android.R.layout.simple_spinner_dropdown_item, currencyArray) //desmeuetai apo edw se poio context leitourgei
         this.setSelection(selection)
+        this.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                updateCurrency(binding.resultTv.text.toString())
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+        }
     }
 
     private fun updateCurrency(result: String) {
@@ -117,6 +130,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AdapterView.OnIt
     private fun clearCalculator() {
         binding.solutionTv.text = ""
         binding.resultTv.text = resources.getString(R.string.init_value)
+        updateCurrency(resources.getString(R.string.init_value))
     }
 
     override fun onClick(view: View) {
@@ -166,10 +180,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AdapterView.OnIt
         }
     }
 
-    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+    /*override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         updateCurrency(binding.resultTv.text.toString())
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
-    }
+    }*/
 }
