@@ -1,47 +1,50 @@
 package android.example.com.currencycalculator.model
 
+import android.content.res.Resources
+import android.example.com.currencycalculator.R
+import android.example.com.currencycalculator.TAG
+import android.example.com.currencycalculator.databinding.ActivityMainBinding
 import android.example.com.currencycalculator.repository.CurrencyCalculatorRepository
-import android.example.com.currencycalculator.repository.dto.FixerDto
+import android.example.com.currencycalculator.util.Extensions.Companion.toTwoDecimalsString
 import android.example.com.currencycalculator.util.Resource
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import retrofit2.Response
 
-class CurrencyCalculatorModel() : ViewModel() {
+class CurrencyCalculatorModel(var binding: ActivityMainBinding, var resources: Resources) : ViewModel() {
 
-    private val _dataFlow = MutableStateFlow<Resource<FixerDto>>(Resource.Success(null))
     private val repository: CurrencyCalculatorRepository = CurrencyCalculatorRepository()
-    private var finalResponse: Response<FixerDto>? = null
 
-    val data = _dataFlow.asStateFlow()
-
-    fun getUserPage(to: String, from: String, amount: Float) {
+    init {
         viewModelScope.launch {
-            finalResponse = null
-            if (amount > 0.0f) {
-                _dataFlow.value = Resource.Loading()
-                val response = repository.getFixerConvert(to, from, amount)
-                finalResponse = response
+            repository.data.collectLatest { response ->
+                when (response) {
+                    is Resource.Success -> {
+                        val initValue = resources.getString(R.string.init_value)
+                        if (binding.resultTv.text.toString() == initValue)
+                            binding.currencyTv.text = initValue
+                        else
+                            binding.currencyTv.text = response.data?.result?.toString()?.toTwoDecimalsString()
+                    }
+                    is Resource.Error -> {
+                        response.message?.let { message ->
+                            Log.e(TAG, "An error occurred: $message")
+                        }
+                    }
+                    is Resource.Loading -> {
+                        binding.currencyTv.text = resources.getString(R.string.loader)
+                    }
+                }
             }
-            _dataFlow.value = handlePageResponse()
         }
     }
 
-    private fun handlePageResponse() : Resource<FixerDto> {
 
-        if (finalResponse == null)
-            return Resource.Success(null)
-
-        if (finalResponse!!.isSuccessful) {
-            finalResponse!!.body()?.let {
-                    resultResponse ->
-                        return Resource.Success(resultResponse)
-            }
+    fun getUserPage(to: String, from: String, amount: Float) {
+        viewModelScope.launch {
+            repository.getFixerConvert(to, from, amount)
         }
-        val msg = finalResponse!!.message()
-        return Resource.Error(msg)
     }
 }

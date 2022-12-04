@@ -3,23 +3,15 @@ package android.example.com.currencycalculator
 import android.example.com.currencycalculator.databinding.ActivityMainBinding
 import android.example.com.currencycalculator.model.CurrencyCalculatorModel
 import android.example.com.currencycalculator.util.Extensions.Companion.getCalculation
-import android.example.com.currencycalculator.util.Extensions.Companion.toTwoDecimalsString
-import android.example.com.currencycalculator.util.Resource
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.button.MaterialButton
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 const val TAG = "MainActivity"
 
@@ -37,27 +29,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        currencyArray= resources.getStringArray(R.array.currency_array)
-        viewModel = CurrencyCalculatorModel()
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.data.collectLatest { response ->
-                    when (response) {
-                        is Resource.Success -> {
-                            binding.currencyTv.text = response.data?.result?.toString()?.toTwoDecimalsString() ?: resources.getString(R.string.init_value)
-                        }
-                        is Resource.Error -> {
-                            response.message?.let { message ->
-                                Log.e(TAG, "An error occurred: $message")
-                            }
-                        }
-                        is Resource.Loading -> {
-                            binding.currencyTv.text = resources.getString(R.string.loader)
-                        }
-                    }
-                }
-            }
-        }
+        currencyArray = resources.getStringArray(R.array.currency_array)
+        viewModel = CurrencyCalculatorModel(binding, resources)
 
         binding.resultTv.addTextChangedListener(object : TextWatcher {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
@@ -130,7 +103,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private fun clearCalculator() {
         binding.solutionTv.text = ""
         binding.resultTv.text = resources.getString(R.string.init_value)
-        updateCurrency(resources.getString(R.string.init_value))
     }
 
     override fun onClick(view: View) {
@@ -179,11 +151,4 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             binding.resultTv.text = finalResult
         }
     }
-
-    /*override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        updateCurrency(binding.resultTv.text.toString())
-    }
-
-    override fun onNothingSelected(parent: AdapterView<*>?) {
-    }*/
 }
