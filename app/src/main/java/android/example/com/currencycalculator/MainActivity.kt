@@ -37,14 +37,18 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        currencyArray= resources.getStringArray(R.array.currency_array)
+        currencyArray = resources.getStringArray(R.array.currency_array)
         viewModel = CurrencyCalculatorModel()
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.data.collectLatest { response ->
                     when (response) {
                         is Resource.Success -> {
-                            binding.currencyTv.text = response.data?.result?.toString()?.toTwoDecimalsString() ?: resources.getString(R.string.init_value)
+                            val initValue = resources.getString(R.string.init_value)
+                            if (binding.resultTv.text.toString() == initValue)
+                                binding.currencyTv.text = initValue
+                            else
+                                binding.currencyTv.text = response.data?.result?.toString()?.toTwoDecimalsString()
                         }
                         is Resource.Error -> {
                             response.message?.let { message ->
@@ -130,7 +134,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private fun clearCalculator() {
         binding.solutionTv.text = ""
         binding.resultTv.text = resources.getString(R.string.init_value)
-        updateCurrency(resources.getString(R.string.init_value))
     }
 
     override fun onClick(view: View) {
@@ -179,11 +182,4 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             binding.resultTv.text = finalResult
         }
     }
-
-    /*override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        updateCurrency(binding.resultTv.text.toString())
-    }
-
-    override fun onNothingSelected(parent: AdapterView<*>?) {
-    }*/
 }

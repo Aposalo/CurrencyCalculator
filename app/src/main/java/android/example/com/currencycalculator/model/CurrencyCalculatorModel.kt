@@ -14,34 +14,33 @@ class CurrencyCalculatorModel() : ViewModel() {
 
     private val _dataFlow = MutableStateFlow<Resource<FixerDto>>(Resource.Success(null))
     private val repository: CurrencyCalculatorRepository = CurrencyCalculatorRepository()
-    private var finalResponse: Response<FixerDto>? = null
+    private var response: Response<FixerDto>? = null
 
     val data = _dataFlow.asStateFlow()
 
     fun getUserPage(to: String, from: String, amount: Float) {
         viewModelScope.launch {
-            finalResponse = null
+            response = null
             if (amount > 0.0f) {
-                _dataFlow.value = Resource.Loading()
-                val response = repository.getFixerConvert(to, from, amount)
-                finalResponse = response
+                _dataFlow.emit(Resource.Loading())
+                response = repository.getFixerConvert(to, from, amount)
             }
-            _dataFlow.value = handlePageResponse()
+            _dataFlow.emit(handlePageResponse())
         }
     }
 
     private fun handlePageResponse() : Resource<FixerDto> {
 
-        if (finalResponse == null)
+        if (response == null)
             return Resource.Success(null)
 
-        if (finalResponse!!.isSuccessful) {
-            finalResponse!!.body()?.let {
+        if (response!!.isSuccessful) {
+            response!!.body()?.let {
                     resultResponse ->
                         return Resource.Success(resultResponse)
             }
         }
-        val msg = finalResponse!!.message()
+        val msg = response!!.message()
         return Resource.Error(msg)
     }
 }
