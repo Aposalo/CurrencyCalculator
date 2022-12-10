@@ -74,7 +74,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
 
     private fun Spinner.setSpinner(selection : Int) {
-        this.adapter = ArrayAdapter(context, android.R.layout.simple_spinner_dropdown_item, currencyArray) //desmeuetai apo edw se poio context leitourgei
+        this.adapter = ArrayAdapter(context, android.R.layout.simple_spinner_dropdown_item, currencyArray)
         this.setSelection(selection)
         this.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
