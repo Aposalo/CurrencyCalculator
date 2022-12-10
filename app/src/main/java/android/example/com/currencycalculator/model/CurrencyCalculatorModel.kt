@@ -22,11 +22,7 @@ class CurrencyCalculatorModel(var binding: ActivityMainBinding, var resources: R
             repository.data.collectLatest { response ->
                 when (response) {
                     is Resource.Success -> {
-                        val initValue = resources.getString(R.string.init_value)
-                        if (binding.resultTv.text.toString() == initValue)
-                            binding.currencyTv.text = initValue
-                        else
-                            binding.currencyTv.text = response.data?.result?.toString()?.toTwoDecimalsString()
+                        binding.currencyTv.text = response.data?.result?.toString()?.toTwoDecimalsString()
                     }
                     is Resource.Error -> {
                         response.message?.let { message ->
