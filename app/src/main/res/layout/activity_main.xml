@@ -94,7 +94,7 @@
                     android:textColor="@color/white"
                     android:layout_margin="12dp"
                     android:id="@+id/x"
-                    android:backgroundTint="@color/red"
+                    android:backgroundTint="@color/orange"
                     android:text="@string/delete_button" />
 
 
@@ -317,7 +317,7 @@
                     android:layout_margin="12dp"
                     android:id="@+id/c"
                     android:text="@string/clear_button"
-                    android:backgroundTint="@color/red"/>
+                    android:backgroundTint="@color/orange"/>
 
                 <com.google.android.material.button.MaterialButton
                     android:layout_width="72dp"
@@ -339,7 +339,7 @@
                     android:textColor="@color/white"
                     android:layout_margin="12dp"
                     android:id="@+id/dot"
-                    android:backgroundTint="@color/red"
+                    android:backgroundTint="@color/orange"
                     android:text="@string/dot_button" />
 
                 <com.google.android.material.button.MaterialButton
