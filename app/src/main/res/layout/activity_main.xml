@@ -2,7 +2,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/seafoam_green"
+        android:background="@color/light_gray"
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_alignParentBottom="true"
-            android:background="@color/sky_blue"
+            android:background="@color/medium_gray"
             android:paddingVertical="16dp"
             android:id="@+id/buttons_layout">
 
@@ -42,8 +42,8 @@
                     android:text="@string/init_value"
                     android:textSize="32dp"
                     android:textAlignment="textEnd"
-                    android:textColor="@color/purple_700"
-                    android:background="@color/seafoam_green"
+                    android:textColor="@color/white"
+                    android:background="@color/light_gray"
                     android:layout_margin="8dp" />
 
                 <Spinner
@@ -67,8 +67,8 @@
                     android:text="@string/init_value"
                     android:textSize="32dp"
                     android:textAlignment="textEnd"
-                    android:textColor="@color/purple_700"
-                    android:background="@color/seafoam_green"
+                    android:textColor="@color/white"
+                    android:background="@color/light_gray"
                     android:layout_margin="8dp" />
 
                 <Spinner
@@ -151,6 +151,7 @@
                     android:textColor="@color/white"
                     android:layout_margin="12dp"
                     android:id="@+id/seven"
+                    android:backgroundTint="@color/light_gray"
                     android:text="7" />
 
                 <com.google.android.material.button.MaterialButton
@@ -162,6 +163,7 @@
                     android:textColor="@color/white"
                     android:layout_margin="12dp"
                     android:id="@+id/eight"
+                    android:backgroundTint="@color/light_gray"
                     android:text="8" />
                 <com.google.android.material.button.MaterialButton
                     android:layout_width="72dp"
@@ -172,6 +174,7 @@
                     android:textColor="@color/white"
                     android:layout_margin="12dp"
                     android:id="@+id/nine"
+                    android:backgroundTint="@color/light_gray"
                     android:text="9" />
                 <com.google.android.material.button.MaterialButton
                     android:layout_width="72dp"
@@ -202,6 +205,7 @@
                     android:textColor="@color/white"
                     android:layout_margin="12dp"
                     android:id="@+id/four"
+                    android:backgroundTint="@color/light_gray"
                     android:text="4" />
                 <com.google.android.material.button.MaterialButton
                     android:layout_width="72dp"
@@ -212,6 +216,7 @@
                     android:textColor="@color/white"
                     android:layout_margin="12dp"
                     android:id="@+id/five"
+                    android:backgroundTint="@color/light_gray"
                     android:text="5" />
                 <com.google.android.material.button.MaterialButton
                     android:layout_width="72dp"
@@ -222,6 +227,7 @@
                     android:textColor="@color/white"
                     android:layout_margin="12dp"
                     android:id="@+id/six"
+                    android:backgroundTint="@color/light_gray"
                     android:text="6" />
 
                 <com.google.android.material.button.MaterialButton
@@ -254,6 +260,7 @@
                     android:textColor="@color/white"
                     android:layout_margin="12dp"
                     android:id="@+id/one"
+                    android:backgroundTint="@color/light_gray"
                     android:text="1" />
 
                 <com.google.android.material.button.MaterialButton
@@ -265,6 +272,7 @@
                     android:textColor="@color/white"
                     android:layout_margin="12dp"
                     android:id="@+id/two"
+                    android:backgroundTint="@color/light_gray"
                     android:text="2" />
 
                 <com.google.android.material.button.MaterialButton
@@ -276,6 +284,7 @@
                     android:textColor="@color/white"
                     android:layout_margin="12dp"
                     android:id="@+id/three"
+                    android:backgroundTint="@color/light_gray"
                     android:text="3" />
 
                 <com.google.android.material.button.MaterialButton
@@ -319,6 +328,7 @@
                     android:textColor="@color/white"
                     android:layout_margin="12dp"
                     android:id="@+id/zero"
+                    android:backgroundTint="@color/light_gray"
                     android:text="0" />
                 <com.google.android.material.button.MaterialButton
                     android:layout_width="72dp"
@@ -329,6 +339,7 @@
                     android:textColor="@color/white"
                     android:layout_margin="12dp"
                     android:id="@+id/dot"
+                    android:backgroundTint="@color/red"
                     android:text="@string/dot_button" />
 
                 <com.google.android.material.button.MaterialButton

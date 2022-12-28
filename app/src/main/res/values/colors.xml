@@ -12,4 +12,8 @@
     <color name="white">#FFFFFFFF</color>
     <color name="seafoam_green">#FF9FE2BF</color>
     <color name="sky_blue">#FF87CEEB</color>
+
+    <color name="medium_gray">#FF2E2E2E</color>
+    <color name="light_gray">#FF818181</color>
+
 </resources>
