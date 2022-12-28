@@ -1,8 +1,8 @@
-package android.example.com.currencycalculator.api.authentication
+package android.aposalo.com.currencycalculator.api.authentication
 
-import android.example.com.currencycalculator.api.CurrencyCalculatorApi
-import android.example.com.currencycalculator.util.Constants.Companion.TOKEN
-import android.example.com.currencycalculator.util.Constants.Companion.CLIENT_BASE_URL
+import android.aposalo.com.currencycalculator.api.CurrencyCalculatorApi
+import android.aposalo.com.currencycalculator.util.Constants.Companion.TOKEN
+import android.aposalo.com.currencycalculator.util.Constants.Companion.CLIENT_BASE_URL
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

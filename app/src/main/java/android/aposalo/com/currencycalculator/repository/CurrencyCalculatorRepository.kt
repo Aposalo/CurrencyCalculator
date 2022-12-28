@@ -1,8 +1,8 @@
-package android.example.com.currencycalculator.repository
+package android.aposalo.com.currencycalculator.repository
 
-import android.example.com.currencycalculator.api.authentication.RetrofitInstance
-import android.example.com.currencycalculator.repository.dto.FixerDto
-import android.example.com.currencycalculator.util.Resource
+import android.aposalo.com.currencycalculator.api.authentication.RetrofitInstance
+import android.aposalo.com.currencycalculator.repository.dto.FixerDto
+import android.aposalo.com.currencycalculator.util.Resource
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 

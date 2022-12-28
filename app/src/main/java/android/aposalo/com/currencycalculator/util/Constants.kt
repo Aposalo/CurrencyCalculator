@@ -1,4 +1,4 @@
-package android.example.com.currencycalculator.util
+package android.aposalo.com.currencycalculator.util
 
 class Constants {
     companion object {

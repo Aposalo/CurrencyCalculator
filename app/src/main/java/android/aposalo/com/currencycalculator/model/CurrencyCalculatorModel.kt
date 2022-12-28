@@ -1,12 +1,12 @@
-package android.example.com.currencycalculator.model
+package android.aposalo.com.currencycalculator.model
 
 import android.content.res.Resources
 import android.example.com.currencycalculator.R
 import android.example.com.currencycalculator.TAG
 import android.example.com.currencycalculator.databinding.ActivityMainBinding
-import android.example.com.currencycalculator.repository.CurrencyCalculatorRepository
-import android.example.com.currencycalculator.util.Extensions.Companion.toTwoDecimalsString
-import android.example.com.currencycalculator.util.Resource
+import android.aposalo.com.currencycalculator.repository.CurrencyCalculatorRepository
+import android.aposalo.com.currencycalculator.util.Extensions.Companion.toTwoDecimalsString
+import android.aposalo.com.currencycalculator.util.Resource
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

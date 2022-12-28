@@ -1,8 +1,8 @@
-package android.example.com.currencycalculator
+package android.aposalo.com.currencycalculator
 
-import android.example.com.currencycalculator.databinding.ActivityMainBinding
-import android.example.com.currencycalculator.model.CurrencyCalculatorModel
-import android.example.com.currencycalculator.util.Extensions.Companion.getCalculation
+import android.aposalo.com.currencycalculator.databinding.ActivityMainBinding
+import android.aposalo.com.currencycalculator.model.CurrencyCalculatorModel
+import android.aposalo.com.currencycalculator.util.Extensions.Companion.getCalculation
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher

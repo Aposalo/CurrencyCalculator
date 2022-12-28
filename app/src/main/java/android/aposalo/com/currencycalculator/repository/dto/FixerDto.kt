@@ -1,4 +1,4 @@
-package android.example.com.currencycalculator.repository.dto
+package android.aposalo.com.currencycalculator.repository.dto
 
 data class FixerDto(
     val date: String,

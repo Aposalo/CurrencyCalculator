@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace 'android.example.com.currencycalculator'
+    namespace 'android.aposalo.com.currencycalculator'
     compileSdk 33
 
     defaultConfig {
-        applicationId "android.example.com.currencycalculator"
+        applicationId "android.aposalo.com.currencycalculator"
         minSdk 22
         targetSdk 33
         versionCode 1
