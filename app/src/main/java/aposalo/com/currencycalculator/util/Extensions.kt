@@ -1,4 +1,4 @@
-package android.aposalo.com.currencycalculator.util
+package aposalo.com.currencycalculator.util
 
 import org.mozilla.javascript.Context
 import org.mozilla.javascript.Scriptable

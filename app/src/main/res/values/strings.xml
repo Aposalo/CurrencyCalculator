@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">CurrencyCalculator</string>
+    <string name="app_name">Currency Calculator</string>
     <string name="init_value">0</string>
     <string name="clear_button">C</string>
     <string name="equal_button">=</string>

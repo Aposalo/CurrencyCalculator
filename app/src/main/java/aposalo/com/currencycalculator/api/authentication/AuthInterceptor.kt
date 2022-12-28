@@ -1,6 +1,6 @@
-package android.aposalo.com.currencycalculator.api.authentication
+package aposalo.com.currencycalculator.api.authentication
 
-import android.aposalo.com.currencycalculator.util.Constants.Companion.AUTHORIZATION_TYPE
+import aposalo.com.currencycalculator.util.Constants.Companion.AUTHORIZATION_TYPE
 import okhttp3.Interceptor
 import okhttp3.Response
 

@@ -1,9 +1,9 @@
-package android.aposalo.com.currencycalculator.repository
+package aposalo.com.currencycalculator.repository
 
-import android.aposalo.com.currencycalculator.api.authentication.RetrofitInstance
-import android.aposalo.com.currencycalculator.repository.dto.FixerDto
-import android.aposalo.com.currencycalculator.util.Constants.Companion.DELAY
-import android.aposalo.com.currencycalculator.util.Resource
+import aposalo.com.currencycalculator.api.authentication.RetrofitInstance
+import aposalo.com.currencycalculator.repository.dto.FixerDto
+import aposalo.com.currencycalculator.util.Constants.Companion.DELAY
+import aposalo.com.currencycalculator.util.Resource
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -28,7 +28,7 @@ class CurrencyCalculatorRepository {
 
     private suspend fun handlePageResponse() : Resource<FixerDto> {
 
-        if (latestAmount == 0.0f)
+        if (latestAmount <= 0.0f)
             return Resource.Success(null)
 
         val response = RetrofitInstance.api.getFixerConvert(latestTo, latestFrom, latestAmount)

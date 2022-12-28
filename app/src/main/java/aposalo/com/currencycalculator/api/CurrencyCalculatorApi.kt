@@ -1,7 +1,7 @@
-package android.aposalo.com.currencycalculator.api
+package aposalo.com.currencycalculator.api
 
-import android.aposalo.com.currencycalculator.repository.dto.FixerDto
-import android.aposalo.com.currencycalculator.util.Constants.Companion.CONVERT_ANNOTATION
+import aposalo.com.currencycalculator.repository.dto.FixerDto
+import aposalo.com.currencycalculator.util.Constants.Companion.CONVERT_ANNOTATION
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
