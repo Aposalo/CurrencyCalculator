@@ -90,9 +90,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun updateCurrency(result: String) {
-            val fromSelectedItem = currencyArray[binding.resultSpinner.selectedItemId.toInt()]
-            val toSelectedItem = currencyArray[binding.currencySpinner.selectedItemId.toInt()]
-            viewModel.getUserPage(toSelectedItem, fromSelectedItem, result.toFloat())
+        val fromSelectedItem = currencyArray[binding.resultSpinner.selectedItemId.toInt()]
+        val toSelectedItem = currencyArray[binding.currencySpinner.selectedItemId.toInt()]
+        viewModel.getUserPage(toSelectedItem, fromSelectedItem, result.toFloat())
     }
 
     private fun clearCalculator() {

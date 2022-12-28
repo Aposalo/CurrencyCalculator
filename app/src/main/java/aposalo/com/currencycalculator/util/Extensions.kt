@@ -34,9 +34,8 @@ import org.mozilla.javascript.Scriptable
              return solutionString
          }
 
-         fun Float.toTwoDecimals(): String {
-             val number = this.toFloat()
-             val solution = String.format("%.2f", number).toFloat()
+         private fun Float.toTwoDecimals(): String {
+             val solution = String.format("%.2f", this).toFloat()
              return solution.toString()
          }
      }

@@ -39,7 +39,6 @@ class CurrencyCalculatorModel(
         }
     }
 
-
     fun getUserPage(to: String, from: String, amount: Float) {
         viewModelScope.launch {
             repository.getFixerConvert(to, from, amount)
