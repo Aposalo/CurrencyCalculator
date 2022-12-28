@@ -13,12 +13,17 @@ class CurrencyCalculatorRepository {
     private val _dataFlow = MutableStateFlow<Resource<FixerDto>>(Resource.Success(null))
     val data = _dataFlow.asStateFlow()
 
-    private lateinit var latestTo : String
-    private lateinit var latestFrom : String
+    private var latestTo : String = ""
+    private var latestFrom : String = ""
     private var latestAmount : Float = 0.0f
+    private var latestResult : String = ""
+    private var isTheSameConvert = false
 
     suspend fun getFixerConvert(to: String, from: String, amount: Float) {
         _dataFlow.emit(Resource.Loading())
+        isTheSameConvert = latestTo == to &&
+                latestFrom == from &&
+                latestAmount == amount
         latestTo = to
         latestFrom = from
         latestAmount = amount
@@ -31,12 +36,16 @@ class CurrencyCalculatorRepository {
         if (latestAmount <= 0.0f)
             return Resource.Success(null)
 
+        if (isTheSameConvert)
+            return Resource.Success(latestResult)
+
         val response = RetrofitInstance.api.getFixerConvert(latestTo, latestFrom, latestAmount)
 
         if (response.isSuccessful) {
             response.body()?.let {
                     resultResponse ->
-                return Resource.Success(resultResponse)
+                latestResult = resultResponse.result.toString()
+                return Resource.Success(latestResult)
             }
         }
         val msg = response.message()

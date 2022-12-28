@@ -23,8 +23,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private lateinit var binding: ActivityMainBinding
 
-    private var isLastCharacterDot = false
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -92,12 +90,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun updateCurrency(result: String) {
-        if (!isLastCharacterDot) {
             val fromSelectedItem = currencyArray[binding.resultSpinner.selectedItemId.toInt()]
             val toSelectedItem = currencyArray[binding.currencySpinner.selectedItemId.toInt()]
             viewModel.getUserPage(toSelectedItem, fromSelectedItem, result.toFloat())
-            isLastCharacterDot = false
-        }
     }
 
     private fun clearCalculator() {
@@ -109,7 +104,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         val button = view as MaterialButton
         val buttonText = button.text.toString()
         var dataToCalculate = binding.solutionTv.text.toString()
-        isLastCharacterDot = false
         when (buttonText) {
             resources.getString(R.string.clear_button) -> {
                 clearCalculator()
@@ -121,23 +115,16 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             }
             resources.getString(R.string.delete_button) -> {
                 if (!binding.solutionTv.text.isNullOrEmpty()) {
-                    val lastCharacter = dataToCalculate.takeLast(1)//dataToCalculate.substring(dataToCalculate.length - 1, dataToCalculate.length)
                     dataToCalculate = dataToCalculate.substring(0, dataToCalculate.length - 1)
                     if (dataToCalculate.isEmpty()) {
                         clearCalculator()
                         return
                     }
-                    else if (lastCharacter == resources.getString(R.string.dot_button))
-                        isLastCharacterDot = true
                 }
                 else {
                     clearCalculator()
                     return
                 }
-            }
-            resources.getString(R.string.dot_button) -> {
-                isLastCharacterDot = true
-                dataToCalculate += buttonText
             }
             else -> {
                 dataToCalculate += buttonText

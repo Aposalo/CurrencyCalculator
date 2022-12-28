@@ -24,7 +24,7 @@ class CurrencyCalculatorModel(
             repository.data.collectLatest { response ->
                 when (response) {
                     is Resource.Success -> {
-                        binding.currencyTv.text = response.data?.result?.toString()?.toTwoDecimalsString() ?: resources.getString(R.string.init_value)
+                        binding.currencyTv.text = response.message?.toTwoDecimalsString() ?: resources.getString(R.string.init_value)
                     }
                     is Resource.Error -> {
                         response.message?.let { message ->
