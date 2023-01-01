@@ -11,7 +11,6 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
-import com.faendir.rhino_android.RhinoAndroidHelper
 import com.google.android.material.button.MaterialButton
 
 const val TAG = "MainActivity"
@@ -133,7 +132,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             }
         }
         binding.solutionTv.text = dataToCalculate
-        val finalResult = dataToCalculate.getCalculation(RhinoAndroidHelper(this))
+        val finalResult = dataToCalculate.getCalculation()
 
         if (finalResult != "Err" && finalResult != result) {
             binding.resultTv.text = finalResult
