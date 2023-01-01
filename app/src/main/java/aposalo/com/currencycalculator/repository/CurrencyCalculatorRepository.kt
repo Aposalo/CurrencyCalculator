@@ -17,13 +17,9 @@ class CurrencyCalculatorRepository {
     private var latestFrom : String = ""
     private var latestAmount : Float = 0.0f
     private var latestResult : String = ""
-    private var isTheSameConvert = false
 
     suspend fun getFixerConvert(to: String, from: String, amount: Float) {
         _dataFlow.emit(Resource.Loading())
-        isTheSameConvert = latestTo == to &&
-                latestFrom == from &&
-                latestAmount == amount
         latestTo = to
         latestFrom = from
         latestAmount = amount
@@ -35,9 +31,6 @@ class CurrencyCalculatorRepository {
 
         if (latestAmount <= 0.0f)
             return Resource.Success(null)
-
-        if (isTheSameConvert)
-            return Resource.Success(latestResult)
 
         val response = RetrofitInstance.api.getFixerConvert(latestTo, latestFrom, latestAmount)
 

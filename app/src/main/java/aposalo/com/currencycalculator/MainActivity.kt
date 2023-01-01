@@ -11,6 +11,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
+import com.faendir.rhino_android.RhinoAndroidHelper
 import com.google.android.material.button.MaterialButton
 
 const val TAG = "MainActivity"
@@ -104,13 +105,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         val button = view as MaterialButton
         val buttonText = button.text.toString()
         var dataToCalculate = binding.solutionTv.text.toString()
+        val result = binding.resultTv.text.toString();
         when (buttonText) {
             resources.getString(R.string.clear_button) -> {
                 clearCalculator()
                 return
             }
             resources.getString(R.string.equal_button) -> {
-                binding.solutionTv.text = binding.resultTv.text
+                binding.solutionTv.text = result
                 return
             }
             resources.getString(R.string.delete_button) -> {
@@ -131,10 +133,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             }
         }
         binding.solutionTv.text = dataToCalculate
+        val finalResult = dataToCalculate.getCalculation(RhinoAndroidHelper(this))
 
-        val finalResult = dataToCalculate.getCalculation()
-
-        if (finalResult != "Err") {
+        if (finalResult != "Err" && finalResult != result) {
             binding.resultTv.text = finalResult
         }
     }

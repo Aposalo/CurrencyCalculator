@@ -44,6 +44,7 @@
                     android:textAlignment="textEnd"
                     android:textColor="@color/white"
                     android:background="@color/light_gray"
+                    android:paddingRight="5dp"
                     android:layout_margin="8dp" />
 
                 <Spinner
@@ -69,6 +70,7 @@
                     android:textAlignment="textEnd"
                     android:textColor="@color/white"
                     android:background="@color/light_gray"
+                    android:paddingRight="5dp"
                     android:layout_margin="8dp" />
 
                 <Spinner
@@ -312,7 +314,7 @@
                     android:layout_height="72dp"
                     app:cornerRadius="36dp"
                     style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
-                    android:textSize="36dp"
+                    android:textSize="20dp"
                     android:textColor="@color/white"
                     android:layout_margin="12dp"
                     android:id="@+id/c"
