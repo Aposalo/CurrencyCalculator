@@ -1,6 +1,9 @@
 package aposalo.com.currencycalculator.util
 
+import android.util.Log
 import net.objecthunter.exp4j.ExpressionBuilder
+
+const val TAG = "EXTENSIONS"
 
 class Extensions  {
 
@@ -9,26 +12,13 @@ class Extensions  {
          fun String.getCalculation(): String {
              return try {
                  val expression = ExpressionBuilder(this).build()
-                 val result = expression.evaluate().toString()
-                 result.toTwoDecimalsString()
+                 expression.evaluate().toString()
              }
              catch (e: Exception) {
+                 val msg = e.message.toString()
+                 Log.e(TAG, "getCalculation: $msg",e)
                  "Err"
              }
-         }
-
-         fun String.toTwoDecimalsString(): String {
-             var solutionString = this.toFloat().toTwoDecimals()
-
-             if (solutionString.endsWith(".0")) {
-                 solutionString = solutionString.replace(".0", "")
-             }
-             return solutionString
-         }
-
-         private fun Float.toTwoDecimals(): String {
-             val solution = String.format("%.2f", this).toFloat()
-             return solution.toString()
          }
      }
 }
