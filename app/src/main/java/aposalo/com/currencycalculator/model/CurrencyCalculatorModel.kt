@@ -8,6 +8,7 @@ import aposalo.com.currencycalculator.R
 import aposalo.com.currencycalculator.TAG
 import aposalo.com.currencycalculator.databinding.ActivityMainBinding
 import aposalo.com.currencycalculator.repository.CurrencyCalculatorRepository
+import aposalo.com.currencycalculator.util.Extensions.Companion.toTwoDecimalsString
 import aposalo.com.currencycalculator.util.Resource
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -23,7 +24,7 @@ class CurrencyCalculatorModel(
             repository.data.collectLatest { response ->
                 when (response) {
                     is Resource.Success -> {
-                        binding.currencyTv.text = response.message ?: resources.getString(R.string.init_value)
+                        binding.currencyTv.text = response.message?.toTwoDecimalsString() ?: resources.getString(R.string.init_value)
                     }
                     is Resource.Error -> {
                         response.message?.let { message ->

@@ -47,28 +47,28 @@ class MainActivity : AppCompatActivity() {
         binding.resultSpinner.setSpinner(1)
         binding.currencySpinner.setSpinner(0)
 
-        val listener = CalculatorListener(binding, resources)
+        val buttonListener = CalculatorListener(binding, resources)
 
-        binding.x.setOnClickListener(listener)
-        binding.openBracket.setOnClickListener(listener)
-        binding.closeBracket.setOnClickListener(listener)
-        binding.divide.setOnClickListener(listener)
-        binding.multiply.setOnClickListener(listener)
-        binding.plus.setOnClickListener(listener)
-        binding.minus.setOnClickListener(listener)
-        binding.equals.setOnClickListener(listener)
-        binding.zero.setOnClickListener(listener)
-        binding.one.setOnClickListener(listener)
-        binding.two.setOnClickListener(listener)
-        binding.three.setOnClickListener(listener)
-        binding.four.setOnClickListener(listener)
-        binding.five.setOnClickListener(listener)
-        binding.six.setOnClickListener(listener)
-        binding.seven.setOnClickListener(listener)
-        binding.eight.setOnClickListener(listener)
-        binding.nine.setOnClickListener(listener)
-        binding.c.setOnClickListener(listener)
-        binding.dot.setOnClickListener(listener)
+        binding.x.setOnClickListener(buttonListener)
+        binding.openBracket.setOnClickListener(buttonListener)
+        binding.closeBracket.setOnClickListener(buttonListener)
+        binding.divide.setOnClickListener(buttonListener)
+        binding.multiply.setOnClickListener(buttonListener)
+        binding.plus.setOnClickListener(buttonListener)
+        binding.minus.setOnClickListener(buttonListener)
+        binding.equals.setOnClickListener(buttonListener)
+        binding.zero.setOnClickListener(buttonListener)
+        binding.one.setOnClickListener(buttonListener)
+        binding.two.setOnClickListener(buttonListener)
+        binding.three.setOnClickListener(buttonListener)
+        binding.four.setOnClickListener(buttonListener)
+        binding.five.setOnClickListener(buttonListener)
+        binding.six.setOnClickListener(buttonListener)
+        binding.seven.setOnClickListener(buttonListener)
+        binding.eight.setOnClickListener(buttonListener)
+        binding.nine.setOnClickListener(buttonListener)
+        binding.c.setOnClickListener(buttonListener)
+        binding.dot.setOnClickListener(buttonListener)
     }
 
 
@@ -82,7 +82,8 @@ class MainActivity : AppCompatActivity() {
                 position: Int,
                 id: Long
             ) {
-                updateCurrency(binding.resultTv.text.toString())
+                val textChanged = binding.resultTv.text.toString()
+                updateCurrency(textChanged)
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -96,5 +97,4 @@ class MainActivity : AppCompatActivity() {
         val floatResult = result.toFloatOrNull() ?: 0.0f
         viewModel.getUserPage(toSelectedItem, fromSelectedItem, floatResult)
     }
-
 }
