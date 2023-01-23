@@ -1,7 +1,7 @@
 package aposalo.com.currencycalculator.repository
 
-import aposalo.com.currencycalculator.api.authentication.RetrofitInstance
-import aposalo.com.currencycalculator.repository.dto.FixerDto
+import aposalo.com.currencycalculator.server.api.authentication.RetrofitInstance
+import aposalo.com.currencycalculator.server.dto.FixerDto
 import aposalo.com.currencycalculator.util.Constants.Companion.DELAY
 import aposalo.com.currencycalculator.util.Extensions.Companion.toTwoDecimalsString
 import aposalo.com.currencycalculator.util.Resource
@@ -30,7 +30,7 @@ class CurrencyCalculatorRepository {
 
     private suspend fun handlePageResponse() : Resource<FixerDto> {
 
-        if (latestAmount <= 0.0f){
+        if (latestAmount <= 0.0f) {
             latestResult = "0"
             return Resource.Success(null)
         }

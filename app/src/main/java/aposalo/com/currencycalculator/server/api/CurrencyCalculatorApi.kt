@@ -1,6 +1,6 @@
-package aposalo.com.currencycalculator.api
+package aposalo.com.currencycalculator.server.api
 
-import aposalo.com.currencycalculator.repository.dto.FixerDto
+import aposalo.com.currencycalculator.server.dto.FixerDto
 import aposalo.com.currencycalculator.util.Constants.Companion.CONVERT_ANNOTATION
 import retrofit2.Response
 import retrofit2.http.GET
