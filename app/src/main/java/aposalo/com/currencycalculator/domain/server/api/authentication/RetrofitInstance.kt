@@ -1,6 +1,6 @@
-package aposalo.com.currencycalculator.server.api.authentication
+package aposalo.com.currencycalculator.domain.server.api.authentication
 
-import aposalo.com.currencycalculator.server.api.CurrencyCalculatorApi
+import aposalo.com.currencycalculator.domain.server.api.CurrencyCalculatorApi
 import aposalo.com.currencycalculator.util.Constants.Companion.CLIENT_BASE_URL
 import aposalo.com.currencycalculator.util.Constants.Companion.TOKEN
 import okhttp3.OkHttpClient

@@ -1,4 +1,4 @@
-package aposalo.com.currencycalculator.server.dto
+package aposalo.com.currencycalculator.domain.server.dto
 
 data class Info (
     val rate: Double,

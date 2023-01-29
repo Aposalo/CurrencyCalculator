@@ -1,4 +1,4 @@
-package aposalo.com.currencycalculator.model
+package aposalo.com.currencycalculator.domain.model
 
 import android.content.res.Resources
 import android.util.Log
@@ -7,7 +7,8 @@ import androidx.lifecycle.viewModelScope
 import aposalo.com.currencycalculator.R
 import aposalo.com.currencycalculator.TAG
 import aposalo.com.currencycalculator.databinding.ActivityMainBinding
-import aposalo.com.currencycalculator.repository.CurrencyCalculatorRepository
+import aposalo.com.currencycalculator.domain.local.AppDatabase
+import aposalo.com.currencycalculator.domain.repository.CurrencyCalculatorRepository
 import aposalo.com.currencycalculator.util.Extensions.Companion.toTwoDecimalsString
 import aposalo.com.currencycalculator.util.Resource
 import kotlinx.coroutines.flow.collectLatest
@@ -15,9 +16,10 @@ import kotlinx.coroutines.launch
 
 class CurrencyCalculatorModel(
     private var binding: ActivityMainBinding,
-    private var resources: Resources) : ViewModel() {
+    private var resources: Resources,
+    mDb: AppDatabase?) : ViewModel() {
 
-    private val repository: CurrencyCalculatorRepository = CurrencyCalculatorRepository()
+    private val repository: CurrencyCalculatorRepository = CurrencyCalculatorRepository(mDb)
 
     init {
         viewModelScope.launch {
