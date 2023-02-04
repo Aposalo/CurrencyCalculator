@@ -63,6 +63,10 @@ class CurrencyCalculatorEntry(
         this.count = count
     }
 
+    fun increaseCount(){
+        count++
+    }
+
     fun getCurrencyEntry() : String {
         return Json.encodeToString(CurrencyResultSerializable(to, from, amount, result))
     }

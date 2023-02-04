@@ -1,5 +1,6 @@
 package aposalo.com.currencycalculator
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -13,7 +14,9 @@ import aposalo.com.currencycalculator.domain.local.AppDatabase
 import aposalo.com.currencycalculator.domain.model.CurrencyCalculatorModel
 import aposalo.com.currencycalculator.listeners.CalculatorListener
 
+
 const val TAG = "MainActivity"
+const val SHARED_PREF = "currency_calculator"
 
 class MainActivity : AppCompatActivity() {
 
@@ -43,9 +46,7 @@ class MainActivity : AppCompatActivity() {
                 s.toString().updateCurrency()
             }
         })
-        binding.resultSpinner.setSpinner(resources.getString(R.string.EUR))
-        binding.currencySpinner.setSpinner(resources.getString(R.string.GBP))
-
+        restoreLastState()
         val buttonListener = CalculatorListener(binding, resources)
 
         binding.x.setOnClickListener(buttonListener)
@@ -68,6 +69,42 @@ class MainActivity : AppCompatActivity() {
         binding.nine.setOnClickListener(buttonListener)
         binding.c.setOnClickListener(buttonListener)
         binding.dot.setOnClickListener(buttonListener)
+    }
+
+    override fun onSaveInstanceState(savedInstanceState: Bundle) {
+        saveLastState()
+        super.onSaveInstanceState(savedInstanceState)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        restoreLastState()
+        super.onRestoreInstanceState(savedInstanceState)
+    }
+
+    private fun saveLastState(){
+        val sharedPreferences: SharedPreferences =
+            getSharedPreferences(SHARED_PREF, MODE_PRIVATE)
+
+        val myEdit: SharedPreferences.Editor = sharedPreferences.edit()
+
+        myEdit.putString("currencySpinner",currencyArray[binding.currencySpinner.selectedItemId.toInt()])
+        myEdit.putString("resultSpinner",currencyArray[binding.resultSpinner.selectedItemId.toInt()])
+        myEdit.putString("solutionTv",binding.solutionTv.text.toString())
+        myEdit.putString("resultTv",binding.resultTv.text.toString())
+        myEdit.apply()
+    }
+
+    private fun restoreLastState(){
+        val sh = getSharedPreferences(SHARED_PREF, MODE_PRIVATE)
+        binding.resultSpinner.setSpinner(sh.getString("resultSpinner",resources.getString(R.string.EUR))!!)
+        binding.currencySpinner.setSpinner(sh.getString("currencySpinner",resources.getString(R.string.GBP))!!)
+        binding.solutionTv.text = sh.getString("solutionTv","")
+        binding.resultTv.text = sh?.getString("resultTv",resources.getString(R.string.init_value))
+    }
+
+    override fun onDestroy() {
+        saveLastState()
+        super.onDestroy()
     }
 
     private fun Spinner.setSpinner(selection : String) {

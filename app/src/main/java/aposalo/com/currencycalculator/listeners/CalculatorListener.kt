@@ -19,7 +19,7 @@ class CalculatorListener(private var binding: ActivityMainBinding,
         val button = view as MaterialButton
         val buttonText = button.text.toString()
         var dataToCalculate = binding.solutionTv.text.toString()
-        val result = binding.resultTv.text.toString();
+        val result = binding.resultTv.text.toString()
         when (buttonText) {
             resources.getString(R.string.clear_button) -> {
                 clearCalculator()

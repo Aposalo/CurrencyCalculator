@@ -17,9 +17,9 @@ interface CurrencyCalculatorDao {
     @Query("SELECT * FROM currency_calculator ORDER BY count ASC")
     suspend fun loadAllCurrencies(): List<CurrencyCalculatorEntry>?
 
-    @Query("SELECT result FROM currency_calculator WHERE" +
+    @Query("SELECT * FROM currency_calculator WHERE" +
             " currency_to LIKE :to AND currency_from LIKE :from AND amount LIKE :amount LIMIT 1")//
-    suspend fun getResult(to: String, from: String, amount: String): String?
+    suspend fun getResult(to: String, from: String, amount: String): CurrencyCalculatorEntry
 
     @Query("SELECT result FROM currency_calculator WHERE " +
             "id = :id")

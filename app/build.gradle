@@ -13,8 +13,8 @@ android {
         applicationId "aposalo.com.currencycalculator"
         minSdk 22
         targetSdk 33
-        versionCode 160
-        versionName "1.6.0"
+        versionCode 210
+        versionName "2.1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

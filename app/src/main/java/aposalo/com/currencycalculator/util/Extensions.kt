@@ -14,7 +14,8 @@ class Extensions  {
          fun String.getCalculation(): String {
              return try {
                  val expression = ExpressionBuilder(this).build()
-                 expression.evaluate().toString().toTwoDecimalsString()
+                 var solution = expression.evaluate().toString().getSolution()
+                 solution
              }
              catch (e: Exception) {
                  val msg = e.message.toString()
@@ -23,12 +24,14 @@ class Extensions  {
              }
          }
 
-         fun String.toTwoDecimalsString(): String {
+
+
+         fun String.getSolution(): String {
              var solutionString = this.toFloat().toTwoDecimals()
 
-             if (solutionString.endsWith(".0")) {
+             if (solutionString.endsWith(".0"))
                  solutionString = solutionString.replace(".0", "")
-             }
+
              return solutionString.replace(",",".")
          }
 

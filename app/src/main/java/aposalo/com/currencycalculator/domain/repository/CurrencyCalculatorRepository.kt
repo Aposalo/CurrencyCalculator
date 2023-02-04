@@ -5,7 +5,7 @@ import aposalo.com.currencycalculator.domain.local.CurrencyCalculatorEntry
 import aposalo.com.currencycalculator.domain.server.api.authentication.RetrofitInstance
 import aposalo.com.currencycalculator.domain.server.dto.FixerDto
 import aposalo.com.currencycalculator.util.Constants.Companion.DELAY
-import aposalo.com.currencycalculator.util.Extensions.Companion.toTwoDecimalsString
+import aposalo.com.currencycalculator.util.Extensions.Companion.getSolution
 import aposalo.com.currencycalculator.util.Resource
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,19 +31,19 @@ class CurrencyCalculatorRepository(private val mDb: AppDatabase?) {
 
     private suspend fun handlePageResponse() : Resource<FixerDto> {
 
-        var latestResult : String?
-
         if (latestAmount <= 0.0f)
             return Resource.Success(null)
 
-        val latestAmountFormatted = latestAmount.toString().toTwoDecimalsString()
+        val latestAmountFormatted = latestAmount.toString().getSolution()
 
-        mDb?.currencyCalculatorDao()?.getResult(latestTo,
+        val resultEntry = mDb?.currencyCalculatorDao()?.getResult(latestTo,
             latestFrom,
-            latestAmountFormatted).also { latestResult = it }
+            latestAmountFormatted)
 
-            if (!latestResult.isNullOrEmpty()){
-                return Resource.Success(latestResult)
+            if (resultEntry != null){
+                resultEntry.increaseCount()
+                mDb?.currencyCalculatorDao()?.updateCurrency(resultEntry)
+                return Resource.Success(resultEntry.getResult())
             }
             else{
                 val response = RetrofitInstance.api.getFixerConvert(latestTo, latestFrom, latestAmountFormatted)
@@ -51,14 +51,13 @@ class CurrencyCalculatorRepository(private val mDb: AppDatabase?) {
                 if (response.isSuccessful) {
                     response.body()?.let {
                             resultResponse ->
-
-                                val resultAmountString = resultResponse.query.amount.toString().toTwoDecimalsString()
+                                val resultAmountString = resultResponse.query.amount.toString().getSolution()
                                 val resultFrom = resultResponse.query.from
                                 val resultTo = resultResponse.query.to
 
                                 if (latestAmountFormatted == resultAmountString && latestTo == resultTo && latestFrom == resultFrom){
-                                    latestResult = resultResponse.result.toString()
-                                    val entry = CurrencyCalculatorEntry(to = resultTo, from = resultFrom, amount = resultAmountString, result = latestResult!!)
+                                    val latestResult = resultResponse.result.toString()
+                                    val entry = CurrencyCalculatorEntry(to = resultTo, from = resultFrom, amount = resultAmountString, result = latestResult)
                                     mDb?.currencyCalculatorDao()?.insertCurrency(entry)
                                     return Resource.Success(latestResult)
                                 }
