@@ -21,8 +21,6 @@ class CurrencyCalculatorModel(
 
     private val repository: CurrencyCalculatorRepository = CurrencyCalculatorRepository(mDb)
 
-    var id = 0
-
     init {
         viewModelScope.launch {
             repository.data.collectLatest { response ->

@@ -9,10 +9,14 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import aposalo.com.currencycalculator.databinding.ActivityMainBinding
 import aposalo.com.currencycalculator.domain.local.AppDatabase
 import aposalo.com.currencycalculator.domain.model.CurrencyCalculatorModel
 import aposalo.com.currencycalculator.listeners.CalculatorListener
+import aposalo.com.currencycalculator.util.GoogleManager
+import com.google.android.play.core.review.ReviewManagerFactory
+import kotlinx.coroutines.launch
 
 
 const val TAG = "MainActivity"
@@ -32,6 +36,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        val reviewManager = ReviewManagerFactory.create(applicationContext)
+        GoogleManager.requestReviewInfo(reviewManager, this)
         currencyArray = resources.getStringArray(R.array.currency_array)
         mDb = AppDatabase.getInstance(applicationContext)
         viewModel = CurrencyCalculatorModel(binding, resources, mDb)
@@ -76,6 +82,13 @@ class MainActivity : AppCompatActivity() {
         super.onSaveInstanceState(savedInstanceState)
     }
 
+    override fun onStop() {
+        lifecycleScope.launch {
+            mDb?.currencyCalculatorDao()?.clearDatabase()
+        }
+        super.onStop()
+    }
+
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         restoreLastState()
         super.onRestoreInstanceState(savedInstanceState)
@@ -84,9 +97,7 @@ class MainActivity : AppCompatActivity() {
     private fun saveLastState(){
         val sharedPreferences: SharedPreferences =
             getSharedPreferences(SHARED_PREF, MODE_PRIVATE)
-
         val myEdit: SharedPreferences.Editor = sharedPreferences.edit()
-
         myEdit.putString("currencySpinner",currencyArray[binding.currencySpinner.selectedItemId.toInt()])
         myEdit.putString("resultSpinner",currencyArray[binding.resultSpinner.selectedItemId.toInt()])
         myEdit.putString("solutionTv",binding.solutionTv.text.toString())

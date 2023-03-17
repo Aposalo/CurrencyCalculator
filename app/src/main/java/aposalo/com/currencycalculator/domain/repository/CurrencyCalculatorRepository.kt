@@ -36,16 +36,15 @@ class CurrencyCalculatorRepository(private val mDb: AppDatabase?) {
 
         val latestAmountFormatted = latestAmount.toString().getSolution()
 
-        val resultEntry = mDb?.currencyCalculatorDao()?.getResult(latestTo,
+        var resultEntry = mDb?.currencyCalculatorDao()?.getResult(latestTo,
             latestFrom,
             latestAmountFormatted)
 
-            if (resultEntry != null){
-                resultEntry.increaseCount()
+            if (resultEntry != null) {
                 mDb?.currencyCalculatorDao()?.updateCurrency(resultEntry)
                 return Resource.Success(resultEntry.getResult())
             }
-            else{
+            else {
                 val response = RetrofitInstance.api.getFixerConvert(latestTo, latestFrom, latestAmountFormatted)
 
                 if (response.isSuccessful) {
@@ -55,7 +54,7 @@ class CurrencyCalculatorRepository(private val mDb: AppDatabase?) {
                                 val resultFrom = resultResponse.query.from
                                 val resultTo = resultResponse.query.to
 
-                                if (latestAmountFormatted == resultAmountString && latestTo == resultTo && latestFrom == resultFrom){
+                                if (latestAmountFormatted == resultAmountString && latestTo == resultTo && latestFrom == resultFrom) {
                                     val latestResult = resultResponse.result.toString()
                                     val entry = CurrencyCalculatorEntry(to = resultTo, from = resultFrom, amount = resultAmountString, result = latestResult)
                                     mDb?.currencyCalculatorDao()?.insertCurrency(entry)

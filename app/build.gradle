@@ -15,7 +15,6 @@ android {
         targetSdk 33
         versionCode 210
         versionName "2.1.0"
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -38,18 +37,17 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.appcompat:appcompat:1.6.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.8.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    //implementation 'com.faendir.rhino:rhino-android:1.6.0'//https://github.com/F43nd1r/rhino-android
     implementation 'net.objecthunter:exp4j:0.4.8'
 
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     implementation "com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.2"
 
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1"
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.5.1"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.0"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.6.0"
 
     //JSON
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1"
@@ -57,7 +55,14 @@ dependencies {
     // Room
     implementation "androidx.room:room-runtime:2.5.0"
     implementation "androidx.room:room-ktx:2.5.0"
+    implementation 'androidx.preference:preference:1.2.0'
     kapt "androidx.room:room-compiler:2.5.0"
+
+    //Google Play
+    implementation "com.google.android.play:review-ktx:2.0.1"
+    implementation "com.google.android.play:review:2.0.1"
+
+    implementation "androidx.fragment:fragment-ktx:1.5.5"
 
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'androidx.test.espresso:espresso-core:3.5.1'

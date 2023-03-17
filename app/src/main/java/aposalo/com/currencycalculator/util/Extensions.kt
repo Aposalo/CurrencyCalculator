@@ -14,7 +14,7 @@ class Extensions  {
          fun String.getCalculation(): String {
              return try {
                  val expression = ExpressionBuilder(this).build()
-                 var solution = expression.evaluate().toString().getSolution()
+                 val solution = expression.evaluate().toString().getSolution()
                  solution
              }
              catch (e: Exception) {
@@ -23,8 +23,6 @@ class Extensions  {
                  "Err"
              }
          }
-
-
 
          fun String.getSolution(): String {
              var solutionString = this.toFloat().toTwoDecimals()

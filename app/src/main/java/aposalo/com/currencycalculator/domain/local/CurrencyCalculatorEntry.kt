@@ -12,8 +12,7 @@ class CurrencyCalculatorEntry(
     @ColumnInfo("currency_to") private var to: String,
     @ColumnInfo("currency_from") private var from: String,
     private var amount: String,
-    private var result: String,
-    private var count: Int = 1) {
+    private var result: String) {
 
     fun getId(): Int {
         return id
@@ -53,18 +52,6 @@ class CurrencyCalculatorEntry(
 
     fun setResult(result: String) {
         this.result = result
-    }
-
-    fun getCount(): Int {
-        return count
-    }
-
-    fun setCount(count: Int) {
-        this.count = count
-    }
-
-    fun increaseCount(){
-        count++
     }
 
     fun getCurrencyEntry() : String {
