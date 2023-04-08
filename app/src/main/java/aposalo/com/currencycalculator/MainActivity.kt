@@ -4,6 +4,7 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -15,6 +16,7 @@ import aposalo.com.currencycalculator.domain.local.AppDatabase
 import aposalo.com.currencycalculator.domain.model.CurrencyCalculatorModel
 import aposalo.com.currencycalculator.listeners.CalculatorListener
 import aposalo.com.currencycalculator.util.GoogleManager
+import aposalo.com.currencycalculator.util.Resource
 import com.google.android.play.core.review.ReviewManagerFactory
 import kotlinx.coroutines.launch
 
@@ -38,9 +40,31 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         val reviewManager = ReviewManagerFactory.create(applicationContext)
         GoogleManager.requestReviewInfo(reviewManager, this)
-        currencyArray = resources.getStringArray(R.array.currency_array)
         mDb = AppDatabase.getInstance(applicationContext)
         viewModel = CurrencyCalculatorModel(binding, resources, mDb)
+
+        viewModel.countriesRepository.data.observe(this) { response ->
+            when(response){
+                is Resource.Success -> {
+                    response.data?.let { countries ->
+                        saveLastState()
+                        currencyArray = countries.symbols.keys.toTypedArray()
+                        restoreLastState()
+                    }
+                }
+                is Resource.Error -> {
+                    Log.e(TAG, "Countries cannot be loaded")
+                }
+                is Resource.Loading -> {
+                    val sh = getSharedPreferences(SHARED_PREF, MODE_PRIVATE)
+                    val defaultResult = sh.getString("resultSpinner",resources.getString(R.string.EUR))!!
+                    val defaultCurrency = sh.getString("currencySpinner",resources.getString(R.string.GBP))!!
+                    currencyArray = arrayOf(defaultResult,defaultCurrency)
+                    restoreLastState()
+                }
+            }
+        }
+
         binding.resultTv.addTextChangedListener(object : TextWatcher {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
             }
@@ -52,9 +76,8 @@ class MainActivity : AppCompatActivity() {
                 s.toString().updateCurrency()
             }
         })
-        restoreLastState()
         val buttonListener = CalculatorListener(binding, resources)
-
+        viewModel.getCountries()
         binding.x.setOnClickListener(buttonListener)
         binding.openBracket.setOnClickListener(buttonListener)
         binding.closeBracket.setOnClickListener(buttonListener)

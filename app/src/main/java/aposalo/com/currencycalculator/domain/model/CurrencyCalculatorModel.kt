@@ -8,6 +8,7 @@ import aposalo.com.currencycalculator.R
 import aposalo.com.currencycalculator.TAG
 import aposalo.com.currencycalculator.databinding.ActivityMainBinding
 import aposalo.com.currencycalculator.domain.local.AppDatabase
+import aposalo.com.currencycalculator.domain.repository.CountryRepository
 import aposalo.com.currencycalculator.domain.repository.CurrencyCalculatorRepository
 import aposalo.com.currencycalculator.util.Extensions.Companion.getSolution
 import aposalo.com.currencycalculator.util.Resource
@@ -19,11 +20,12 @@ class CurrencyCalculatorModel(
     private var resources: Resources,
     mDb: AppDatabase?) : ViewModel() {
 
-    private val repository: CurrencyCalculatorRepository = CurrencyCalculatorRepository(mDb)
+    private val currencyCalculatorRepository: CurrencyCalculatorRepository = CurrencyCalculatorRepository(mDb)
+    public val countriesRepository: CountryRepository = CountryRepository()
 
     init {
         viewModelScope.launch {
-            repository.data.collectLatest { response ->
+            currencyCalculatorRepository.data.collectLatest { response ->
                 when (response) {
                     is Resource.Success -> {
                         binding.currencyTv.text = response.message?.getSolution() ?: resources.getString(R.string.init_value)
@@ -43,7 +45,13 @@ class CurrencyCalculatorModel(
 
     fun getUserPage(to: String, from: String, amount: Float) {
         viewModelScope.launch {
-            repository.getFixerConvert(to, from, amount)
+            currencyCalculatorRepository.getFixerConvert(to, from, amount)
+        }
+    }
+
+    fun getCountries(){
+        viewModelScope.launch {
+            countriesRepository.getCountries()
         }
     }
 }
