@@ -3,6 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'org.jetbrains.kotlin.kapt'
     id 'org.jetbrains.kotlin.plugin.serialization'
+    id 'kotlin-android'
 }
 
 android {
@@ -11,10 +12,10 @@ android {
 
     defaultConfig {
         applicationId "aposalo.com.currencycalculator"
-        minSdk 22
+        minSdk 24
         targetSdk 33
-        versionCode 210
-        versionName "2.1.0"
+        versionCode 300
+        versionName "3.0.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -41,6 +42,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.8.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'net.objecthunter:exp4j:0.4.8'
+    implementation "androidx.navigation:navigation-ui-ktx:2.5.3"
 
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
@@ -56,7 +58,9 @@ dependencies {
     // Room
     implementation "androidx.room:room-runtime:2.5.1"
     implementation "androidx.room:room-ktx:2.5.1"
-    implementation 'androidx.preference:preference:1.2.0'
+    implementation 'androidx.preference:preference-ktx:1.2.0'
+    implementation 'androidx.core:core-ktx:1.10.0'
+    implementation 'androidx.core:core-ktx:1.10.0'
     kapt "androidx.room:room-compiler:2.5.1"
 
     //Google Play

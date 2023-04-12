@@ -9,7 +9,7 @@ import kotlinx.coroutines.delay
 
 class CountryRepository {
 
-    public val data : MutableLiveData<Resource<Country>> = MutableLiveData()//MutableStateFlow<Resource<Country>>(Resource.Success(null))
+    val data : MutableLiveData<Resource<Country>> = MutableLiveData()//MutableStateFlow<Resource<Country>>(Resource.Success(null))
 
     suspend fun getCountries() {
         data.postValue(Resource.Loading())

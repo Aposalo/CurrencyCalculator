@@ -5,13 +5,12 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import aposalo.com.currencycalculator.R
-import aposalo.com.currencycalculator.TAG
 import aposalo.com.currencycalculator.databinding.ActivityMainBinding
 import aposalo.com.currencycalculator.domain.local.AppDatabase
-import aposalo.com.currencycalculator.domain.repository.CountryRepository
 import aposalo.com.currencycalculator.domain.repository.CurrencyCalculatorRepository
 import aposalo.com.currencycalculator.util.Extensions.Companion.getSolution
 import aposalo.com.currencycalculator.util.Resource
+import aposalo.com.currencycalculator.util.TAG
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -21,7 +20,6 @@ class CurrencyCalculatorModel(
     mDb: AppDatabase?) : ViewModel() {
 
     private val currencyCalculatorRepository: CurrencyCalculatorRepository = CurrencyCalculatorRepository(mDb)
-    public val countriesRepository: CountryRepository = CountryRepository()
 
     init {
         viewModelScope.launch {
@@ -32,6 +30,7 @@ class CurrencyCalculatorModel(
                     }
                     is Resource.Error -> {
                         response.message?.let { message ->
+                            binding.currencyTv.text = "err"
                             Log.e(TAG, "An error occurred: $message")
                         }
                     }
@@ -49,9 +48,4 @@ class CurrencyCalculatorModel(
         }
     }
 
-    fun getCountries(){
-        viewModelScope.launch {
-            countriesRepository.getCountries()
-        }
-    }
 }
