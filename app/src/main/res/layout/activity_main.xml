@@ -6,7 +6,7 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
-        tools:context=".MainActivity">
+        tools:context=".activities.MainActivity">
 
     <TextView
         android:id="@+id/solution_tv"
@@ -37,7 +37,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="280dp"
+                    android:layout_width="305dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/result_tv"
                     android:text="@string/init_value"
@@ -51,13 +51,14 @@
                 <TextView
                     android:id="@+id/result_text"
                     android:layout_height="match_parent"
-                    android:layout_width="75dp"
+                    android:layout_width="50dp"
                     android:textColor="@color/light_gray"
-                    android:textSize="28sp"
+                    android:textSize="20sp"
                     android:textAlignment="center"
                     android:paddingStart="0dp"
                     android:paddingEnd="5dp"
                     android:layout_margin="8dp"
+                    android:gravity="center"
                     tools:text="Sp1"/>
 
             </LinearLayout>
@@ -70,7 +71,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="280dp"
+                    android:layout_width="305dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/currency_tv"
                     android:text="@string/init_value"
@@ -85,13 +86,14 @@
                 <TextView
                     android:id="@+id/currency_button"
                     android:layout_height="match_parent"
-                    android:layout_width="75dp"
+                    android:layout_width="50dp"
                     android:textColor="@color/light_gray"
-                    android:textSize="28sp"
+                    android:textSize="20sp"
                     android:textAlignment="center"
                     android:paddingStart="0dp"
                     android:paddingEnd="5dp"
                     android:layout_margin="8dp"
+                    android:gravity="center"
                     tools:text="Sp2"/>
 
             </LinearLayout>

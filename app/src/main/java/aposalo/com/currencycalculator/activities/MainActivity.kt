@@ -13,10 +13,8 @@ import aposalo.com.currencycalculator.domain.model.CurrencyCalculatorModel
 import aposalo.com.currencycalculator.listeners.CalculatorListener
 import aposalo.com.currencycalculator.util.ActivityMainStateManager
 import aposalo.com.currencycalculator.util.Constants.Companion.CURRENCY_CHANGE
-import aposalo.com.currencycalculator.util.Constants.Companion.CURRENCY_VALUE
 import com.google.android.play.core.review.ReviewManagerFactory
 import kotlinx.coroutines.launch
-
 
 const val TAG = "MainActivity"
 const val SHARED_PREF = "currency_calculator"
@@ -35,6 +33,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         val reviewManager = ReviewManagerFactory.create(applicationContext)
         val request = reviewManager.requestReviewFlow()
         request.addOnCompleteListener { task ->
@@ -45,23 +44,10 @@ class MainActivity : AppCompatActivity() {
 
         mDb = AppDatabase.getInstance(applicationContext)
         viewModel = CurrencyCalculatorModel(binding, resources, mDb)
-        stateManager = ActivityMainStateManager(binding, resources, this)
-
-        if (intent != null && intent.hasExtra(CURRENCY_CHANGE) && intent.hasExtra(CURRENCY_VALUE)) {
-            val currencyChange = intent.getStringExtra(CURRENCY_CHANGE) ?: ""
-            val currencyValue = intent.getStringExtra(CURRENCY_VALUE) ?: ""
-            if (currencyChange == "result"){
-                stateManager.updateResultValue(currencyValue)
-            }
-            else if (currencyChange == "currency"){
-                stateManager.updateCurrencyValue(currencyValue)
-            }
-            stateManager.restoreLastState()
-            binding.resultTv.text.toString().updateCurrency()
-        }
-        else{
-            stateManager.restoreLastState()
-        }
+        stateManager = ActivityMainStateManager(resources, this)
+        stateManager.setBinding(binding)
+        stateManager.restoreLastState()
+        binding.resultTv.text.toString().updateCurrency()
 
         binding.resultTv.addTextChangedListener(object : TextWatcher {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
@@ -78,26 +64,7 @@ class MainActivity : AppCompatActivity() {
         binding.currencyLayout.setOnClickListener(onClickCountryChange("currency"))
 
         val buttonListener = CalculatorListener(binding, resources)
-        binding.x.setOnClickListener(buttonListener)
-        binding.openBracket.setOnClickListener(buttonListener)
-        binding.closeBracket.setOnClickListener(buttonListener)
-        binding.divide.setOnClickListener(buttonListener)
-        binding.multiply.setOnClickListener(buttonListener)
-        binding.plus.setOnClickListener(buttonListener)
-        binding.minus.setOnClickListener(buttonListener)
-        binding.equals.setOnClickListener(buttonListener)
-        binding.zero.setOnClickListener(buttonListener)
-        binding.one.setOnClickListener(buttonListener)
-        binding.two.setOnClickListener(buttonListener)
-        binding.three.setOnClickListener(buttonListener)
-        binding.four.setOnClickListener(buttonListener)
-        binding.five.setOnClickListener(buttonListener)
-        binding.six.setOnClickListener(buttonListener)
-        binding.seven.setOnClickListener(buttonListener)
-        binding.eight.setOnClickListener(buttonListener)
-        binding.nine.setOnClickListener(buttonListener)
-        binding.c.setOnClickListener(buttonListener)
-        binding.dot.setOnClickListener(buttonListener)
+        buttonListener.setOnClickListenerButtons()
     }
 
     private fun onClickCountryChange(layout: String): View.OnClickListener {

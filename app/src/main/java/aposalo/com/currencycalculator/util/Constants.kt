@@ -12,6 +12,5 @@ class Constants {
         const val CLIENT_BASE_URL = "https://api.apilayer.com/"
         const val DELAY: Long = 600
         const val CURRENCY_CHANGE = "currency"
-        const val CURRENCY_VALUE = "currencyValue"
     }
 }

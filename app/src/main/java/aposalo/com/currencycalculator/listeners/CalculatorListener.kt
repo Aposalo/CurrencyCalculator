@@ -15,6 +15,29 @@ class CalculatorListener(private var binding: ActivityMainBinding,
         binding.resultTv.text = resources.getString(R.string.init_value)
     }
 
+    fun setOnClickListenerButtons(){
+        binding.x.setOnClickListener(this)
+        binding.openBracket.setOnClickListener(this)
+        binding.closeBracket.setOnClickListener(this)
+        binding.divide.setOnClickListener(this)
+        binding.multiply.setOnClickListener(this)
+        binding.plus.setOnClickListener(this)
+        binding.minus.setOnClickListener(this)
+        binding.equals.setOnClickListener(this)
+        binding.zero.setOnClickListener(this)
+        binding.one.setOnClickListener(this)
+        binding.two.setOnClickListener(this)
+        binding.three.setOnClickListener(this)
+        binding.four.setOnClickListener(this)
+        binding.five.setOnClickListener(this)
+        binding.six.setOnClickListener(this)
+        binding.seven.setOnClickListener(this)
+        binding.eight.setOnClickListener(this)
+        binding.nine.setOnClickListener(this)
+        binding.c.setOnClickListener(this)
+        binding.dot.setOnClickListener(this)
+    }
+
     override fun onClick(view: View?) {
         val button = view as MaterialButton
         val buttonText = button.text.toString()

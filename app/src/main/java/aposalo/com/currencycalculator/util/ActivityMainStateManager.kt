@@ -8,9 +8,14 @@ import aposalo.com.currencycalculator.R
 import aposalo.com.currencycalculator.activities.SHARED_PREF
 import aposalo.com.currencycalculator.databinding.ActivityMainBinding
 
-class ActivityMainStateManager(private val binding: ActivityMainBinding,
-                               private val resources: Resources,
+class ActivityMainStateManager(private val resources: Resources,
                                private val context : Context) {
+
+     private lateinit var binding: ActivityMainBinding
+
+    fun setBinding(binding: ActivityMainBinding){
+        this.binding = binding
+    }
 
     fun saveLastState(){
         val sharedPreferences: SharedPreferences =
@@ -19,7 +24,6 @@ class ActivityMainStateManager(private val binding: ActivityMainBinding,
         myEdit.putString("currencySpinner",binding.currencyButton.text.toString())
         myEdit.putString("resultSpinner",binding.resultText.text.toString())
         myEdit.putString("solutionTv",binding.solutionTv.text.toString())
-        myEdit.putString("currencyTv",binding.currencyTv.text.toString())
         myEdit.putString("resultTv",binding.resultTv.text.toString())
         myEdit.apply()
     }
@@ -45,7 +49,6 @@ class ActivityMainStateManager(private val binding: ActivityMainBinding,
         binding.currencyButton.text = sh.getString("currencySpinner",resources.getString(R.string.GBP))!!
         binding.resultText.text = sh.getString("resultSpinner",resources.getString(R.string.EUR))!!
         binding.solutionTv.text = sh.getString("solutionTv","")
-        binding.currencyTv.text = sh.getString("currencyTv",resources.getString(R.string.init_value))
         binding.resultTv.text = sh?.getString("resultTv",resources.getString(R.string.init_value))
     }
 }

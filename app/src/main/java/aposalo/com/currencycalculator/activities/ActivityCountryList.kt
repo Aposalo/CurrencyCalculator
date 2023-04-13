@@ -1,9 +1,7 @@
 package aposalo.com.currencycalculator.activities
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import aposalo.com.currencycalculator.adapters.CountriesAdapter
@@ -11,8 +9,8 @@ import aposalo.com.currencycalculator.databinding.ActivityCountryListBinding
 import aposalo.com.currencycalculator.domain.local.AppDatabase
 import aposalo.com.currencycalculator.domain.model.CountryModel
 import aposalo.com.currencycalculator.domain.model.CountrySymbols
+import aposalo.com.currencycalculator.util.ActivityMainStateManager
 import aposalo.com.currencycalculator.util.Constants.Companion.CURRENCY_CHANGE
-import aposalo.com.currencycalculator.util.Constants.Companion.CURRENCY_VALUE
 import aposalo.com.currencycalculator.util.Resource
 
 class ActivityCountryList : AppCompatActivity() {
@@ -23,14 +21,6 @@ class ActivityCountryList : AppCompatActivity() {
     private lateinit var countriesAdapter : CountriesAdapter
     private var currencyList : ArrayList<CountrySymbols> = ArrayList()
     private lateinit var layout: String;
-
-    private fun hideProgressBar() {
-        binding.progressBar.visibility = View.INVISIBLE
-    }
-
-    private fun showProgressBar() {
-        binding.progressBar.visibility = View.VISIBLE
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,15 +42,13 @@ class ActivityCountryList : AppCompatActivity() {
                             currencyList.add(countrySymbol)
                         }
                         countriesAdapter.differ.submitList(currencyList)
-                        hideProgressBar()
                     }
                 }
                 is Resource.Error -> {
-                    Log.e(TAG, "Countries cannot be loaded")
-                    hideProgressBar()
+                    Log.e(TAG, "Countries cannot be loaded.")
                 }
                 is Resource.Loading -> {
-                    showProgressBar()
+                    Log.d(TAG, "Countries are loaded.")
                 }
             }
         }
@@ -68,10 +56,14 @@ class ActivityCountryList : AppCompatActivity() {
     }
 
     private fun adapterOnClick(countrySymbol: CountrySymbols) {
-        val intent = Intent(this, MainActivity()::class.java)
-        intent.putExtra(CURRENCY_CHANGE, layout);
-        intent.putExtra(CURRENCY_VALUE, countrySymbol.symbol);
-        this.startActivity(intent)
+        val stateManager = ActivityMainStateManager(resources, this)
+        if (layout == "result"){
+            stateManager.updateResultValue(countrySymbol.symbol)
+        }
+        else if (layout == "currency"){
+            stateManager.updateCurrencyValue(countrySymbol.symbol)
+        }
+        finish()
     }
 
     private fun setupRecyclerView() {
