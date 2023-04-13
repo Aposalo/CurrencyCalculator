@@ -45,7 +45,7 @@ class ActivityMainStateManager(private val binding: ActivityMainBinding,
         binding.currencyButton.text = sh.getString("currencySpinner",resources.getString(R.string.GBP))!!
         binding.resultText.text = sh.getString("resultSpinner",resources.getString(R.string.EUR))!!
         binding.solutionTv.text = sh.getString("solutionTv","")
-        binding.currencyTv.text = sh.getString("currencyTv","")
+        binding.currencyTv.text = sh.getString("currencyTv",resources.getString(R.string.init_value))
         binding.resultTv.text = sh?.getString("resultTv",resources.getString(R.string.init_value))
     }
 }

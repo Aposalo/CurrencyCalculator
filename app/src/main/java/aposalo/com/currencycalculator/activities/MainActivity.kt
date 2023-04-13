@@ -14,7 +14,6 @@ import aposalo.com.currencycalculator.listeners.CalculatorListener
 import aposalo.com.currencycalculator.util.ActivityMainStateManager
 import aposalo.com.currencycalculator.util.Constants.Companion.CURRENCY_CHANGE
 import aposalo.com.currencycalculator.util.Constants.Companion.CURRENCY_VALUE
-import aposalo.com.currencycalculator.util.GoogleManager
 import com.google.android.play.core.review.ReviewManagerFactory
 import kotlinx.coroutines.launch
 
@@ -37,7 +36,13 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val reviewManager = ReviewManagerFactory.create(applicationContext)
-        GoogleManager.requestReviewInfo(reviewManager, this)
+        val request = reviewManager.requestReviewFlow()
+        request.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                reviewManager.launchReviewFlow(this, task.result)
+            }
+        }
+
         mDb = AppDatabase.getInstance(applicationContext)
         viewModel = CurrencyCalculatorModel(binding, resources, mDb)
         stateManager = ActivityMainStateManager(binding, resources, this)
