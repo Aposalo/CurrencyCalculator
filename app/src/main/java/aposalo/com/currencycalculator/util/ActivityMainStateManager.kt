@@ -5,8 +5,8 @@ import android.content.SharedPreferences
 import android.content.res.Resources
 import androidx.appcompat.app.AppCompatActivity
 import aposalo.com.currencycalculator.R
-import aposalo.com.currencycalculator.activities.SHARED_PREF
 import aposalo.com.currencycalculator.databinding.ActivityMainBinding
+import aposalo.com.currencycalculator.util.Constants.Companion.SHARED_PREF
 
 class ActivityMainStateManager(private val resources: Resources,
                                private val context : Context) {

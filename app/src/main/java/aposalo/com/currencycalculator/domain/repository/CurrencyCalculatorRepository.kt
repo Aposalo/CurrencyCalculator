@@ -36,7 +36,7 @@ class CurrencyCalculatorRepository(private val mDb: AppDatabase?) {
 
         val latestAmountFormatted = latestAmount.toString().getSolution()
 
-        var resultEntry = mDb?.currencyCalculatorDao()?.getResult(latestTo,
+        val resultEntry = mDb?.currencyCalculatorDao()?.getResult(latestTo,
             latestFrom,
             latestAmountFormatted)
 

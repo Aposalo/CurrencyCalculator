@@ -17,7 +17,6 @@ import com.google.android.play.core.review.ReviewManagerFactory
 import kotlinx.coroutines.launch
 
 const val TAG = "MainActivity"
-const val SHARED_PREF = "currency_calculator"
 
 class MainActivity : AppCompatActivity() {
 
@@ -28,6 +27,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var stateManager: ActivityMainStateManager
 
     private var mDb: AppDatabase? = null
+
+    private var hasMovedToCountries: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,36 +68,30 @@ class MainActivity : AppCompatActivity() {
         buttonListener.setOnClickListenerButtons()
     }
 
+    override fun onRestart() {
+        stateManager.restoreLastState()
+        hasMovedToCountries = false
+        super.onRestart()
+    }
+
     private fun onClickCountryChange(layout: String): View.OnClickListener {
         return View.OnClickListener {
             stateManager.saveLastState()
             val intent = Intent(this@MainActivity, ActivityCountryList::class.java)
             intent.putExtra(CURRENCY_CHANGE, layout)
+            hasMovedToCountries = true
             startActivity(intent)
         }
     }
 
-    override fun onSaveInstanceState(savedInstanceState: Bundle) {
-        stateManager.saveLastState()
-        super.onSaveInstanceState(savedInstanceState)
-    }
-
     override fun onStop() {
         stateManager.saveLastState()
-        lifecycleScope.launch {
-            mDb?.currencyCalculatorDao()?.clearDatabase()
+        if (!hasMovedToCountries){
+            lifecycleScope.launch {
+                mDb?.currencyCalculatorDao()?.clearDatabase()
+            }
         }
         super.onStop()
-    }
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        stateManager.restoreLastState()
-        super.onRestoreInstanceState(savedInstanceState)
-    }
-
-    override fun onDestroy() {
-        stateManager.saveLastState()
-        super.onDestroy()
     }
 
     private fun String.updateCurrency() {
