@@ -7,7 +7,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import aposalo.com.currencycalculator.util.Constants.Companion.DATABASE_NAME
 
-@Database(entities = [CurrencyCalculatorEntry::class], version = 1, exportSchema = false)
+@Database(entities = [CurrencyCalculatorEntry::class,CountryEntry::class], version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
 
     companion object {
@@ -32,7 +32,5 @@ abstract class AppDatabase : RoomDatabase() {
     }
 
     abstract fun currencyCalculatorDao(): CurrencyCalculatorDao
-
-    abstract fun countryDao(): CountryDao
 
 }

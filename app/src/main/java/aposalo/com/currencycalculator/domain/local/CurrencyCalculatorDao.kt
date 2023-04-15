@@ -33,7 +33,7 @@ interface CurrencyCalculatorDao {
     suspend fun loadAllCurrencies(): List<CurrencyCalculatorEntry>?
 
     @Query("SELECT DISTINCT * FROM country where name LIKE '%' || :word || '%' or symbol LIKE '%' || :word || '%' ORDER BY name ASC")
-    suspend fun loadAllCurrencies(word: String): List<CurrencyCalculatorEntry>?
+    suspend fun loadAllCountries(word: String): List<CountryEntry>?
 
     @Query("SELECT * FROM country ORDER BY name ASC")
     suspend fun loadAllCountries(): List<CountryEntry>?
