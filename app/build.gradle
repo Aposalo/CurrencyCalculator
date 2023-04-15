@@ -60,14 +60,20 @@ dependencies {
     implementation "androidx.room:room-ktx:2.5.1"
     implementation 'androidx.preference:preference-ktx:1.2.0'
     implementation 'androidx.core:core-ktx:1.10.0'
+    implementation 'androidx.core:core-ktx:+'
+    implementation 'androidx.core:core-ktx:+'
     kapt "androidx.room:room-compiler:2.5.1"
 
     //Google Play
     implementation "com.google.android.play:review-ktx:2.0.1"
     implementation "com.google.android.play:review:2.0.1"
 
+    //Fragments
     implementation "androidx.fragment:fragment-ktx:1.5.6"
 
+    //JUNIT 4
+    implementation 'androidx.test.ext:junit-ktx:1.1.5'
+    androidTestImplementation 'junit:junit:4.13.2'
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 }

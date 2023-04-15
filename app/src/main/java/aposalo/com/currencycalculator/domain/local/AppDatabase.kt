@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import aposalo.com.currencycalculator.util.Constants.Companion.DATABASE_NAME
 
 @Database(entities = [CurrencyCalculatorEntry::class], version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
@@ -12,7 +13,6 @@ abstract class AppDatabase : RoomDatabase() {
     companion object {
         private val LOG_TAG = AppDatabase::class.java.simpleName
         private val LOCK = Any()
-        private const val DATABASE_NAME = "CurrencyCalculator"
         private var sInstance: AppDatabase? = null
 
         fun getInstance(context: Context): AppDatabase? {
@@ -32,5 +32,7 @@ abstract class AppDatabase : RoomDatabase() {
     }
 
     abstract fun currencyCalculatorDao(): CurrencyCalculatorDao
+
+    abstract fun countryDao(): CountryDao
 
 }

@@ -1,5 +1,6 @@
 package aposalo.com.currencycalculator.domain.repository
 
+import android.annotation.SuppressLint
 import aposalo.com.currencycalculator.domain.local.AppDatabase
 import aposalo.com.currencycalculator.domain.local.CurrencyCalculatorEntry
 import aposalo.com.currencycalculator.domain.server.api.authentication.RetrofitInstance
@@ -29,6 +30,7 @@ class CurrencyCalculatorRepository(private val mDb: AppDatabase?) {
         _dataFlow.emit(handlePageResponse())
     }
 
+    @SuppressLint("SuspiciousIndentation")
     private suspend fun handlePageResponse() : Resource<FixerDto> {
 
         if (latestAmount <= 0.0f)

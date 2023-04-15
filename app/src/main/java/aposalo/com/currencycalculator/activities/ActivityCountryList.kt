@@ -10,7 +10,7 @@ import aposalo.com.currencycalculator.domain.local.AppDatabase
 import aposalo.com.currencycalculator.domain.model.CountryModel
 import aposalo.com.currencycalculator.domain.model.CountrySymbols
 import aposalo.com.currencycalculator.util.ActivityMainStateManager
-import aposalo.com.currencycalculator.util.Constants.Companion.CURRENCY_CHANGE
+import aposalo.com.currencycalculator.util.Constants
 import aposalo.com.currencycalculator.util.Resource
 
 class ActivityCountryList : AppCompatActivity() {
@@ -20,23 +20,19 @@ class ActivityCountryList : AppCompatActivity() {
     private lateinit var viewModel: CountryModel
     private lateinit var countriesAdapter : CountriesAdapter
     private var currencyList : ArrayList<CountrySymbols> = ArrayList()
-    private lateinit var layout: String;
+    private lateinit var layout: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (intent != null && intent.hasExtra(CURRENCY_CHANGE)) {
-            layout = intent.getStringExtra(CURRENCY_CHANGE) ?: "";
-        }
         binding = ActivityCountryListBinding.inflate(layoutInflater)
         mDb = AppDatabase.getInstance(applicationContext)
         setContentView(binding.root)
         setupRecyclerView()
-        viewModel = CountryModel()
+        viewModel = CountryModel(mDb)
         viewModel.countriesRepository.data.observe(this) { response ->
             when(response){
                 is Resource.Success -> {
                     response.data?.let { countries ->
-                        currencyList = ArrayList()
                         countries.symbols.forEach { (k, v) ->
                             val countrySymbol = CountrySymbols(k,v)
                             currencyList.add(countrySymbol)
@@ -56,13 +52,11 @@ class ActivityCountryList : AppCompatActivity() {
     }
 
     private fun adapterOnClick(countrySymbol: CountrySymbols) {
+        if (intent != null && intent.hasExtra(Constants.CURRENCY_CHANGE)) {
+            layout = intent.getStringExtra(Constants.CURRENCY_CHANGE) ?: ""
+        }
         val stateManager = ActivityMainStateManager(resources, this)
-        if (layout == "result"){
-            stateManager.updateResultValue(countrySymbol.symbol)
-        }
-        else if (layout == "currency"){
-            stateManager.updateCurrencyValue(countrySymbol.symbol)
-        }
+        stateManager.updateCountryValue(layout, countrySymbol.symbol)
         finish()
     }
 

@@ -13,6 +13,8 @@ import aposalo.com.currencycalculator.domain.model.CurrencyCalculatorModel
 import aposalo.com.currencycalculator.listeners.CalculatorListener
 import aposalo.com.currencycalculator.util.ActivityMainStateManager
 import aposalo.com.currencycalculator.util.Constants.Companion.CURRENCY_CHANGE
+import aposalo.com.currencycalculator.util.Constants.Companion.CURRENCY_TEXT_LABEL
+import aposalo.com.currencycalculator.util.Constants.Companion.RESULT_TEXT_LABEL
 import com.google.android.play.core.review.ReviewManagerFactory
 import kotlinx.coroutines.launch
 
@@ -61,8 +63,8 @@ class MainActivity : AppCompatActivity() {
                 s.toString().updateCurrency()
             }
         })
-        binding.resultLayout.setOnClickListener(onClickCountryChange("result"))
-        binding.currencyLayout.setOnClickListener(onClickCountryChange("currency"))
+        binding.resultLayout.setOnClickListener(onClickCountryChange(RESULT_TEXT_LABEL))
+        binding.currencyLayout.setOnClickListener(onClickCountryChange(CURRENCY_TEXT_LABEL))
 
         val buttonListener = CalculatorListener(binding, resources)
         buttonListener.setOnClickListenerButtons()
@@ -89,13 +91,14 @@ class MainActivity : AppCompatActivity() {
         if (!hasMovedToCountries){
             lifecycleScope.launch {
                 mDb?.currencyCalculatorDao()?.clearDatabase()
+                mDb?.currencyCalculatorDao()?.clearCountry()
             }
         }
         super.onStop()
     }
 
     private fun String.updateCurrency() {
-        val toSelectedItem = binding.currencyButton.text.toString()
+        val toSelectedItem = binding.currencyText.text.toString()
         val fromSelectedItem = binding.resultText.text.toString()
         val floatResult = this.toFloatOrNull() ?: 0.0f
         viewModel.getUserPage(toSelectedItem, fromSelectedItem, floatResult)
