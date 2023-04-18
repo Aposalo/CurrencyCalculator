@@ -1,4 +1,4 @@
-package aposalo.com.currencycalculator.domain.local
+package aposalo.com.currencycalculator.domain.local.currency
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

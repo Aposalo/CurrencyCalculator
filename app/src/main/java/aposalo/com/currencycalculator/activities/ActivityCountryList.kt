@@ -1,6 +1,8 @@
 package aposalo.com.currencycalculator.activities
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -9,7 +11,7 @@ import aposalo.com.currencycalculator.databinding.ActivityCountryListBinding
 import aposalo.com.currencycalculator.domain.local.AppDatabase
 import aposalo.com.currencycalculator.domain.model.CountryModel
 import aposalo.com.currencycalculator.domain.model.CountrySymbols
-import aposalo.com.currencycalculator.util.ActivityMainStateManager
+import aposalo.com.currencycalculator.util.StateManager
 import aposalo.com.currencycalculator.util.Constants
 import aposalo.com.currencycalculator.util.Resource
 
@@ -19,7 +21,6 @@ class ActivityCountryList : AppCompatActivity() {
     private var mDb: AppDatabase? = null
     private lateinit var viewModel: CountryModel
     private lateinit var countriesAdapter : CountriesAdapter
-    private var currencyList : ArrayList<CountrySymbols> = ArrayList()
     private lateinit var layout: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,6 +34,7 @@ class ActivityCountryList : AppCompatActivity() {
             when(response){
                 is Resource.Success -> {
                     response.data?.let { countries ->
+                        val currencyList : ArrayList<CountrySymbols> = ArrayList()
                         countries.symbols.forEach { (k, v) ->
                             val countrySymbol = CountrySymbols(k,v)
                             currencyList.add(countrySymbol)
@@ -49,13 +51,25 @@ class ActivityCountryList : AppCompatActivity() {
             }
         }
         viewModel.getCountries()
+
+        binding.searchCountries.addTextChangedListener(object : TextWatcher{
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                viewModel.getCountries(s.toString())
+            }
+        })
     }
 
     private fun adapterOnClick(countrySymbol: CountrySymbols) {
         if (intent != null && intent.hasExtra(Constants.CURRENCY_CHANGE)) {
             layout = intent.getStringExtra(Constants.CURRENCY_CHANGE) ?: ""
         }
-        val stateManager = ActivityMainStateManager(resources, this)
+        val stateManager = StateManager(resources, this)
         stateManager.updateCountryValue(layout, countrySymbol.symbol)
         finish()
     }

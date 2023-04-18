@@ -9,4 +9,5 @@
     <string name="GBP">GBP</string>
     <string name="EUR">EUR</string>
     <string name="history_label">History</string>
+    <string name="search">Search...</string>
 </resources>

@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import aposalo.com.currencycalculator.databinding.CountryListItemsBinding
 import aposalo.com.currencycalculator.domain.model.CountrySymbols
+import io.sentry.Sentry
 
 class CountriesAdapter(private val onItemClick: (CountrySymbols) -> Unit): RecyclerView.Adapter<CountriesAdapter.PageViewHolder>() {
 
@@ -38,16 +39,21 @@ class CountriesAdapter(private val onItemClick: (CountrySymbols) -> Unit): Recyc
     }
 
     override fun onBindViewHolder(holder: PageViewHolder, position: Int) {
-
-        with(holder){
-            with(itemModels[position]){
-                binding.tvSymbol.text = this.symbol
-                binding.tvName.text = this.name
-                binding.listItem.setOnClickListener {
-                    onItemClick(itemModels[position])
+        try{
+            with(holder){
+                with(itemModels[position]){
+                    binding.tvSymbol.text = this.symbol
+                    binding.tvName.text = this.name
+                    binding.listItem.setOnClickListener {
+                        onItemClick(this)
+                    }
                 }
             }
         }
+        catch(e: Exception){
+            e.message?.let { Sentry.captureMessage(it) }
+        }
+
     }
 
     inner class PageViewHolder(val binding: CountryListItemsBinding): ViewHolder(binding.root)

@@ -1,6 +1,8 @@
 package aposalo.com.currencycalculator.domain.local
 
 import androidx.room.*
+import aposalo.com.currencycalculator.domain.local.countries.CountryEntry
+import aposalo.com.currencycalculator.domain.local.currency.CurrencyCalculatorEntry
 
 @Dao
 interface CurrencyCalculatorDao {

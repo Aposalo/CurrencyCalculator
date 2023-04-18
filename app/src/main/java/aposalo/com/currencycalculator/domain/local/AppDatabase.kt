@@ -5,9 +5,11 @@ import android.util.Log
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import aposalo.com.currencycalculator.domain.local.countries.CountryEntry
+import aposalo.com.currencycalculator.domain.local.currency.CurrencyCalculatorEntry
 import aposalo.com.currencycalculator.util.Constants.Companion.DATABASE_NAME
 
-@Database(entities = [CurrencyCalculatorEntry::class,CountryEntry::class], version = 1, exportSchema = false)
+@Database(entities = [CurrencyCalculatorEntry::class, CountryEntry::class], version = 2)
 abstract class AppDatabase : RoomDatabase() {
 
     companion object {
@@ -23,6 +25,7 @@ abstract class AppDatabase : RoomDatabase() {
                         context.applicationContext,
                         AppDatabase::class.java, DATABASE_NAME
                     )
+                        .fallbackToDestructiveMigration()
                         .build()
                 }
             }
