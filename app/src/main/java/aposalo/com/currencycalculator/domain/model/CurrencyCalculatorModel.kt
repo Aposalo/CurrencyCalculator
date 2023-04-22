@@ -9,10 +9,10 @@ import aposalo.com.currencycalculator.R
 import aposalo.com.currencycalculator.databinding.ActivityMainBinding
 import aposalo.com.currencycalculator.domain.local.AppDatabase
 import aposalo.com.currencycalculator.domain.repository.CurrencyCalculatorRepository
+import aposalo.com.currencycalculator.util.Extensions.Companion.getDefaultCalculation
 import aposalo.com.currencycalculator.util.Extensions.Companion.getSolution
 import aposalo.com.currencycalculator.util.InternetConnectivity
 import aposalo.com.currencycalculator.util.Resource
-import aposalo.com.currencycalculator.util.StateManager
 import aposalo.com.currencycalculator.util.TAG
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -25,28 +25,40 @@ class CurrencyCalculatorModel(
 
     private val currencyCalculatorRepository: CurrencyCalculatorRepository = CurrencyCalculatorRepository(mDb)
 
+    private var rate : Float = 0.88f
+
     init {
         viewModelScope.launch {
-            currencyCalculatorRepository.data.collectLatest { response ->
+            currencyCalculatorRepository.dataCurrencyCalculator.collectLatest { response ->
                 when (response) {
                     is Resource.Success -> {
                         if (InternetConnectivity.isOnline(context)){
                             binding.currencyTv.text = response.message?.getSolution() ?: resources.getString(R.string.init_value)
                         }
-                        else{
-                            val stateManager = StateManager(resources, context)
-                            val rate = stateManager.getRate()
-                            val res = binding.resultTv.text.toString().toFloat()
-                            val curr = rate?.toFloat()?.times(res)
+                        else {
+                            var res = binding.solutionTv.text.toString().getDefaultCalculation().toFloatOrNull()
+                            val toSelectedItem = binding.currencyText.text.toString()
+                            val fromSelectedItem = binding.resultText.text.toString()
+                            val resRate = mDb?.latestRateDao()?.getResult(to = toSelectedItem, from = fromSelectedItem)
+                            if (resRate != null) {
+                                rate = resRate.getRate()
+                            }
+                            res = res ?: 0.0f
+                            val curr = rate.times(res)
                             binding.currencyTv.text = curr.toString().getSolution()
                         }
                     }
                     is Resource.Error -> {
                         response.message?.let { message ->
-                            val stateManager = StateManager(resources, context)
-                            val rate = stateManager.getRate()
-                            val res = binding.resultTv.text.toString().toFloat()
-                            val curr = rate?.toFloat()?.times(res)
+                            var res = binding.solutionTv.text.toString().getDefaultCalculation().toFloatOrNull()
+                            val toSelectedItem = binding.currencyText.text.toString()
+                            val fromSelectedItem = binding.resultText.text.toString()
+                            val resRate = mDb?.latestRateDao()?.getResult(to = toSelectedItem, from = fromSelectedItem)
+                            if (resRate != null) {
+                                rate = resRate.getRate()
+                            }
+                            res = res ?: 0.0f
+                            val curr = rate.times(res!!)
                             binding.currencyTv.text = curr.toString().getSolution()
                             Log.e(TAG, "An error occurred: $message")
                         }
@@ -59,12 +71,13 @@ class CurrencyCalculatorModel(
         }
 
         viewModelScope.launch {
-            currencyCalculatorRepository.dataInitValue.collectLatest { response ->
+            currencyCalculatorRepository.dataLatestRate.collectLatest { response ->
                 when (response) {
                     is Resource.Success -> {
                         if (InternetConnectivity.isOnline(context)){
-                            val stateManager = StateManager(resources, context)
-                            stateManager.updateRate(response.message?.getSolution() ?: "1.0f")
+                            response.message?.let { responseRate ->
+                                rate = responseRate.toFloat()
+                            }
                         }
                     }
                     is Resource.Error -> {
@@ -72,9 +85,7 @@ class CurrencyCalculatorModel(
                             Log.e(TAG, "An error occurred: $message")
                         }
                     }
-                    is Resource.Loading -> {
-                        //binding.currencyTv.text = resources.getString(R.string.loader)
-                    }
+                    is Resource.Loading -> {}
                 }
             }
         }
@@ -82,13 +93,13 @@ class CurrencyCalculatorModel(
 
     fun getUserPage(to: String, from: String, amount: Float) {
         viewModelScope.launch {
-            currencyCalculatorRepository.getFixerConvert(to, from, amount)
+            currencyCalculatorRepository.getCurrencyValue(to, from, amount)
         }
     }
 
-    fun getUserPage(to: String, from: String) {
+    fun getLatestRate(to: String, from: String) {
         viewModelScope.launch {
-            currencyCalculatorRepository.getFixerConvert(to, from)
+            currencyCalculatorRepository.getLatestRateValue(to, from)
         }
     }
 

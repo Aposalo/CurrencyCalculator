@@ -50,8 +50,6 @@ class MainActivity : AppCompatActivity() {
         viewModel = CurrencyCalculatorModel(binding, resources, mDb, this)
         stateManager = StateManager(resources, this)
         stateManager.setBinding(binding)
-        stateManager.restoreLastState()
-        binding.resultTv.text.toString().updateCurrency()
         binding.resultTv.addTextChangedListener(object : TextWatcher {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
             }
@@ -65,6 +63,7 @@ class MainActivity : AppCompatActivity() {
         })
         binding.resultLayout.setOnClickListener(onClickCountryChange(RESULT_TEXT_LABEL))
         binding.currencyLayout.setOnClickListener(onClickCountryChange(CURRENCY_TEXT_LABEL))
+        stateManager.restoreLastState()
 
         val buttonListener = CalculatorListener(binding, resources)
         buttonListener.setOnClickListenerButtons()
@@ -98,8 +97,8 @@ class MainActivity : AppCompatActivity() {
         stateManager.saveLastState()
         if (!hasMovedToCountries) {
             lifecycleScope.launch {
-                mDb?.currencyCalculatorDao()?.clearDatabase()
-                mDb?.currencyCalculatorDao()?.clearCountry()
+                mDb?.currencyCalculatorDao()?.clearCurrencies()
+                mDb?.countryDao()?.clearCountry()
             }
         }
         super.onStop()
@@ -109,7 +108,7 @@ class MainActivity : AppCompatActivity() {
         if (InternetConnectivity.isOnline(this)) {
             val toSelectedItem = binding.currencyText.text.toString()
             val fromSelectedItem = binding.resultText.text.toString()
-            viewModel.getUserPage(toSelectedItem, fromSelectedItem)
+            viewModel.getLatestRate(toSelectedItem, fromSelectedItem)
         }
     }
 

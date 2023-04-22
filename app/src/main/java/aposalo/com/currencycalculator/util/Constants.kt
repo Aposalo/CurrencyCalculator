@@ -20,6 +20,5 @@ class Constants {
         const val RESULT_TEXT_LABEL = "resultSpinner"
         const val SOLUTION_TEXT_LABEL = "solutionTv"
         const val RESULT_TEXT_VALUE_LABEL = "resultTv"
-        const val RATE_LABEL = "rate"
     }
 }

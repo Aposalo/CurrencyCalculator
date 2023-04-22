@@ -2,6 +2,7 @@ package aposalo.com.currencycalculator.domain.server.api
 
 import aposalo.com.currencycalculator.domain.server.dto.Country
 import aposalo.com.currencycalculator.domain.server.dto.FixerDto
+import aposalo.com.currencycalculator.domain.server.dto.Rate
 import aposalo.com.currencycalculator.util.Constants.Companion.CONVERT_ANNOTATION
 import aposalo.com.currencycalculator.util.Constants.Companion.LATEST_ANNOTATION
 import aposalo.com.currencycalculator.util.Constants.Companion.SYMBOLS_ANNOTATION
@@ -18,5 +19,5 @@ interface CurrencyCalculatorApi {
     suspend fun getCountries(): Response<Country>
 
     @GET(LATEST_ANNOTATION)
-    suspend fun getLatestRates(@Query("base") base: String)
+    suspend fun getLatestRates(@Query("base") base: String,@Query("symbols") symbols: String) : Response<Rate>
 }

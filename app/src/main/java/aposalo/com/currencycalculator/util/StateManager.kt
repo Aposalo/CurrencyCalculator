@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import aposalo.com.currencycalculator.R
 import aposalo.com.currencycalculator.databinding.ActivityMainBinding
 import aposalo.com.currencycalculator.util.Constants.Companion.CURRENCY_TEXT_LABEL
-import aposalo.com.currencycalculator.util.Constants.Companion.RATE_LABEL
 import aposalo.com.currencycalculator.util.Constants.Companion.RESULT_TEXT_LABEL
 import aposalo.com.currencycalculator.util.Constants.Companion.RESULT_TEXT_VALUE_LABEL
 import aposalo.com.currencycalculator.util.Constants.Companion.SHARED_PREF
@@ -47,19 +46,6 @@ class StateManager(private val resources: Resources,
         val myEdit: SharedPreferences.Editor = sharedPreferences.edit()
         myEdit.putString(layout,newValue)
         myEdit.apply()
-    }
-
-    fun updateRate(rate : String) {
-        val sharedPreferences: SharedPreferences =
-            context.getSharedPreferences(SHARED_PREF, AppCompatActivity.MODE_PRIVATE)
-        val myEdit: SharedPreferences.Editor = sharedPreferences.edit()
-        myEdit.putString(RATE_LABEL, rate)
-        myEdit.apply()
-    }
-
-    fun getRate() : String? {
-        val sh = context.getSharedPreferences(SHARED_PREF, AppCompatActivity.MODE_PRIVATE)
-        return sh.getString(RATE_LABEL, "1.0f")
     }
 
 }

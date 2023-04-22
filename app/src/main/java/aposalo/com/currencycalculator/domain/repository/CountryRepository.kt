@@ -57,7 +57,7 @@ class CountryRepository(private val mDb : AppDatabase?) {
                 val country = Country(success = true, symbols = symbols)
                 return Resource.Success("Success",country)
             }
-            val response = RetrofitInstance.api.getCountries()
+            val response = RetrofitInstance.lateApi.getCountries()
             if (response.isSuccessful) {
                 response.body()?.let {
                     it.symbols.forEach { item ->

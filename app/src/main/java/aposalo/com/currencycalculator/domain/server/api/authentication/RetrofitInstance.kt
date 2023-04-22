@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit
 
 object RetrofitInstance {
 
-    private val client : OkHttpClient by lazy {
+    private val lateClient : OkHttpClient by lazy {
         OkHttpClient.Builder()
             .readTimeout(60, TimeUnit.SECONDS)
             .connectTimeout(60, TimeUnit.SECONDS)
@@ -18,7 +18,24 @@ object RetrofitInstance {
         .build()
     }
 
-    val api: CurrencyCalculatorApi by lazy {
+    val lateApi : CurrencyCalculatorApi by lazy {
+        Retrofit.Builder()
+            .baseUrl(CLIENT_BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(lateClient)
+            .build()
+            .create(CurrencyCalculatorApi::class.java)
+    }
+
+    private val client : OkHttpClient by lazy {
+        OkHttpClient.Builder()
+            .readTimeout(60, TimeUnit.MILLISECONDS)
+            .connectTimeout(60, TimeUnit.MILLISECONDS)
+            .addInterceptor(AuthInterceptor(TOKEN))
+            .build()
+    }
+
+    val api : CurrencyCalculatorApi by lazy {
         Retrofit.Builder()
             .baseUrl(CLIENT_BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
