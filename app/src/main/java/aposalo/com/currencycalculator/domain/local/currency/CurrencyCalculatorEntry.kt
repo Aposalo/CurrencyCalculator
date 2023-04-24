@@ -2,16 +2,14 @@ package aposalo.com.currencycalculator.domain.local.currency
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.PrimaryKey
-import java.util.Date
 
-@Entity(tableName = "currency_calculator")
+@Entity(tableName = "currency_calculator", primaryKeys = ["currency_to","currency_from","amount"])
 class CurrencyCalculatorEntry(
-    @PrimaryKey(autoGenerate = false) @ColumnInfo("currency_to") private var to: String,
-    @PrimaryKey(autoGenerate = false) @ColumnInfo("currency_from") private var from: String,
-    @PrimaryKey(autoGenerate = false) private var amount: String,
+    @ColumnInfo("currency_to") private var to: String,
+    @ColumnInfo("currency_from") private var from: String,
+    private var amount: String,
     private var result: String,
-    @ColumnInfo("latest_date") private var latestDate: Date) {
+    @ColumnInfo("latest_date") private var latestDate: Long) {
 
     fun getTo(): String {
         return to
@@ -43,5 +41,13 @@ class CurrencyCalculatorEntry(
 
     fun setResult(result: String) {
         this.result = result
+    }
+
+    fun getLatestDate(): Long {
+        return latestDate
+    }
+
+    fun setLatestDate(latestDate: Long) {
+        this.latestDate = latestDate
     }
 }

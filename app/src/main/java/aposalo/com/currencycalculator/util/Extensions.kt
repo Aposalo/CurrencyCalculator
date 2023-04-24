@@ -4,14 +4,12 @@ import android.util.Log
 import net.objecthunter.exp4j.ExpressionBuilder
 import java.math.RoundingMode
 import java.text.DecimalFormat
-import java.util.Date
 
 const val TAG = "EXTENSIONS"
 
 class Extensions  {
 
      companion object {
-
          fun String.getCalculation(): String {
              return try {
                  val solution = this.getDefaultCalculation().getSolution()
@@ -53,8 +51,5 @@ class Extensions  {
              return roundOff.toString()
          }
 
-         fun Int.getDateTime(): Date {
-             return Date(this * 1000L)
-         }
      }
 }

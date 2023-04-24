@@ -48,8 +48,7 @@ class MainActivity : AppCompatActivity() {
 
         mDb = AppDatabase.getInstance(applicationContext)
         viewModel = CurrencyCalculatorModel(binding, resources, mDb, this)
-        stateManager = StateManager(resources, this)
-        stateManager.setBinding(binding)
+        stateManager = StateManager(resources, this, binding)
         binding.resultTv.addTextChangedListener(object : TextWatcher {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
             }
@@ -104,18 +103,20 @@ class MainActivity : AppCompatActivity() {
         super.onStop()
     }
 
-    private fun updateRate(){
+    private fun updateRate() {
         if (InternetConnectivity.isOnline(this)) {
-            val toSelectedItem = binding.currencyText.text.toString()
-            val fromSelectedItem = binding.resultText.text.toString()
-            viewModel.getLatestRate(toSelectedItem, fromSelectedItem)
+            viewModel.getLatestRate(
+                to = binding.currencyText.text.toString(),
+                from = binding.resultText.text.toString()
+            )
         }
     }
 
     private fun String.updateCurrency() {
-        val toSelectedItem = binding.currencyText.text.toString()
-        val fromSelectedItem = binding.resultText.text.toString()
-        val floatResult = this.toFloatOrNull() ?: 0.0f
-        viewModel.getUserPage(to = toSelectedItem, from = fromSelectedItem, amount = floatResult)
+        viewModel.getUserPage(
+            to = binding.currencyText.text.toString(),
+            from = binding.resultText.text.toString(),
+            amount = toFloatOrNull() ?: 0.0f
+        )
     }
 }

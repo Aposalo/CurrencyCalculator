@@ -39,7 +39,7 @@ android {
     kotlinOptions {
         jvmTarget = '17'
     }
-    buildFeatures{
+    buildFeatures {
         viewBinding true
     }
     buildscript {
@@ -47,7 +47,6 @@ android {
             mavenCentral()
         }
     }
-
 }
 
 dependencies {
@@ -79,12 +78,12 @@ dependencies {
     implementation "com.google.android.play:review-ktx:2.0.1"
     implementation "com.google.android.play:review:2.0.1"
 
-    //Fragments
-    implementation "androidx.fragment:fragment-ktx:1.5.6"
-
     //JUNIT 4
     implementation 'androidx.test.ext:junit-ktx:1.1.5'
     androidTestImplementation 'junit:junit:4.13.2'
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+
+    // Work Manager
+    implementation 'androidx.work:work-runtime-ktx:2.8.1'
 }

@@ -7,5 +7,5 @@ data class Rate(
     val date: Date,
     val rates: Map <String, Float>,
     val success: Boolean,
-    val timestamp: Int
+    val timestamp: Long
 )

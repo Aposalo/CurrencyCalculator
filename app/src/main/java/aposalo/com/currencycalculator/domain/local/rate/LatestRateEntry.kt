@@ -2,14 +2,12 @@ package aposalo.com.currencycalculator.domain.local.rate
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.PrimaryKey
-import java.util.Date
 
-@Entity(tableName = "latest_rate")
-class LatestRateEntry (@PrimaryKey(autoGenerate = false) @ColumnInfo("currency_to") private var to: String,
-                       @PrimaryKey(autoGenerate = false) @ColumnInfo("currency_from") private var from: String,
+@Entity(tableName = "latest_rate", primaryKeys = ["currency_to","currency_from"])
+class LatestRateEntry (@ColumnInfo("currency_to") private var to: String,
+                       @ColumnInfo("currency_from") private var from: String,
                        private var rate: Float,
-                       @ColumnInfo("latest_date") private var latestDate: Date){
+                       @ColumnInfo("latest_date") private var latestDate: Long){
 
     fun getTo(): String {
         return to
@@ -35,11 +33,11 @@ class LatestRateEntry (@PrimaryKey(autoGenerate = false) @ColumnInfo("currency_t
         this.rate = rate
     }
 
-    fun getLatestDate(): Date {
+    fun getLatestDate(): Long {
         return latestDate
     }
 
-    fun setLatestDate(latestDate: Date) {
+    fun setLatestDate(latestDate: Long) {
         this.latestDate = latestDate
     }
 
