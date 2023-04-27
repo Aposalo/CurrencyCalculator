@@ -7,7 +7,6 @@ import android.text.TextWatcher
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import aposalo.com.currencycalculator.databinding.ActivityMainBinding
 import aposalo.com.currencycalculator.domain.local.AppDatabase
 import aposalo.com.currencycalculator.domain.model.CurrencyCalculatorModel
@@ -17,8 +16,8 @@ import aposalo.com.currencycalculator.util.Constants.Companion.CURRENCY_TEXT_LAB
 import aposalo.com.currencycalculator.util.Constants.Companion.RESULT_TEXT_LABEL
 import aposalo.com.currencycalculator.util.InternetConnectivity
 import aposalo.com.currencycalculator.util.StateManager
+import aposalo.com.currencycalculator.workers.WorkerRequest
 import com.google.android.play.core.review.ReviewManagerFactory
-import kotlinx.coroutines.launch
 
 const val TAG = "MainActivity"
 
@@ -30,9 +29,9 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var stateManager: StateManager
 
-    private var mDb: AppDatabase? = null
+    private lateinit var workerRequest: WorkerRequest
 
-    private var hasMovedToCountries: Boolean = false
+    private var mDb: AppDatabase? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +48,7 @@ class MainActivity : AppCompatActivity() {
         mDb = AppDatabase.getInstance(applicationContext)
         viewModel = CurrencyCalculatorModel(binding, resources, mDb, this)
         stateManager = StateManager(resources, this, binding)
+        workerRequest = WorkerRequest(this)
         binding.resultTv.addTextChangedListener(object : TextWatcher {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
             }
@@ -66,15 +66,19 @@ class MainActivity : AppCompatActivity() {
 
         val buttonListener = CalculatorListener(binding, resources)
         buttonListener.setOnClickListenerButtons()
-        updateRate()
-
     }
+
+
 
     override fun onRestart() {
         stateManager.restoreLastState()
-        hasMovedToCountries = false
-        updateRate()
         super.onRestart()
+    }
+
+    override fun onStop() {
+        stateManager.saveLastState()
+        workerRequest.startWork()
+        super.onStop()
     }
 
     private fun onClickCountryChange (layout: String) : View.OnClickListener {
@@ -83,32 +87,11 @@ class MainActivity : AppCompatActivity() {
                 stateManager.saveLastState()
                 val intent = Intent(this@MainActivity, ActivityCountryList::class.java)
                 intent.putExtra(Constants.CURRENCY_CHANGE, layout)
-                hasMovedToCountries = true
                 startActivity(intent)
             }
             else {
                 Toast.makeText(this,"No Internet Access",Toast.LENGTH_SHORT).show()
             }
-        }
-    }
-
-    override fun onStop() {
-        stateManager.saveLastState()
-        if (!hasMovedToCountries) {
-            lifecycleScope.launch {
-                mDb?.currencyCalculatorDao()?.clearCurrencies()
-                mDb?.countryDao()?.clearCountry()
-            }
-        }
-        super.onStop()
-    }
-
-    private fun updateRate() {
-        if (InternetConnectivity.isOnline(this)) {
-            viewModel.getLatestRate(
-                to = binding.currencyText.text.toString(),
-                from = binding.resultText.text.toString()
-            )
         }
     }
 

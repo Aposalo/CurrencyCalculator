@@ -3,8 +3,8 @@ package aposalo.com.currencycalculator.util
 class Constants {
     companion object {
 
-        private const val LIBRARY = "exchangerates_data"
-        const val TOKEN = "yl4KKvZGf11HCmnTvT0m5VzrwDOsufed"
+        private const val LIBRARY = "fixer"
+        const val TOKEN = "PO2uChU3igI4bY80d43uR6XtNhiQ2Olb"
 
         const val CONVERT_ANNOTATION = "$LIBRARY/convert"
         const val SYMBOLS_ANNOTATION = "$LIBRARY/symbols"
@@ -20,5 +20,7 @@ class Constants {
         const val RESULT_TEXT_LABEL = "resultSpinner"
         const val SOLUTION_TEXT_LABEL = "solutionTv"
         const val RESULT_TEXT_VALUE_LABEL = "resultTv"
+
+        const val RATE_WORKER = "rate_worker"
     }
 }
