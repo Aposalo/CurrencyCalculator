@@ -66,9 +66,8 @@ class MainActivity : AppCompatActivity() {
 
         val buttonListener = CalculatorListener(binding, resources)
         buttonListener.setOnClickListenerButtons()
+        workerRequest.startWork()
     }
-
-
 
     override fun onRestart() {
         stateManager.restoreLastState()
