@@ -5,6 +5,7 @@ import androidx.work.BackoffPolicy
 import androidx.work.Constraints
 import androidx.work.Data
 import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequest
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
@@ -17,7 +18,9 @@ class WorkerRequest(private val context : Context) {
         .Builder()
         .build()
 
-    private fun createWorkRequest() = PeriodicWorkRequestBuilder<RateWorker>(1, TimeUnit.DAYS)
+    private fun createPeriodicWorkRequest() = PeriodicWorkRequestBuilder<RateWorker>(
+        1, TimeUnit.DAYS,
+        1,TimeUnit.HOURS)
         .setInputData(Data.EMPTY)
         .setConstraints(createConstraints())
         .setBackoffCriteria(BackoffPolicy.LINEAR,
@@ -25,8 +28,20 @@ class WorkerRequest(private val context : Context) {
             TimeUnit.MILLISECONDS)
         .build()
 
-    fun startWork() {
-        val work = createWorkRequest()
-        WorkManager.getInstance(context).enqueueUniquePeriodicWork(Constants.RATE_WORKER, ExistingPeriodicWorkPolicy.UPDATE,work)
+    private fun createOneTimeWorkRequest() = OneTimeWorkRequestBuilder<CleanDatabaseWorker>()
+        .setConstraints(createConstraints())
+        .build()
+
+    fun startPeriodWork() {
+        val work = createPeriodicWorkRequest()
+        WorkManager.getInstance(context).enqueueUniquePeriodicWork(
+            Constants.RATE_WORKER,
+            ExistingPeriodicWorkPolicy.UPDATE,
+            work)
+    }
+
+    fun startOnceTimeWork() {
+        val work = createOneTimeWorkRequest()
+        WorkManager.getInstance(context).enqueue(work)
     }
 }

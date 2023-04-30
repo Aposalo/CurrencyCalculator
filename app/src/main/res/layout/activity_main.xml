@@ -7,6 +7,16 @@
     android:background="@color/light_gray"
     tools:context=".activities.MainActivity">
 
+    <TextView
+        android:id="@+id/solution_tv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignEnd="@+id/buttons_layout"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="10dp"
+        android:textAlignment="textEnd"
+        android:textColor="@color/white"
+        android:textSize="32sp" />
 
     <LinearLayout
         android:id="@+id/buttons_layout"
@@ -140,16 +150,6 @@
                 android:textColor="@color/white"
                 android:textSize="32sp"
                 app:cornerRadius="36dp" />
-
-            <TextView
-                android:id="@+id/solution_tv"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="10dp"
-                android:textAlignment="textEnd"
-                android:textColor="@color/white"
-                android:textSize="32sp" />
 
         </LinearLayout>
 

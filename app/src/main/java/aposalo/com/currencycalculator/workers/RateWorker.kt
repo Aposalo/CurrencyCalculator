@@ -25,8 +25,6 @@ class RateWorker (var ctx: Context, params: WorkerParameters) :
             to = currentCurrencies.to,
             from = currentCurrencies.from)
 
-        mDb?.currencyCalculatorDao()?.clearCurrencies()
-        mDb?.countryDao()?.clearCountry()
         return Result.success()
     }
 }

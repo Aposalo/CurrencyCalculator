@@ -49,6 +49,7 @@ class MainActivity : AppCompatActivity() {
         viewModel = CurrencyCalculatorModel(binding, resources, mDb, this)
         stateManager = StateManager(resources, this, binding)
         workerRequest = WorkerRequest(this)
+        workerRequest.startOnceTimeWork()
         binding.resultTv.addTextChangedListener(object : TextWatcher {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
             }
@@ -66,7 +67,7 @@ class MainActivity : AppCompatActivity() {
 
         val buttonListener = CalculatorListener(binding, resources)
         buttonListener.setOnClickListenerButtons()
-        workerRequest.startWork()
+        workerRequest.startPeriodWork()
     }
 
     override fun onRestart() {
@@ -76,7 +77,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStop() {
         stateManager.saveLastState()
-        workerRequest.startWork()
+        workerRequest.startPeriodWork()
         super.onStop()
     }
 
