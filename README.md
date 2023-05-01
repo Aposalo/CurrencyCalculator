@@ -22,7 +22,7 @@ In order to run the program to your pc you will need:
 <ul>
 <li>Android Studio (latest varsion, as i always update the code to the latest version of Android Studio)</li>
 
-<li>And lastly you will need to go to the link below, get an API key (with free subscription of course), then go to 
+<li>And then go to the link below, get an API key (with free subscription of course), then go to 
 /currencycalculator/util/Constants.kt and then change library and token.</li>
 </ul> 
 
