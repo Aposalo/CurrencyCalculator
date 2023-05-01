@@ -16,8 +16,6 @@ Works as a Calculator a tis has the basic functions addition (+), substraction (
 
 Works as a Currency converter, between two currencies.
 
-When you click one of the Currencies, you go to Country Menu, and you can exchange the Country with one of your choice.
-
 In order to run the program to your pc you will need:
 <ul>
 <li>Android Studio (latest varsion, as i always update the code to the latest version of Android Studio)</li>
