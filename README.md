@@ -35,3 +35,8 @@ And here is an APK to install the app to your phone.
 
 https://drive.google.com/file/d/1A76p3E0R5znfTaZi1xDD7aKrSS4Q55ma/view?usp=share_link
 
+
+Presentation on Youtube
+
+https://www.youtube.com/watch?v=6V2volz34hE
+
