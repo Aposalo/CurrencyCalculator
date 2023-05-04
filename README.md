@@ -10,6 +10,7 @@ Some of the technologies used:
   <li>Databinding</li>
   <li>Navigation</li>
   <li>Gson</li>
+  <li>Sentry</li>
 </ul> 
   
 Works as a Calculator a tis has the basic functions addition (+), substraction (-), multiply (*), divide (/) and you can do complex actions.
