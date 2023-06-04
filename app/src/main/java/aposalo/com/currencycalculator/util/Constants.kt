@@ -3,12 +3,12 @@ package aposalo.com.currencycalculator.util
 class Constants {
     companion object {
 
-        private const val LIBRARY = "fixer"
-        const val TOKEN = "PO2uChU3igI4bY80d43uR6XtNhiQ2Olb"
+        private const val LIBRARY = "currency_data"
+        const val TOKEN = "zyN6PbHkEdPmSIRgANJIk50Rv2yfmaPO"
 
         const val CONVERT_ANNOTATION = "$LIBRARY/convert"
-        const val SYMBOLS_ANNOTATION = "$LIBRARY/symbols"
-        const val LATEST_ANNOTATION = "$LIBRARY/latest"
+        const val SYMBOLS_ANNOTATION = "$LIBRARY/list"
+        const val LATEST_ANNOTATION = "$LIBRARY/live"
         const val AUTHORIZATION_TYPE = "apikey"
         const val CLIENT_BASE_URL = "https://api.apilayer.com/"
         const val DELAY: Long = 600

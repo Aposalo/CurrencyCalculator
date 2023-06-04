@@ -41,14 +41,14 @@ class RateRepository(private val mDb : AppDatabase?)  {
                 )
                 if (response.isSuccessful) {
                     response.body()?.let { resultResponse ->
-                        resultResponse.rates.forEach { mapEntry ->
+                        resultResponse.quotes.forEach { mapEntry ->
                             val rateDb = mDb?.latestRateDao()?.getResult (
-                                to = mapEntry.key,
+                                to = latestRateTo,
                                 from = latestRateFrom
                             )
                             if (rateDb == null) {
                                 val latestRateEntry = LatestRateEntry (
-                                    to = mapEntry.key,
+                                    to = latestRateTo,
                                     from = latestRateFrom,
                                     rate = mapEntry.value,
                                     latestDate = resultResponse.timestamp

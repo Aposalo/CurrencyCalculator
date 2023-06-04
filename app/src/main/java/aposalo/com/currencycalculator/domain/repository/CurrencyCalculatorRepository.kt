@@ -28,7 +28,6 @@ class CurrencyCalculatorRepository(private val mDb: AppDatabase?) {
         latestTo = to
         latestFrom = from
         latestAmount = amount
-        delay(DELAY)
         _dataCurrencyCalculatorFlow.emit(handlePageResponse())
     }
 
@@ -51,7 +50,18 @@ class CurrencyCalculatorRepository(private val mDb: AppDatabase?) {
                 return Resource.Success(resultEntry.getResult())
             }
             else {
-                val response = ApiInstance.shortApi.getFixerConvert (
+
+                val rateDb = mDb?.latestRateDao()?.getResult (
+                    to = latestTo,
+                    from = latestFrom
+                )
+                if (rateDb != null) {
+                    return Resource.Success("0")
+                }
+
+                delay(DELAY)
+
+                val response = ApiInstance.longApi.getFixerConvert (
                     to = latestTo,
                     from = latestFrom,
                     amount = latestAmountFormatted
@@ -64,7 +74,7 @@ class CurrencyCalculatorRepository(private val mDb: AppDatabase?) {
                         val resultFrom = resultResponse.query.from
                         val resultTo = resultResponse.query.to
                         val latestDate = resultResponse.info.timestamp
-                        val latestRate = resultResponse.info.rate
+                        val latestRate = resultResponse.info.quote
 
                         if (latestAmountFormatted == resultAmountString &&
                             latestTo == resultTo &&

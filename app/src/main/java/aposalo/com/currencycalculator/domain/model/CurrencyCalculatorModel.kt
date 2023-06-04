@@ -32,7 +32,8 @@ class CurrencyCalculatorModel(
             currencyCalculatorRepository.dataCurrencyCalculator.collectLatest { response ->
                 when (response) {
                     is Resource.Success -> {
-                        if (InternetConnectivity.isOnline(context)) binding.currencyTv.text = response.message?.getSolution() ?: resources.getString(R.string.init_value)
+                        val msg = response.message
+                        if (msg != "0" && InternetConnectivity.isOnline(context)) binding.currencyTv.text = msg?.getSolution() ?: resources.getString(R.string.init_value)
                         else calculateCurrencyOffline()
                     }
                     is Resource.Error -> {

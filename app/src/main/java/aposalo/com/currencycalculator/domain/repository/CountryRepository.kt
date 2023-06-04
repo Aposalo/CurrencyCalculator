@@ -39,7 +39,7 @@ class CountryRepository(private val mDb : AppDatabase?) {
             }
             val country = Country (
                 success = true,
-                symbols = symbols
+                currencies = symbols
             )
 
             return Resource.Success("Success", country)
@@ -60,7 +60,7 @@ class CountryRepository(private val mDb : AppDatabase?) {
                 }
                 val country = Country(
                     success = true,
-                    symbols = symbols
+                    currencies = symbols
                 )
 
                 return Resource.Success("Success", country)
@@ -68,7 +68,7 @@ class CountryRepository(private val mDb : AppDatabase?) {
             val response = ApiInstance.longApi.getCountries()
             if (response.isSuccessful) {
                 response.body()?.let {
-                    it.symbols.forEach { item ->
+                    it.currencies.forEach { item ->
                         val countryEntry = CountryEntry (
                             symbol = item.key,
                             name = item.value

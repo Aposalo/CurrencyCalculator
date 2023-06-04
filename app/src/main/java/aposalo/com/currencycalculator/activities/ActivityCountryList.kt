@@ -35,7 +35,7 @@ class ActivityCountryList : AppCompatActivity() {
                 is Resource.Success -> {
                     response.data?.let { countries ->
                         val currencyList : ArrayList<CountrySymbols> = ArrayList()
-                        countries.symbols.forEach { (k, v) ->
+                        countries.currencies.forEach { (k, v) ->
                             val countrySymbol = CountrySymbols(k,v)
                             currencyList.add(countrySymbol)
                         }

@@ -6,7 +6,7 @@ import aposalo.com.currencycalculator.domain.local.AppDatabase
 import aposalo.com.currencycalculator.domain.repository.CountryRepository
 import kotlinx.coroutines.launch
 
-class CountryModel(private val mDb: AppDatabase?): ViewModel() {
+class CountryModel(mDb: AppDatabase?): ViewModel() {
 
     val countriesRepository: CountryRepository = CountryRepository(mDb)
 

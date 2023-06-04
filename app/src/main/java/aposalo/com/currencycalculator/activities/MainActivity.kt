@@ -16,7 +16,8 @@ import aposalo.com.currencycalculator.util.Constants.Companion.CURRENCY_TEXT_LAB
 import aposalo.com.currencycalculator.util.Constants.Companion.RESULT_TEXT_LABEL
 import aposalo.com.currencycalculator.util.InternetConnectivity
 import aposalo.com.currencycalculator.util.StateManager
-import aposalo.com.currencycalculator.workers.WorkerRequest
+import aposalo.com.currencycalculator.workers.cleanDatabase.CleanDatabaseWorkRequest
+import aposalo.com.currencycalculator.workers.rateWorker.RateWorkerWorkRequest
 import com.google.android.play.core.review.ReviewManagerFactory
 
 const val TAG = "MainActivity"
@@ -29,7 +30,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var stateManager: StateManager
 
-    private lateinit var workerRequest: WorkerRequest
+    private lateinit var rateWorkerWorkRequest: RateWorkerWorkRequest
 
     private var mDb: AppDatabase? = null
 
@@ -48,8 +49,8 @@ class MainActivity : AppCompatActivity() {
         mDb = AppDatabase.getInstance(applicationContext)
         viewModel = CurrencyCalculatorModel(binding, resources, mDb, this)
         stateManager = StateManager(resources, this, binding)
-        workerRequest = WorkerRequest(this)
-        workerRequest.startOnceTimeWork()
+        val cleanDatabaseWorkRequest = CleanDatabaseWorkRequest(this)
+        cleanDatabaseWorkRequest.startWork()
         binding.resultTv.addTextChangedListener(object : TextWatcher {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
             }
@@ -67,7 +68,8 @@ class MainActivity : AppCompatActivity() {
 
         val buttonListener = CalculatorListener(binding, resources)
         buttonListener.setOnClickListenerButtons()
-        workerRequest.startPeriodWork()
+        rateWorkerWorkRequest = RateWorkerWorkRequest(this)
+        rateWorkerWorkRequest.startWork()
     }
 
     override fun onRestart() {
@@ -77,8 +79,12 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStop() {
         stateManager.saveLastState()
-        workerRequest.startPeriodWork()
         super.onStop()
+    }
+
+    override fun onDestroy() {
+        rateWorkerWorkRequest.cancelWork()
+        super.onDestroy()
     }
 
     private fun onClickCountryChange (layout: String) : View.OnClickListener {
