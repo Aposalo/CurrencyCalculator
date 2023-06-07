@@ -6,6 +6,7 @@ import androidx.work.WorkerParameters
 import aposalo.com.currencycalculator.domain.local.AppDatabase
 import aposalo.com.currencycalculator.domain.model.CurrentCurrencies
 import aposalo.com.currencycalculator.domain.repository.RateRepository
+import aposalo.com.currencycalculator.util.InternetConnectivity
 import aposalo.com.currencycalculator.util.StateManager
 import com.google.gson.Gson
 
@@ -21,10 +22,11 @@ class RateWorker (var ctx: Context, params: WorkerParameters) :
         val gson = Gson()
         val currentCurrencies = gson.fromJson(currentCurrenciesJson, CurrentCurrencies::class.java)
         rateRepository  = RateRepository(mDb)
-        rateRepository.getLatestRateValue(
-            to = currentCurrencies.to,
-            from = currentCurrencies.from)
-
+        if (InternetConnectivity.isOnline(ctx)) {
+            rateRepository.getLatestRateValue(
+                to = currentCurrencies.to,
+                from = currentCurrencies.from)
+        }
         return Result.success()
     }
 }

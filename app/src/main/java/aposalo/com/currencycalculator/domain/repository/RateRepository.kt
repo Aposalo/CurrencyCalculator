@@ -6,13 +6,8 @@ import aposalo.com.currencycalculator.domain.server.api.authentication.ApiInstan
 import aposalo.com.currencycalculator.domain.server.dto.Rate
 import aposalo.com.currencycalculator.util.Resource
 import io.sentry.Sentry
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 
 class RateRepository(private val mDb : AppDatabase?)  {
-
-    private val _dataLatestRateFlow = MutableStateFlow<Resource<Rate>>(Resource.Success(null))
-    val dataLatestRate = _dataLatestRateFlow.asStateFlow()
 
     private var latestRateTo : String = ""
     private var latestRateFrom : String = ""
@@ -20,7 +15,7 @@ class RateRepository(private val mDb : AppDatabase?)  {
     suspend fun getLatestRateValue(to: String, from: String) {
         latestRateTo = to
         latestRateFrom = from
-        _dataLatestRateFlow.emit(handleLatestRateResponse())
+        handleLatestRateResponse()
     }
 
     private suspend fun handleLatestRateResponse() : Resource<Rate> {
