@@ -19,17 +19,7 @@ class RateRepository(private val mDb : AppDatabase?)  {
     }
 
     private suspend fun handleLatestRateResponse() : Resource<Rate> {
-        val resultEntry = mDb?.latestRateDao()?.getResult (
-            latestRateTo,
-            latestRateFrom,
-        )
-
         try {
-            if (resultEntry != null) {
-                mDb?.latestRateDao()?.updateLatestRate(resultEntry)
-                return Resource.Success(resultEntry.getRate().toString())
-            }
-            else {
                 val response = ApiInstance.longApi.getLatestRates (
                     base = latestRateFrom,
                     symbols = latestRateTo
@@ -59,7 +49,7 @@ class RateRepository(private val mDb : AppDatabase?)  {
                         }
                     }
                 }
-            }
+
         }
         catch (e : Exception) {
             e.message?.let { Sentry.captureMessage(it) }

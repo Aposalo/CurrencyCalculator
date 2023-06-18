@@ -10,11 +10,11 @@ import aposalo.com.currencycalculator.util.Constants
 import aposalo.com.currencycalculator.workers.WorkerRequest
 import java.util.concurrent.TimeUnit
 
-class RateWorkerWorkRequest(override val context: Context) : WorkerRequest(context) {
+class RateWorkerPeriodicWorkRequest(override val context: Context) : WorkerRequest(context) {
 
     private val periodicWorkRequest = PeriodicWorkRequestBuilder<RateWorker>(
         1, TimeUnit.DAYS,
-        30, TimeUnit.MINUTES)
+        10, TimeUnit.MINUTES)
         .setInputData(Data.EMPTY)
         .setBackoffCriteria(
             BackoffPolicy.LINEAR,

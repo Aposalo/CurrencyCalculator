@@ -17,7 +17,8 @@ import aposalo.com.currencycalculator.util.Constants.Companion.RESULT_TEXT_LABEL
 import aposalo.com.currencycalculator.util.InternetConnectivity
 import aposalo.com.currencycalculator.util.StateManager
 import aposalo.com.currencycalculator.workers.cleanDatabase.CleanDatabaseWorkRequest
-import aposalo.com.currencycalculator.workers.rateWorker.RateWorkerWorkRequest
+import aposalo.com.currencycalculator.workers.rateWorker.RateWorkerOneTimeWorkRequest
+import aposalo.com.currencycalculator.workers.rateWorker.RateWorkerPeriodicWorkRequest
 import com.google.android.play.core.review.ReviewManagerFactory
 
 const val TAG = "MainActivity"
@@ -30,7 +31,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var stateManager: StateManager
 
-    private lateinit var rateWorkerWorkRequest: RateWorkerWorkRequest
+    private lateinit var rateWorkerWorkRequest: RateWorkerPeriodicWorkRequest
 
     private var mDb: AppDatabase? = null
 
@@ -68,8 +69,10 @@ class MainActivity : AppCompatActivity() {
 
         val buttonListener = CalculatorListener(binding, resources)
         buttonListener.setOnClickListenerButtons()
-        rateWorkerWorkRequest = RateWorkerWorkRequest(this)
+        rateWorkerWorkRequest = RateWorkerPeriodicWorkRequest(this)
         rateWorkerWorkRequest.startWork()
+        val rateWorkerOneTimeWorkRequest = RateWorkerOneTimeWorkRequest(this)
+        rateWorkerOneTimeWorkRequest.startWork()
     }
 
     override fun onRestart() {

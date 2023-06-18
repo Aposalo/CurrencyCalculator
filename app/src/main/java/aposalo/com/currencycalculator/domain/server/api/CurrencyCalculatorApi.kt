@@ -19,5 +19,5 @@ interface CurrencyCalculatorApi {
     suspend fun getCountries(): Response<Country>
 
     @GET(LATEST_ANNOTATION)
-    suspend fun getLatestRates(@Query("base") base: String,@Query("symbols") symbols: String) : Response<Rate>
+    suspend fun getLatestRates(@Query("source") source: String,@Query("symbols") symbols: String) : Response<Rate>
 }

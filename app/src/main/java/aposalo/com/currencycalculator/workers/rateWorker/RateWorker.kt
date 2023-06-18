@@ -10,7 +10,7 @@ import aposalo.com.currencycalculator.util.InternetConnectivity
 import aposalo.com.currencycalculator.util.StateManager
 import com.google.gson.Gson
 
-class RateWorker (var ctx: Context, params: WorkerParameters) :
+class RateWorker (private var ctx: Context, params: WorkerParameters) :
     CoroutineWorker(ctx, params) {
 
     private lateinit var rateRepository : RateRepository
@@ -21,7 +21,7 @@ class RateWorker (var ctx: Context, params: WorkerParameters) :
         val currentCurrenciesJson = stateManager.getCurrentCurrencies()
         val gson = Gson()
         val currentCurrencies = gson.fromJson(currentCurrenciesJson, CurrentCurrencies::class.java)
-        rateRepository  = RateRepository(mDb)
+        rateRepository = RateRepository(mDb)
         if (InternetConnectivity.isOnline(ctx)) {
             rateRepository.getLatestRateValue(
                 to = currentCurrencies.to,
