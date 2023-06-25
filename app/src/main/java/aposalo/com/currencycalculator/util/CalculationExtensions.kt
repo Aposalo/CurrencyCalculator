@@ -5,9 +5,9 @@ import net.objecthunter.exp4j.ExpressionBuilder
 import java.math.RoundingMode
 import java.text.DecimalFormat
 
-const val TAG = "EXTENSIONS"
+const val TAG = "CALCULATION_EXTENSIONS"
 
-class Extensions  {
+class CalculationExtensions  {
 
      companion object {
          fun String.getCalculation(): String {

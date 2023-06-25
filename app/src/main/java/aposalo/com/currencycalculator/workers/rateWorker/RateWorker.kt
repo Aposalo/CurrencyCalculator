@@ -24,8 +24,9 @@ class RateWorker (private var ctx: Context, params: WorkerParameters) :
         rateRepository = RateRepository(mDb)
         if (InternetConnectivity.isOnline(ctx)) {
             rateRepository.getLatestRateValue(
-                to = currentCurrencies.to,
-                from = currentCurrencies.from)
+                from = currentCurrencies.from,
+                to = currentCurrencies.to
+            )
         }
         return Result.success()
     }

@@ -4,7 +4,7 @@ import android.content.res.Resources
 import android.view.View
 import aposalo.com.currencycalculator.R
 import aposalo.com.currencycalculator.databinding.ActivityMainBinding
-import aposalo.com.currencycalculator.util.Extensions.Companion.getCalculation
+import aposalo.com.currencycalculator.util.CalculationExtensions.Companion.getCalculation
 import com.google.android.material.button.MaterialButton
 
 class CalculatorListener(private var binding: ActivityMainBinding,
