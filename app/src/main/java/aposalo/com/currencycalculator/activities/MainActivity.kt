@@ -106,8 +106,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun String.updateCurrency() {
         viewModel.getUserPage(
-            to = binding.currencyText.text.toString(),
             from = binding.resultText.text.toString(),
+            to = binding.currencyText.text.toString(),
             amount = toFloatOrNull() ?: 0.0f
         )
     }

@@ -5,8 +5,8 @@ import androidx.room.Entity
 
 @Entity(tableName = "currency_calculator", primaryKeys = ["currency_to","currency_from","amount"])
 class CurrencyCalculatorEntry(
-    @ColumnInfo("currency_to") private var to: String,
     @ColumnInfo("currency_from") private var from: String,
+    @ColumnInfo("currency_to") private var to: String,
     private var amount: String,
     private var result: String,
     @ColumnInfo("latest_date") private var latestDate: Long) {

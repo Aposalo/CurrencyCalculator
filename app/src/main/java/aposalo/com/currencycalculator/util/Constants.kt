@@ -4,7 +4,7 @@ class Constants {
     companion object {
 
         private const val LIBRARY = "currency_data"
-        const val TOKEN = "zyN6PbHkEdPmSIRgANJIk50Rv2yfmaPO"
+        const val TOKEN = "laYRIR6If2YNe0bAV0DQK6aIyw4rjOyi"
 
         const val CONVERT_ANNOTATION = "$LIBRARY/convert"
         const val SYMBOLS_ANNOTATION = "$LIBRARY/list"

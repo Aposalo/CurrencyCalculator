@@ -71,9 +71,13 @@ class CurrencyCalculatorModel(
         }
     }
 
-    fun getUserPage(to: String, from: String, amount: Float) {
+    fun getUserPage(from: String, to: String,  amount: Float) {
         viewModelScope.launch {
-            currencyCalculatorRepository.getCurrencyValue(to, from, amount)
+            currencyCalculatorRepository.getCurrencyValue (
+                from = from,
+                to = to,
+                amount = amount
+            )
         }
     }
 

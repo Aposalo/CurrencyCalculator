@@ -50,7 +50,6 @@ class CurrencyCalculatorRepository(private val mDb: AppDatabase?) {
                 return Resource.Success(resultEntry.getResult())
             }
             else {
-
                 val rateDb = mDb?.latestRateDao()?.getResult (
                     from = latestFrom,
                     to = latestTo

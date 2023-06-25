@@ -50,6 +50,5 @@ class CalculationExtensions  {
              val roundOff = df.format(this)
              return roundOff.toString()
          }
-
      }
 }
