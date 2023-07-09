@@ -59,13 +59,11 @@ class StateManager (private val context : Context) {
         myEdit.apply()
     }
 
-    fun getCurrentCurrencies() : String {
+    fun getCurrentCurrencies(): String {
         val sh = context.getSharedPreferences(SHARED_PREF, AppCompatActivity.MODE_PRIVATE)
-        val from = sh.getString(RESULT_TEXT_LABEL, "")!!
-        val to = sh.getString(CURRENCY_TEXT_LABEL, "")!!
-        val gson = Gson()
-        val jsonString = gson.toJson(CurrentCurrencies(from = from, to = to))
-        return jsonString
+        val from = sh.getString(RESULT_TEXT_LABEL, String())!!
+        val to = sh.getString(CURRENCY_TEXT_LABEL, String())!!
+        return Gson().toJson(CurrentCurrencies(from = from, to = to))
     }
 
 }

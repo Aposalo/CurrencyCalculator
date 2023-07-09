@@ -25,6 +25,7 @@ class CountriesAdapter(private val onItemClick: (CountrySymbols) -> Unit): Recyc
     }
 
     val differ = AsyncListDiffer(this, diffCallback)
+    
     private var itemModels: List<CountrySymbols>
         get() = differ.currentList
         set(value) { differ.submitList(value) }

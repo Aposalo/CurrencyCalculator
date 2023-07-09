@@ -52,7 +52,7 @@ class CurrencyCalculatorModel(
     }
 
     private suspend fun calculateCurrencyOffline() {
-        val res = binding.solutionTv.text.toString().getDefaultCalculation().toFloat()
+        val res = binding.resultTv.text.toString().toFloat()
         val resRate = mDb?.latestRateDao()?.getResult(
             to = binding.currencyText.text.toString(),
             from = binding.resultText.text.toString()

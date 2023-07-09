@@ -2,7 +2,7 @@ package aposalo.com.currencycalculator.util
 
 class RateConvertor {
 
-    companion object{
+    companion object {
         fun getConvertedQuotes(quotes:Map<String,Float>, source:String):Map<String,Float> {
             val convertedQuotes = mutableMapOf<String,Float> ()
             quotes.forEach { (k,v) ->

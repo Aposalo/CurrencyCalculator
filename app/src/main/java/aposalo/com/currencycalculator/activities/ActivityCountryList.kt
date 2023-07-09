@@ -14,6 +14,7 @@ import aposalo.com.currencycalculator.domain.model.CountrySymbols
 import aposalo.com.currencycalculator.util.StateManager
 import aposalo.com.currencycalculator.util.Constants
 import aposalo.com.currencycalculator.util.Resource
+import io.sentry.Sentry
 
 class ActivityCountryList : AppCompatActivity() {
 
@@ -31,7 +32,7 @@ class ActivityCountryList : AppCompatActivity() {
         setupRecyclerView()
         viewModel = CountryModel(mDb)
         viewModel.countriesRepository.data.observe(this) { response ->
-            when(response){
+            when(response) {
                 is Resource.Success -> {
                     response.data?.let { countries ->
                         val currencyList : ArrayList<CountrySymbols> = ArrayList()
@@ -44,6 +45,7 @@ class ActivityCountryList : AppCompatActivity() {
                 }
                 is Resource.Error -> {
                     Log.e(TAG, "Countries cannot be loaded.")
+                    Sentry.captureMessage("Countries cannot be loaded.")
                 }
                 is Resource.Loading -> {
                     Log.d(TAG, "Countries are loaded.")
@@ -67,7 +69,7 @@ class ActivityCountryList : AppCompatActivity() {
 
     private fun adapterOnClick(countrySymbol: CountrySymbols) {
         if (intent != null && intent.hasExtra(Constants.CURRENCY_CHANGE)) {
-            layout = intent.getStringExtra(Constants.CURRENCY_CHANGE) ?: ""
+            layout = intent.getStringExtra(Constants.CURRENCY_CHANGE) ?: String()
         }
         val stateManager = StateManager(resources, this)
         stateManager.updateCountryValue(layout, countrySymbol.symbol)

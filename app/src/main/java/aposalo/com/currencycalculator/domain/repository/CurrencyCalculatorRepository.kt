@@ -8,6 +8,7 @@ import aposalo.com.currencycalculator.domain.server.api.authentication.ApiInstan
 import aposalo.com.currencycalculator.domain.server.dto.FixerDto
 import aposalo.com.currencycalculator.util.Constants.Companion.DELAY
 import aposalo.com.currencycalculator.util.CalculationExtensions.Companion.getSolution
+import aposalo.com.currencycalculator.util.Constants
 import aposalo.com.currencycalculator.util.Resource
 import io.sentry.Sentry
 import kotlinx.coroutines.delay
@@ -50,11 +51,11 @@ class CurrencyCalculatorRepository(private val mDb: AppDatabase?) {
                 return Resource.Success(resultEntry.getResult())
             }
             else {
-                val rateDb = mDb?.latestRateDao()?.getResult (
+                val localRateDb = mDb?.latestRateDao()?.getResult (
                     from = latestFrom,
                     to = latestTo
                 )
-                if (rateDb != null) {
+                if (localRateDb != null) {
                     return Resource.Success("0")
                 }
 
@@ -65,6 +66,13 @@ class CurrencyCalculatorRepository(private val mDb: AppDatabase?) {
                     to = latestTo,
                     amount = latestAmountFormatted
                 )
+
+                val code = response.code()
+                if(code == Constants.API_EXCEEDED_CALLS_CODE)
+                {
+                    Sentry.captureMessage("API exceeded calls, please change key")
+                    return Resource.Error("Error")
+                }
 
                 if (response.isSuccessful) {
                     response.body()?.let { resultResponse ->

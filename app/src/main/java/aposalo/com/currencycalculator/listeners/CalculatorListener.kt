@@ -11,7 +11,7 @@ class CalculatorListener(private var binding: ActivityMainBinding,
                          private var resources: Resources) : View.OnClickListener {
 
     private fun clearCalculator() {
-        binding.solutionTv.text = ""
+        binding.solutionTv.text = String()
         binding.resultTv.text = resources.getString(R.string.init_value)
     }
 

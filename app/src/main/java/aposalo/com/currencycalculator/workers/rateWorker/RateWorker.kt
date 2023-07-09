@@ -19,8 +19,7 @@ class RateWorker (private var ctx: Context, params: WorkerParameters) :
         val mDb = AppDatabase.getInstance(ctx)
         val stateManager = StateManager(ctx)
         val currentCurrenciesJson = stateManager.getCurrentCurrencies()
-        val gson = Gson()
-        val currentCurrencies = gson.fromJson(currentCurrenciesJson, CurrentCurrencies::class.java)
+        val currentCurrencies = Gson().fromJson(currentCurrenciesJson, CurrentCurrencies::class.java)
         rateRepository = RateRepository(mDb)
         if (InternetConnectivity.isOnline(ctx)) {
             rateRepository.getLatestRateValue(
