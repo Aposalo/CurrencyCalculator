@@ -1,4 +1,4 @@
-package aposalo.com.currencycalculator.util
+package aposalo.com.currencycalculator.utils
 
 class Constants {
     companion object {

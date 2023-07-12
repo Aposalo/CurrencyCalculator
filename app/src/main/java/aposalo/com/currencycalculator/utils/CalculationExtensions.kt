@@ -1,4 +1,4 @@
-package aposalo.com.currencycalculator.util
+package aposalo.com.currencycalculator.utils
 
 import android.util.Log
 import net.objecthunter.exp4j.ExpressionBuilder

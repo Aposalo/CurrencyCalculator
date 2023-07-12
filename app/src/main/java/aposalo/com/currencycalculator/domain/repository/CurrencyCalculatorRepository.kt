@@ -1,15 +1,14 @@
 package aposalo.com.currencycalculator.domain.repository
 
-import android.annotation.SuppressLint
 import aposalo.com.currencycalculator.domain.local.AppDatabase
 import aposalo.com.currencycalculator.domain.local.currency.CurrencyCalculatorEntry
 import aposalo.com.currencycalculator.domain.local.rate.LatestRateEntry
 import aposalo.com.currencycalculator.domain.server.api.authentication.ApiInstance
 import aposalo.com.currencycalculator.domain.server.dto.FixerDto
-import aposalo.com.currencycalculator.util.Constants.Companion.DELAY
-import aposalo.com.currencycalculator.util.CalculationExtensions.Companion.getSolution
-import aposalo.com.currencycalculator.util.Constants
-import aposalo.com.currencycalculator.util.Resource
+import aposalo.com.currencycalculator.utils.CalculationExtensions.Companion.getSolution
+import aposalo.com.currencycalculator.utils.Constants
+import aposalo.com.currencycalculator.utils.Constants.Companion.DELAY
+import aposalo.com.currencycalculator.utils.Resource
 import io.sentry.Sentry
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -32,10 +31,9 @@ class CurrencyCalculatorRepository(private val mDb: AppDatabase?) {
         _dataCurrencyCalculatorFlow.emit(handlePageResponse())
     }
 
-    @SuppressLint("SuspiciousIndentation")
     private suspend fun handlePageResponse() : Resource<FixerDto> {
-        if (latestAmount <= 0.0f)
-            return Resource.Success(null)
+
+        if (latestAmount <= 0.0f) return Resource.Success(null)
 
         val latestAmountFormatted = latestAmount.toString().getSolution()
 

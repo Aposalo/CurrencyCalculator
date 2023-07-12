@@ -6,8 +6,8 @@ import androidx.work.WorkerParameters
 import aposalo.com.currencycalculator.domain.local.AppDatabase
 import aposalo.com.currencycalculator.domain.model.CurrentCurrencies
 import aposalo.com.currencycalculator.domain.repository.RateRepository
-import aposalo.com.currencycalculator.util.InternetConnectivity
-import aposalo.com.currencycalculator.util.StateManager
+import aposalo.com.currencycalculator.utils.InternetConnectivity
+import aposalo.com.currencycalculator.utils.StateManager
 import com.google.gson.Gson
 
 class RateWorker (private var ctx: Context, params: WorkerParameters) :

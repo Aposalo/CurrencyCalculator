@@ -1,4 +1,4 @@
-package aposalo.com.currencycalculator.util
+package aposalo.com.currencycalculator.utils
 
 sealed class Resource<T>(
     val data : T? = null,

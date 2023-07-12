@@ -3,8 +3,8 @@ package aposalo.com.currencycalculator.domain.repository
 import aposalo.com.currencycalculator.domain.local.AppDatabase
 import aposalo.com.currencycalculator.domain.local.rate.LatestRateEntry
 import aposalo.com.currencycalculator.domain.server.api.authentication.ApiInstance
-import aposalo.com.currencycalculator.util.Constants
-import aposalo.com.currencycalculator.util.RateConvertor.Companion.getConvertedQuotes
+import aposalo.com.currencycalculator.utils.Constants
+import aposalo.com.currencycalculator.utils.RateConvertor.Companion.getConvertedQuotes
 import io.sentry.Sentry
 
 class RateRepository(private val mDb : AppDatabase?)  {

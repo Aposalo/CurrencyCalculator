@@ -1,4 +1,4 @@
-package aposalo.com.currencycalculator.util
+package aposalo.com.currencycalculator.utils
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -7,11 +7,11 @@ import androidx.appcompat.app.AppCompatActivity
 import aposalo.com.currencycalculator.R
 import aposalo.com.currencycalculator.databinding.ActivityMainBinding
 import aposalo.com.currencycalculator.domain.model.CurrentCurrencies
-import aposalo.com.currencycalculator.util.Constants.Companion.CURRENCY_TEXT_LABEL
-import aposalo.com.currencycalculator.util.Constants.Companion.RESULT_TEXT_LABEL
-import aposalo.com.currencycalculator.util.Constants.Companion.RESULT_TEXT_VALUE_LABEL
-import aposalo.com.currencycalculator.util.Constants.Companion.SHARED_PREF
-import aposalo.com.currencycalculator.util.Constants.Companion.SOLUTION_TEXT_LABEL
+import aposalo.com.currencycalculator.utils.Constants.Companion.CURRENCY_TEXT_LABEL
+import aposalo.com.currencycalculator.utils.Constants.Companion.RESULT_TEXT_LABEL
+import aposalo.com.currencycalculator.utils.Constants.Companion.RESULT_TEXT_VALUE_LABEL
+import aposalo.com.currencycalculator.utils.Constants.Companion.SHARED_PREF
+import aposalo.com.currencycalculator.utils.Constants.Companion.SOLUTION_TEXT_LABEL
 import com.google.gson.Gson
 
 class StateManager (private val context : Context) {

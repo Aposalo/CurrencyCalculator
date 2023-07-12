@@ -1,4 +1,4 @@
-package aposalo.com.currencycalculator.util
+package aposalo.com.currencycalculator.utils
 
 import androidx.room.TypeConverter
 import java.util.Date

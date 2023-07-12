@@ -6,7 +6,7 @@ import androidx.work.Data
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequest
 import androidx.work.PeriodicWorkRequestBuilder
-import aposalo.com.currencycalculator.util.Constants
+import aposalo.com.currencycalculator.utils.Constants
 import aposalo.com.currencycalculator.workers.WorkerRequest
 import java.util.concurrent.TimeUnit
 

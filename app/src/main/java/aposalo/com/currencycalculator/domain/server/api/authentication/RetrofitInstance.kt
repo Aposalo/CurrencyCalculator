@@ -1,7 +1,7 @@
 package aposalo.com.currencycalculator.domain.server.api.authentication
 
 import aposalo.com.currencycalculator.domain.server.api.CurrencyCalculatorApi
-import aposalo.com.currencycalculator.util.Constants
+import aposalo.com.currencycalculator.utils.Constants
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

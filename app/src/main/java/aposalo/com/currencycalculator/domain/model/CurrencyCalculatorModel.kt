@@ -10,11 +10,10 @@ import aposalo.com.currencycalculator.R
 import aposalo.com.currencycalculator.databinding.ActivityMainBinding
 import aposalo.com.currencycalculator.domain.local.AppDatabase
 import aposalo.com.currencycalculator.domain.repository.CurrencyCalculatorRepository
-import aposalo.com.currencycalculator.util.CalculationExtensions.Companion.getDefaultCalculation
-import aposalo.com.currencycalculator.util.CalculationExtensions.Companion.getSolution
-import aposalo.com.currencycalculator.util.InternetConnectivity
-import aposalo.com.currencycalculator.util.Resource
-import aposalo.com.currencycalculator.util.TAG
+import aposalo.com.currencycalculator.utils.CalculationExtensions.Companion.getSolution
+import aposalo.com.currencycalculator.utils.InternetConnectivity
+import aposalo.com.currencycalculator.utils.Resource
+import aposalo.com.currencycalculator.utils.TAG
 import io.sentry.Sentry
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch

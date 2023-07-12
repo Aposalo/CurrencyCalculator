@@ -11,11 +11,11 @@ import aposalo.com.currencycalculator.databinding.ActivityMainBinding
 import aposalo.com.currencycalculator.domain.local.AppDatabase
 import aposalo.com.currencycalculator.domain.model.CurrencyCalculatorModel
 import aposalo.com.currencycalculator.listeners.CalculatorListener
-import aposalo.com.currencycalculator.util.Constants
-import aposalo.com.currencycalculator.util.Constants.Companion.CURRENCY_TEXT_LABEL
-import aposalo.com.currencycalculator.util.Constants.Companion.RESULT_TEXT_LABEL
-import aposalo.com.currencycalculator.util.InternetConnectivity
-import aposalo.com.currencycalculator.util.StateManager
+import aposalo.com.currencycalculator.utils.Constants
+import aposalo.com.currencycalculator.utils.Constants.Companion.CURRENCY_TEXT_LABEL
+import aposalo.com.currencycalculator.utils.Constants.Companion.RESULT_TEXT_LABEL
+import aposalo.com.currencycalculator.utils.InternetConnectivity
+import aposalo.com.currencycalculator.utils.StateManager
 import aposalo.com.currencycalculator.workers.cleanDatabase.CleanDatabaseWorkRequest
 import aposalo.com.currencycalculator.workers.rateWorker.RateWorkerOneTimeWorkRequest
 import aposalo.com.currencycalculator.workers.rateWorker.RateWorkerPeriodicWorkRequest
