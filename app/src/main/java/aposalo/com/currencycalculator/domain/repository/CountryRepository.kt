@@ -28,13 +28,11 @@ class CountryRepository(private val mDb : AppDatabase?) {
             if (!resultEntry.isNullOrEmpty()) {
                 val symbols = mutableMapOf<String, String>();
                 resultEntry.forEach { entry ->
-                    symbols[entry.getSymbol()] = entry.getName()
+                    symbols[entry.symbol] = entry.name
                 }
                 val country = Country(
-                    success = true,
                     currencies = symbols
                 )
-
                 return Resource.Success("Success", country)
             }
             val response = ApiInstance.longApi.getCountries()
@@ -42,7 +40,7 @@ class CountryRepository(private val mDb : AppDatabase?) {
             if(code == API_EXCEEDED_CALLS_CODE)
             {
                 Sentry.captureMessage("API exceeded calls, please change key")
-                return Resource.Error("Error")
+                return Resource.Error("API exceeded calls, please change key")
             }
             if (response.isSuccessful) {
                 response.body()?.let {
@@ -58,7 +56,10 @@ class CountryRepository(private val mDb : AppDatabase?) {
             }
         }
         catch (e : Exception){
-            e.message?.let { Sentry.captureMessage(it) }
+            e.message?.let {
+                Sentry.captureMessage(it)
+                return Resource.Error(it)
+            }
         }
         return Resource.Error("Error")
     }

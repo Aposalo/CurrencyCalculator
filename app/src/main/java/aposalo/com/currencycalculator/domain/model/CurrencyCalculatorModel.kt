@@ -40,7 +40,7 @@ class CurrencyCalculatorModel(
                         response.message?.let { message ->
                             calculateCurrencyOffline()
                             Log.e(TAG, "An error occurred: $message")
-                            Sentry.captureMessage(message)
+                            Sentry.captureMessage("An error occurred: $message")
                         }
                     }
                     is Resource.Loading -> {
@@ -59,7 +59,7 @@ class CurrencyCalculatorModel(
         )
 
         if (resRate != null) {
-            val rate = resRate.getRate()
+            val rate = resRate.rate
             val curr = rate.times(res)
             binding.currencyTv.text = curr.toString().getSolution()
         }

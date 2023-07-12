@@ -10,7 +10,6 @@ class CleanDatabaseWorkRequest(override val context: Context) : WorkerRequest(co
         .setConstraints(createConstraints())
         .build()
 
-
     override fun startWork() {
         getWorkManagerInstance().enqueue(oneTimeWorkRequest)
     }

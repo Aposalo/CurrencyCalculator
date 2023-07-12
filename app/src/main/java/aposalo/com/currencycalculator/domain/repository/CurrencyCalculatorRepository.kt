@@ -48,7 +48,7 @@ class CurrencyCalculatorRepository(private val mDb: AppDatabase?) {
         try {
             if (resultEntry != null) {
                 mDb?.currencyCalculatorDao()?.updateCurrency(resultEntry)
-                return Resource.Success(resultEntry.getResult())
+                return Resource.Success(resultEntry.result)
             }
             else {
                 val localRateDb = mDb?.latestRateDao()?.getResult (
@@ -110,8 +110,8 @@ class CurrencyCalculatorRepository(private val mDb: AppDatabase?) {
                                 mDb?.latestRateDao()?.insertLatestRate(latestRateEntry)
                             }
                             else {
-                                rateDb.setRate(latestRate)
-                                rateDb.setLatestDate(latestDate)
+                                rateDb.rate = (latestRate)
+                                rateDb.latestDate = (latestDate)
                                 mDb?.latestRateDao()?.updateLatestRate(rateDb)
                             }
                             return Resource.Success(latestResult)

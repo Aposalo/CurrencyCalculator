@@ -37,10 +37,7 @@ class CalculationExtensions  {
 
          fun String.getSolution(): String {
              var solutionString = this.toFloat().toTwoDecimals()
-
-             if (solutionString.endsWith(".0"))
-                 solutionString = solutionString.replace(".0", "")
-
+             solutionString = if (solutionString.endsWith(".0")) solutionString.replace(".0", "") else solutionString
              return solutionString.replace(",",".")
          }
 

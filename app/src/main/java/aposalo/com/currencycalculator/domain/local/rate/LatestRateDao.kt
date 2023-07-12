@@ -11,13 +11,13 @@ import androidx.room.Update
 interface LatestRateDao {
 
     @Insert
-    suspend fun insertLatestRate(latestRate : LatestRateEntry)
+    suspend fun insertLatestRate(latestRate: LatestRateEntry)
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun updateLatestRate(latestRate : LatestRateEntry)
+    suspend fun updateLatestRate(latestRate: LatestRateEntry)
 
     @Delete
-    suspend fun deleteLatestRate(latestRate : LatestRateEntry)
+    suspend fun deleteLatestRate(latestRate: LatestRateEntry)
 
     @Query("DELETE FROM latest_rate")
     suspend fun clearCurrencies()

@@ -13,7 +13,7 @@ import aposalo.com.currencycalculator.domain.local.rate.LatestRateEntry
 import aposalo.com.currencycalculator.domain.local.rate.LatestRateDao
 import aposalo.com.currencycalculator.util.Constants.Companion.DATABASE_NAME
 
-@Database(entities = [CurrencyCalculatorEntry::class, CountryEntry::class, LatestRateEntry::class], version = 3)
+@Database(entities = [CurrencyCalculatorEntry::class, CountryEntry::class, LatestRateEntry::class], version = 4)
 abstract class AppDatabase : RoomDatabase() {
 
     companion object {

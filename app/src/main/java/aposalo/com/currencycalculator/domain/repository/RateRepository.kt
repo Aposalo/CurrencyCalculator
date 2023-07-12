@@ -9,8 +9,8 @@ import io.sentry.Sentry
 
 class RateRepository(private val mDb : AppDatabase?)  {
 
-    private var latestRateFrom : String = ""
-    private var latestRateTo : String = ""
+    private var latestRateFrom  = String()
+    private var latestRateTo  = String()
 
     suspend fun getLatestRateValue(from: String, to: String) {
         latestRateFrom = from
@@ -21,13 +21,14 @@ class RateRepository(private val mDb : AppDatabase?)  {
     private suspend fun handleLatestRateInDatabase() {
         try {
             val response = ApiInstance.longApi.getLatestRates (
-                source = latestRateFrom)
+                source = latestRateFrom
+            )
             val code = response.code()
             if(code == Constants.API_EXCEEDED_CALLS_CODE)
             {
                 Sentry.captureMessage("API exceeded calls, please change key")
             }
-            if (response.isSuccessful) {
+            else if (response.isSuccessful) {
                 response.body()?.let { resultResponse ->
                     val quotes = getConvertedQuotes(resultResponse.quotes, latestRateFrom)
                     quotes.forEach { mapEntry ->
@@ -45,8 +46,8 @@ class RateRepository(private val mDb : AppDatabase?)  {
                             mDb?.latestRateDao()?.insertLatestRate(latestRateEntry)//TODO insertorupdate function
                         }
                         else {
-                            rateDb.setRate(mapEntry.value)
-                            rateDb.setLatestDate(resultResponse.timestamp)
+                            rateDb.rate = (mapEntry.value)
+                            rateDb.latestDate = (resultResponse.timestamp)
                             mDb?.latestRateDao()?.updateLatestRate(rateDb)
                         }
                     }

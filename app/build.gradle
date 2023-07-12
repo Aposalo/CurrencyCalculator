@@ -4,6 +4,7 @@ plugins {
     id 'org.jetbrains.kotlin.kapt'
     id 'org.jetbrains.kotlin.plugin.serialization'
     id 'kotlin-android'
+    id 'kotlin-parcelize'
     id "io.sentry.android.gradle" version "3.5.0"
 }
 
@@ -18,7 +19,6 @@ android {
         versionCode 315
         versionName "3.1.5"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments += ["room.schemaLocation": "$projectDir/schemas".toString()]

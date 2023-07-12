@@ -16,6 +16,8 @@ class Constants {
         const val SHARED_PREF = "currency_calculator"
         const val DATABASE_NAME = "CurrencyCalculator"
         const val API_EXCEEDED_CALLS_CODE = 429//Code for too many requests
+        const val LONG_TIMEOUT: Long = 60
+        const val SHORT_TIMEOUT: Long  = 5
 
         const val CURRENCY_TEXT_LABEL = "currencySpinner"
         const val RESULT_TEXT_LABEL = "resultSpinner"

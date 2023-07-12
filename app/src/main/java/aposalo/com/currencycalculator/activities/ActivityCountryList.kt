@@ -44,8 +44,8 @@ class ActivityCountryList : AppCompatActivity() {
                     }
                 }
                 is Resource.Error -> {
-                    Log.e(TAG, "Countries cannot be loaded.")
-                    Sentry.captureMessage("Countries cannot be loaded.")
+                    Log.e(TAG, response.message!!)
+                    Sentry.captureMessage(response.message)
                 }
                 is Resource.Loading -> {
                     Log.d(TAG, "Countries are loaded.")
