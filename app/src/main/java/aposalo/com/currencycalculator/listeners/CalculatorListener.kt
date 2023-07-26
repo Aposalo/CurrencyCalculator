@@ -73,8 +73,11 @@ class CalculatorListener(private var binding: ActivityMainBinding,
         binding.solutionTv.text = dataToCalculate
         val finalResult = dataToCalculate.getCalculation()
 
-        if (finalResult != "Err" && finalResult != result) {
-            binding.resultTv.text = finalResult
+        binding.resultTv.text = if (finalResult != "Err") {
+            finalResult
+        }
+        else{
+            ""
         }
     }
 }

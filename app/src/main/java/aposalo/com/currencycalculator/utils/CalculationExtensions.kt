@@ -22,7 +22,7 @@ class CalculationExtensions  {
              }
          }
 
-         fun String.getDefaultCalculation(): String {
+         private fun String.getDefaultCalculation(): String {
              return try {
                  val expression = ExpressionBuilder(this).build()
                  val solution = expression.evaluate().toString()

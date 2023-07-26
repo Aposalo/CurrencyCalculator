@@ -26,9 +26,9 @@ class CountryRepository(private val mDb : AppDatabase?) {
             }
 
             if (!resultEntry.isNullOrEmpty()) {
-                val symbols = mutableMapOf<String, String>();
-                resultEntry.forEach { entry ->
-                    symbols[entry.symbol] = entry.name
+                val symbols = mutableMapOf<String, String>()
+                resultEntry.forEach {
+                    symbols[it.symbol] = it.name
                 }
                 val country = Country(
                     currencies = symbols
