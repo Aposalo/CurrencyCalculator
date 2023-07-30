@@ -1,10 +1,12 @@
 package aposalo.com.currencycalculator.utils
 
+import aposalo.com.currencycalculator.BuildConfig
+
 class Constants {
     companion object {
 
         private const val LIBRARY = "currency_data"
-        const val TOKEN = "laYRIR6If2YNe0bAV0DQK6aIyw4rjOyi"
+        const val TOKEN = BuildConfig.API_KEY;
 
         const val CONVERT_ANNOTATION = "$LIBRARY/convert"
         const val SYMBOLS_ANNOTATION = "$LIBRARY/list"
