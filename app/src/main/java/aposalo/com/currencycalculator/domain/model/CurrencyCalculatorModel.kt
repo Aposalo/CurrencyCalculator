@@ -1,5 +1,6 @@
 package aposalo.com.currencycalculator.domain.model
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Resources
 import android.util.Log
@@ -18,6 +19,7 @@ import io.sentry.Sentry
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
+@SuppressLint("StaticFieldLeak")
 class CurrencyCalculatorModel(
     private var binding: ActivityMainBinding,
     private var resources: Resources,
@@ -32,7 +34,7 @@ class CurrencyCalculatorModel(
                 when (response) {
                     is Resource.Success -> {
                         val msg = response.message
-                        if (msg != "0" && InternetConnectivity.isOnline(context)) binding.currencyTv.text = msg?.getSolution() ?: resources.getString(R.string.init_value)
+                        if (msg != resources.getString(R.string.init_value) && InternetConnectivity.isOnline(context)) binding.currencyTv.text = msg?.getSolution() ?: resources.getString(R.string.init_value)
                         else calculateCurrencyOffline()
                     }
                     is Resource.Error -> {

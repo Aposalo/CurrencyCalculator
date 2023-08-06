@@ -24,5 +24,5 @@ interface LatestRateDao {
 
     @Query("SELECT * FROM latest_rate WHERE" +
             " currency_to LIKE :to AND currency_from LIKE :from LIMIT 1")
-    suspend fun getResult(to: String, from: String): LatestRateEntry
+    suspend fun getResult(to: String, from: String): LatestRateEntry?
 }

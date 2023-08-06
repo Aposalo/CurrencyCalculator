@@ -9,8 +9,8 @@ import aposalo.com.currencycalculator.domain.local.countries.CountryDao
 import aposalo.com.currencycalculator.domain.local.countries.CountryEntry
 import aposalo.com.currencycalculator.domain.local.currency.CurrencyCalculatorDao
 import aposalo.com.currencycalculator.domain.local.currency.CurrencyCalculatorEntry
-import aposalo.com.currencycalculator.domain.local.rate.LatestRateEntry
 import aposalo.com.currencycalculator.domain.local.rate.LatestRateDao
+import aposalo.com.currencycalculator.domain.local.rate.LatestRateEntry
 import aposalo.com.currencycalculator.utils.Constants.Companion.DATABASE_NAME
 
 @Database(entities = [CurrencyCalculatorEntry::class, CountryEntry::class, LatestRateEntry::class], version = 4)

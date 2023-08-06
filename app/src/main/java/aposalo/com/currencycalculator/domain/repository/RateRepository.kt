@@ -4,10 +4,10 @@ import aposalo.com.currencycalculator.domain.local.AppDatabase
 import aposalo.com.currencycalculator.domain.local.rate.LatestRateEntry
 import aposalo.com.currencycalculator.domain.server.api.authentication.ApiInstance
 import aposalo.com.currencycalculator.utils.Constants
-import aposalo.com.currencycalculator.utils.RateConvertor.Companion.getConvertedQuotes
 import io.sentry.Sentry
 
-class RateRepository(private val mDb : AppDatabase?)  {
+class RateRepository(private var mDb : AppDatabase?) {
+
 
     private var latestRateFrom  = String()
     private var latestRateTo  = String()
@@ -18,9 +18,18 @@ class RateRepository(private val mDb : AppDatabase?)  {
         handleLatestRateInDatabase()
     }
 
+    private fun Map<String,Float>.getConvertedQuotes():Map<String,Float> {
+        val convertedQuotes = mutableMapOf<String,Float> ()
+        this.forEach { (k,v) ->
+            val newKey = k.removePrefix(latestRateFrom)
+            convertedQuotes[newKey] = v
+        }
+        return convertedQuotes;
+    }
+
     private suspend fun handleLatestRateInDatabase() {
         try {
-            val response = ApiInstance.longApi.getLatestRates (
+            val response = ApiInstance.api.getLatestRates (
                 source = latestRateFrom
             )
             val code = response.code()
@@ -30,7 +39,7 @@ class RateRepository(private val mDb : AppDatabase?)  {
             }
             else if (response.isSuccessful) {
                 response.body()?.let { resultResponse ->
-                    val quotes = getConvertedQuotes(resultResponse.quotes, latestRateFrom)
+                    val quotes = resultResponse.quotes.getConvertedQuotes()
                     quotes.forEach { mapEntry ->
                         val rateDb = mDb?.latestRateDao()?.getResult (
                             from = latestRateFrom,

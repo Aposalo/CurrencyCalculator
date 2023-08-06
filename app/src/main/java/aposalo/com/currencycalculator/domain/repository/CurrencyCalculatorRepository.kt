@@ -14,7 +14,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class CurrencyCalculatorRepository(private val mDb: AppDatabase?) {
+class CurrencyCalculatorRepository(private var mDb: AppDatabase?) {
 
     private val _dataCurrencyCalculatorFlow = MutableStateFlow<Resource<FixerDto>>(Resource.Success(null))
     val dataCurrencyCalculator = _dataCurrencyCalculatorFlow.asStateFlow()
@@ -59,7 +59,7 @@ class CurrencyCalculatorRepository(private val mDb: AppDatabase?) {
 
                 delay(DELAY)
 
-                val response = ApiInstance.longApi.getFixerConvert (
+                val response = ApiInstance.api.getFixerConvert (
                     from = latestFrom,
                     to = latestTo,
                     amount = latestAmountFormatted

@@ -11,9 +11,9 @@ import aposalo.com.currencycalculator.databinding.ActivityCountryListBinding
 import aposalo.com.currencycalculator.domain.local.AppDatabase
 import aposalo.com.currencycalculator.domain.model.CountryModel
 import aposalo.com.currencycalculator.domain.model.CountrySymbols
-import aposalo.com.currencycalculator.utils.StateManager
 import aposalo.com.currencycalculator.utils.Constants
 import aposalo.com.currencycalculator.utils.Resource
+import aposalo.com.currencycalculator.utils.StateManager
 import io.sentry.Sentry
 
 class ActivityCountryList : AppCompatActivity() {

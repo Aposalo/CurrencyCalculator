@@ -7,15 +7,20 @@ import aposalo.com.currencycalculator.databinding.ActivityMainBinding
 import aposalo.com.currencycalculator.utils.CalculationExtensions.Companion.getCalculation
 import com.google.android.material.button.MaterialButton
 
-class CalculatorListener(private var binding: ActivityMainBinding,
-                         private var resources: Resources) : View.OnClickListener {
+class CalculatorListenerSetter(
+    private var binding: ActivityMainBinding,
+    private var resources: Resources) : View.OnClickListener {
+
+    init {
+        setOnClickListenerButtons()
+    }
 
     private fun clearCalculator() {
         binding.solutionTv.text = String()
         binding.resultTv.text = resources.getString(R.string.init_value)
     }
 
-    fun setOnClickListenerButtons(){
+    private fun setOnClickListenerButtons(){
         binding.x.setOnClickListener(this)
         binding.openBracket.setOnClickListener(this)
         binding.closeBracket.setOnClickListener(this)
@@ -76,8 +81,8 @@ class CalculatorListener(private var binding: ActivityMainBinding,
         binding.resultTv.text = if (finalResult != "Err") {
             finalResult
         }
-        else{
-            ""
+        else {
+            result
         }
     }
 }

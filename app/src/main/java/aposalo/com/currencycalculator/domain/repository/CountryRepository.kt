@@ -35,7 +35,7 @@ class CountryRepository(private val mDb : AppDatabase?) {
                 )
                 return Resource.Success("Success", country)
             }
-            val response = ApiInstance.longApi.getCountries()
+            val response = ApiInstance.api.getCountries()//an argei to api na epikoinwnhsei na pairnw ena mhjnuma sentry
             val code = response.code()
             if(code == API_EXCEEDED_CALLS_CODE)
             {
@@ -55,7 +55,7 @@ class CountryRepository(private val mDb : AppDatabase?) {
                 }
             }
         }
-        catch (e : Exception){
+        catch (e : Exception) {
             e.message?.let {
                 Sentry.captureMessage(it)
                 return Resource.Error(it)

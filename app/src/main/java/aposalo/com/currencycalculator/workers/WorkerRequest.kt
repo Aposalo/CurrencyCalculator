@@ -6,7 +6,7 @@ import androidx.work.WorkManager
 
 abstract class WorkerRequest {
 
-    abstract val context: Context
+    protected abstract val context: Context
 
     fun createConstraints() = Constraints
         .Builder()
