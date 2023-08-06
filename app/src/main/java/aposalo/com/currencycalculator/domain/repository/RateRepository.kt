@@ -3,13 +3,14 @@ package aposalo.com.currencycalculator.domain.repository
 import aposalo.com.currencycalculator.domain.local.AppDatabase
 import aposalo.com.currencycalculator.domain.local.rate.LatestRateEntry
 import aposalo.com.currencycalculator.domain.server.api.authentication.ApiInstance
-import aposalo.com.currencycalculator.util.RateConvertor.Companion.getConvertedQuotes
+import aposalo.com.currencycalculator.utils.Constants
 import io.sentry.Sentry
 
-class RateRepository(private val mDb : AppDatabase?)  {
+class RateRepository(private var mDb : AppDatabase?) {
 
-    private var latestRateFrom : String = ""
-    private var latestRateTo : String = ""
+
+    private var latestRateFrom  = String()
+    private var latestRateTo  = String()
 
     suspend fun getLatestRateValue(from: String, to: String) {
         latestRateFrom = from
@@ -17,35 +18,50 @@ class RateRepository(private val mDb : AppDatabase?)  {
         handleLatestRateInDatabase()
     }
 
+    private fun Map<String,Float>.getConvertedQuotes():Map<String,Float> {
+        val convertedQuotes = mutableMapOf<String,Float> ()
+        this.forEach { (k,v) ->
+            val newKey = k.removePrefix(latestRateFrom)
+            convertedQuotes[newKey] = v
+        }
+        return convertedQuotes;
+    }
+
     private suspend fun handleLatestRateInDatabase() {
         try {
-                val response = ApiInstance.longApi.getLatestRates (
-                    source = latestRateFrom)
-                if (response.isSuccessful) {
-                    response.body()?.let { resultResponse ->
-                        val quotes = getConvertedQuotes(resultResponse.quotes, latestRateFrom)
-                        quotes.forEach { mapEntry ->
-                            val rateDb = mDb?.latestRateDao()?.getResult (
+            val response = ApiInstance.api.getLatestRates (
+                source = latestRateFrom
+            )
+            val code = response.code()
+            if(code == Constants.API_EXCEEDED_CALLS_CODE)
+            {
+                Sentry.captureMessage("API exceeded calls, please change key")
+            }
+            else if (response.isSuccessful) {
+                response.body()?.let { resultResponse ->
+                    val quotes = resultResponse.quotes.getConvertedQuotes()
+                    quotes.forEach { mapEntry ->
+                        val rateDb = mDb?.latestRateDao()?.getResult (
+                            from = latestRateFrom,
+                            to = mapEntry.key
+                        )
+                        if (rateDb == null) {
+                            val latestRateEntry = LatestRateEntry (
                                 from = latestRateFrom,
-                                to = mapEntry.key
+                                to = mapEntry.key,
+                                rate = mapEntry.value,
+                                latestDate = resultResponse.timestamp
                             )
-                            if (rateDb == null) {
-                                val latestRateEntry = LatestRateEntry (
-                                    from = latestRateFrom,
-                                    to = mapEntry.key,
-                                    rate = mapEntry.value,
-                                    latestDate = resultResponse.timestamp
-                                )
-                                mDb?.latestRateDao()?.insertLatestRate(latestRateEntry)//TODO insertorupdate function
-                            }
-                            else {
-                                rateDb.setRate(mapEntry.value)
-                                rateDb.setLatestDate(resultResponse.timestamp)
-                                mDb?.latestRateDao()?.updateLatestRate(rateDb)
-                            }
+                            mDb?.latestRateDao()?.insertLatestRate(latestRateEntry)//TODO insertorupdate function
+                        }
+                        else {
+                            rateDb.rate = (mapEntry.value)
+                            rateDb.latestDate = (resultResponse.timestamp)
+                            mDb?.latestRateDao()?.updateLatestRate(rateDb)
                         }
                     }
                 }
+            }
         }
         catch (e : Exception) {
             e.message?.let { Sentry.captureMessage(it) }

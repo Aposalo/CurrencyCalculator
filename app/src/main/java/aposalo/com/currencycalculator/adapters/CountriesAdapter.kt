@@ -25,6 +25,7 @@ class CountriesAdapter(private val onItemClick: (CountrySymbols) -> Unit): Recyc
     }
 
     val differ = AsyncListDiffer(this, diffCallback)
+    
     private var itemModels: List<CountrySymbols>
         get() = differ.currentList
         set(value) { differ.submitList(value) }
@@ -39,8 +40,8 @@ class CountriesAdapter(private val onItemClick: (CountrySymbols) -> Unit): Recyc
     }
 
     override fun onBindViewHolder(holder: PageViewHolder, position: Int) {
-        try{
-            with(holder){
+        try {
+            with(holder) {
                 with(itemModels[position]){
                     binding.tvSymbol.text = this.symbol
                     binding.tvName.text = this.name
@@ -53,7 +54,6 @@ class CountriesAdapter(private val onItemClick: (CountrySymbols) -> Unit): Recyc
         catch(e: Exception){
             e.message?.let { Sentry.captureMessage(it) }
         }
-
     }
 
     inner class PageViewHolder(val binding: CountryListItemsBinding): ViewHolder(binding.root)

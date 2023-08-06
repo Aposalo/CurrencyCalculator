@@ -10,12 +10,12 @@ import androidx.appcompat.app.AppCompatActivity
 import aposalo.com.currencycalculator.databinding.ActivityMainBinding
 import aposalo.com.currencycalculator.domain.local.AppDatabase
 import aposalo.com.currencycalculator.domain.model.CurrencyCalculatorModel
-import aposalo.com.currencycalculator.listeners.CalculatorListener
-import aposalo.com.currencycalculator.util.Constants
-import aposalo.com.currencycalculator.util.Constants.Companion.CURRENCY_TEXT_LABEL
-import aposalo.com.currencycalculator.util.Constants.Companion.RESULT_TEXT_LABEL
-import aposalo.com.currencycalculator.util.InternetConnectivity
-import aposalo.com.currencycalculator.util.StateManager
+import aposalo.com.currencycalculator.listeners.CalculatorListenerSetter
+import aposalo.com.currencycalculator.utils.Constants
+import aposalo.com.currencycalculator.utils.Constants.Companion.CURRENCY_TEXT_LABEL
+import aposalo.com.currencycalculator.utils.Constants.Companion.RESULT_TEXT_LABEL
+import aposalo.com.currencycalculator.utils.InternetConnectivity
+import aposalo.com.currencycalculator.utils.StateManager
 import aposalo.com.currencycalculator.workers.cleanDatabase.CleanDatabaseWorkRequest
 import aposalo.com.currencycalculator.workers.rateWorker.RateWorkerOneTimeWorkRequest
 import aposalo.com.currencycalculator.workers.rateWorker.RateWorkerPeriodicWorkRequest
@@ -25,9 +25,9 @@ const val TAG = "MainActivity"
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var viewModel: CurrencyCalculatorModel
-
     private lateinit var binding: ActivityMainBinding
+
+    private lateinit var viewModel: CurrencyCalculatorModel
 
     private lateinit var stateManager: StateManager
 
@@ -46,9 +46,13 @@ class MainActivity : AppCompatActivity() {
                 reviewManager.launchReviewFlow(this, task.result)
             }
         }
-
         mDb = AppDatabase.getInstance(applicationContext)
-        viewModel = CurrencyCalculatorModel(binding, resources, mDb, this)
+        viewModel = CurrencyCalculatorModel(
+            binding = binding,
+            context = this,
+            mDb = mDb,
+            resources = resources
+        )
         stateManager = StateManager(resources, this, binding)
         val cleanDatabaseWorkRequest = CleanDatabaseWorkRequest(this)
         cleanDatabaseWorkRequest.startWork()
@@ -66,9 +70,7 @@ class MainActivity : AppCompatActivity() {
         binding.resultLayout.setOnClickListener(onClickCountryChange(RESULT_TEXT_LABEL))
         binding.currencyLayout.setOnClickListener(onClickCountryChange(CURRENCY_TEXT_LABEL))
         stateManager.restoreLastState()
-
-        val buttonListener = CalculatorListener(binding, resources)
-        buttonListener.setOnClickListenerButtons()
+        CalculatorListenerSetter(binding, resources)
         rateWorkerWorkRequest = RateWorkerPeriodicWorkRequest(this)
         rateWorkerWorkRequest.startWork()
         val rateWorkerOneTimeWorkRequest = RateWorkerOneTimeWorkRequest(this)

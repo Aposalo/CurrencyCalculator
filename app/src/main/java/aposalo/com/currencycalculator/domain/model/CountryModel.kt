@@ -10,13 +10,7 @@ class CountryModel(mDb: AppDatabase?): ViewModel() {
 
     val countriesRepository: CountryRepository = CountryRepository(mDb)
 
-    fun getCountries(){
-        viewModelScope.launch {
-            countriesRepository.getCountries()
-        }
-    }
-
-    fun getCountries(word: String){
+    fun getCountries(word: String = String()) {
         viewModelScope.launch {
             countriesRepository.getCountries(word)
         }

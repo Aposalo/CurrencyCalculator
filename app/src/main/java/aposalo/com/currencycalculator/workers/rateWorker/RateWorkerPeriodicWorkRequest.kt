@@ -6,11 +6,11 @@ import androidx.work.Data
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequest
 import androidx.work.PeriodicWorkRequestBuilder
-import aposalo.com.currencycalculator.util.Constants
+import aposalo.com.currencycalculator.utils.Constants
 import aposalo.com.currencycalculator.workers.WorkerRequest
 import java.util.concurrent.TimeUnit
 
-class RateWorkerPeriodicWorkRequest(override val context: Context) : WorkerRequest(context) {
+class RateWorkerPeriodicWorkRequest(override val context: Context) : WorkerRequest() {
 
     private val periodicWorkRequest = PeriodicWorkRequestBuilder<RateWorker>(
         1, TimeUnit.DAYS,

@@ -1,5 +1,6 @@
 package aposalo.com.currencycalculator.domain.model
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Resources
 import android.util.Log
@@ -10,15 +11,15 @@ import aposalo.com.currencycalculator.R
 import aposalo.com.currencycalculator.databinding.ActivityMainBinding
 import aposalo.com.currencycalculator.domain.local.AppDatabase
 import aposalo.com.currencycalculator.domain.repository.CurrencyCalculatorRepository
-import aposalo.com.currencycalculator.util.CalculationExtensions.Companion.getDefaultCalculation
-import aposalo.com.currencycalculator.util.CalculationExtensions.Companion.getSolution
-import aposalo.com.currencycalculator.util.InternetConnectivity
-import aposalo.com.currencycalculator.util.Resource
-import aposalo.com.currencycalculator.util.TAG
+import aposalo.com.currencycalculator.utils.CalculationExtensions.Companion.getSolution
+import aposalo.com.currencycalculator.utils.InternetConnectivity
+import aposalo.com.currencycalculator.utils.Resource
+import aposalo.com.currencycalculator.utils.TAG
 import io.sentry.Sentry
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
+@SuppressLint("StaticFieldLeak")
 class CurrencyCalculatorModel(
     private var binding: ActivityMainBinding,
     private var resources: Resources,
@@ -33,14 +34,14 @@ class CurrencyCalculatorModel(
                 when (response) {
                     is Resource.Success -> {
                         val msg = response.message
-                        if (msg != "0" && InternetConnectivity.isOnline(context)) binding.currencyTv.text = msg?.getSolution() ?: resources.getString(R.string.init_value)
+                        if (msg != resources.getString(R.string.init_value) && InternetConnectivity.isOnline(context)) binding.currencyTv.text = msg?.getSolution() ?: resources.getString(R.string.init_value)
                         else calculateCurrencyOffline()
                     }
                     is Resource.Error -> {
                         response.message?.let { message ->
                             calculateCurrencyOffline()
                             Log.e(TAG, "An error occurred: $message")
-                            Sentry.captureMessage(message)
+                            Sentry.captureMessage("An error occurred: $message")
                         }
                     }
                     is Resource.Loading -> {
@@ -52,14 +53,14 @@ class CurrencyCalculatorModel(
     }
 
     private suspend fun calculateCurrencyOffline() {
-        val res = binding.solutionTv.text.toString().getDefaultCalculation().toFloat()
+        val res = binding.resultTv.text.toString().toFloat()
         val resRate = mDb?.latestRateDao()?.getResult(
             to = binding.currencyText.text.toString(),
             from = binding.resultText.text.toString()
         )
 
         if (resRate != null) {
-            val rate = resRate.getRate()
+            val rate = resRate.rate
             val curr = rate.times(res)
             binding.currencyTv.text = curr.toString().getSolution()
         }

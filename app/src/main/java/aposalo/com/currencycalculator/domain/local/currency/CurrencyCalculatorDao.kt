@@ -19,6 +19,6 @@ interface CurrencyCalculatorDao {
 
     @Query("SELECT * FROM currency_calculator WHERE" +
             " currency_to LIKE :to AND currency_from LIKE :from AND amount LIKE :amount LIMIT 1")
-    suspend fun getResult(to: String, from: String, amount: String): CurrencyCalculatorEntry
+    suspend fun getResult(to: String, from: String, amount: String): CurrencyCalculatorEntry?
 
 }

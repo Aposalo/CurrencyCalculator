@@ -1,20 +1,20 @@
 package aposalo.com.currencycalculator.domain.repository
 
-import android.annotation.SuppressLint
 import aposalo.com.currencycalculator.domain.local.AppDatabase
 import aposalo.com.currencycalculator.domain.local.currency.CurrencyCalculatorEntry
 import aposalo.com.currencycalculator.domain.local.rate.LatestRateEntry
 import aposalo.com.currencycalculator.domain.server.api.authentication.ApiInstance
 import aposalo.com.currencycalculator.domain.server.dto.FixerDto
-import aposalo.com.currencycalculator.util.Constants.Companion.DELAY
-import aposalo.com.currencycalculator.util.CalculationExtensions.Companion.getSolution
-import aposalo.com.currencycalculator.util.Resource
+import aposalo.com.currencycalculator.utils.CalculationExtensions.Companion.getSolution
+import aposalo.com.currencycalculator.utils.Constants
+import aposalo.com.currencycalculator.utils.Constants.Companion.DELAY
+import aposalo.com.currencycalculator.utils.Resource
 import io.sentry.Sentry
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class CurrencyCalculatorRepository(private val mDb: AppDatabase?) {
+class CurrencyCalculatorRepository(private var mDb: AppDatabase?) {
 
     private val _dataCurrencyCalculatorFlow = MutableStateFlow<Resource<FixerDto>>(Resource.Success(null))
     val dataCurrencyCalculator = _dataCurrencyCalculatorFlow.asStateFlow()
@@ -31,10 +31,9 @@ class CurrencyCalculatorRepository(private val mDb: AppDatabase?) {
         _dataCurrencyCalculatorFlow.emit(handlePageResponse())
     }
 
-    @SuppressLint("SuspiciousIndentation")
     private suspend fun handlePageResponse() : Resource<FixerDto> {
-        if (latestAmount <= 0.0f)
-            return Resource.Success(null)
+
+        if (latestAmount <= 0.0f) return Resource.Success(null)
 
         val latestAmountFormatted = latestAmount.toString().getSolution()
 
@@ -47,24 +46,31 @@ class CurrencyCalculatorRepository(private val mDb: AppDatabase?) {
         try {
             if (resultEntry != null) {
                 mDb?.currencyCalculatorDao()?.updateCurrency(resultEntry)
-                return Resource.Success(resultEntry.getResult())
+                return Resource.Success(resultEntry.result)
             }
             else {
-                val rateDb = mDb?.latestRateDao()?.getResult (
+                val localRateDb = mDb?.latestRateDao()?.getResult (
                     from = latestFrom,
                     to = latestTo
                 )
-                if (rateDb != null) {
+                if (localRateDb != null) {
                     return Resource.Success("0")
                 }
 
                 delay(DELAY)
 
-                val response = ApiInstance.longApi.getFixerConvert (
+                val response = ApiInstance.api.getFixerConvert (
                     from = latestFrom,
                     to = latestTo,
                     amount = latestAmountFormatted
                 )
+
+                val code = response.code()
+                if(code == Constants.API_EXCEEDED_CALLS_CODE)
+                {
+                    Sentry.captureMessage("API exceeded calls, please change key")
+                    return Resource.Error("Error")
+                }
 
                 if (response.isSuccessful) {
                     response.body()?.let { resultResponse ->
@@ -102,8 +108,8 @@ class CurrencyCalculatorRepository(private val mDb: AppDatabase?) {
                                 mDb?.latestRateDao()?.insertLatestRate(latestRateEntry)
                             }
                             else {
-                                rateDb.setRate(latestRate)
-                                rateDb.setLatestDate(latestDate)
+                                rateDb.rate = (latestRate)
+                                rateDb.latestDate = (latestDate)
                                 mDb?.latestRateDao()?.updateLatestRate(rateDb)
                             }
                             return Resource.Success(latestResult)

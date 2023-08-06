@@ -1,6 +1,6 @@
 package aposalo.com.currencycalculator.domain.server.api.authentication
 
-import aposalo.com.currencycalculator.util.Constants.Companion.AUTHORIZATION_TYPE
+import aposalo.com.currencycalculator.utils.Constants.Companion.AUTHORIZATION_TYPE
 import okhttp3.Interceptor
 import okhttp3.Response
 

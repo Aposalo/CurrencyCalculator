@@ -1,29 +1,32 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
-    id 'org.jetbrains.kotlin.kapt'
+    id 'com.google.devtools.ksp'
     id 'org.jetbrains.kotlin.plugin.serialization'
     id 'kotlin-android'
+    id 'kotlin-parcelize'
     id "io.sentry.android.gradle" version "3.5.0"
 }
 
+def localPropertiesFile = rootProject.file("local.properties")
+def localProperties = new Properties()
+localProperties.load(new FileInputStream(localPropertiesFile))
+
 android {
     namespace 'aposalo.com.currencycalculator'
-    compileSdk 34
+    compileSdk 33
 
     defaultConfig {
         applicationId "aposalo.com.currencycalculator"
         minSdk 24
-        targetSdk 34
-        versionCode 315
-        versionName "3.1.5"
+        targetSdk 33
+        versionCode 316
+        versionName "3.1.6"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments += ["room.schemaLocation": "$projectDir/schemas".toString()]
-            }
+        ksp {
+            arg("room.schemaLocation", "$projectDir/schemas")
         }
+        buildConfigField "String", "API_KEY", localProperties['apiKey']
     }
 
     buildTypes {
@@ -72,7 +75,7 @@ dependencies {
     implementation "androidx.room:room-ktx:2.5.2"
     implementation 'androidx.preference:preference-ktx:1.2.0'
     implementation 'androidx.core:core-ktx:1.10.1'
-    kapt "androidx.room:room-compiler:2.5.2"
+    ksp "androidx.room:room-compiler:2.5.2"
 
     //Google Play
     implementation "com.google.android.play:review-ktx:2.0.1"

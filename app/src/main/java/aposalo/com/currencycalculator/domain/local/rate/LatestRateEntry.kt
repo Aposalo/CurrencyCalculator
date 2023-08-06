@@ -1,44 +1,14 @@
 package aposalo.com.currencycalculator.domain.local.rate
 
+import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import kotlinx.parcelize.Parcelize
 
 @Entity(tableName = "latest_rate", primaryKeys = ["currency_to","currency_from"])
-class LatestRateEntry (@ColumnInfo("currency_to") private var to: String,
-                       @ColumnInfo("currency_from") private var from: String,
-                       private var rate: Float,
-                       @ColumnInfo("latest_date") private var latestDate: Long){
-
-    fun getTo(): String {
-        return to
-    }
-
-    fun setTo(to: String) {
-        this.to = to
-    }
-
-    fun getFrom(): String {
-        return from
-    }
-
-    fun setFrom(from: String) {
-        this.from = from
-    }
-
-    fun getRate(): Float {
-        return rate
-    }
-
-    fun setRate(rate: Float) {
-        this.rate = rate
-    }
-
-    fun getLatestDate(): Long {
-        return latestDate
-    }
-
-    fun setLatestDate(latestDate: Long) {
-        this.latestDate = latestDate
-    }
-
-}
+@Parcelize
+data class LatestRateEntry (
+    @ColumnInfo("currency_to") var to: String,
+    @ColumnInfo("currency_from") var from: String,
+    var rate: Float,
+    @ColumnInfo("latest_date") var latestDate: Long): Parcelable
