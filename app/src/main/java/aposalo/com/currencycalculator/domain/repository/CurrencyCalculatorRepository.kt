@@ -11,27 +11,14 @@ import aposalo.com.currencycalculator.utils.DELAY
 import aposalo.com.currencycalculator.utils.Resource
 import io.sentry.Sentry
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 
-class CurrencyCalculatorRepository(private var mDb: AppDatabase?) {
+class CurrencyCalculatorRepository(private val mDb: AppDatabase?) {
 
-    private val _dataCurrencyCalculatorFlow = MutableStateFlow<Resource<FixerDto>>(Resource.Success(null))
-    val dataCurrencyCalculator = _dataCurrencyCalculatorFlow.asStateFlow()
-
-    private var latestFrom = String()
-    private var latestTo  = String()
-    private var latestAmount  = 0.0f
-
-    suspend fun getCurrencyValue(from: String, to: String, amount: Float) {
-        _dataCurrencyCalculatorFlow.emit(Resource.Loading())
-        latestFrom = from
-        latestTo = to
-        latestAmount = amount
-        _dataCurrencyCalculatorFlow.emit(handlePageResponse())
-    }
-
-    private suspend fun handlePageResponse() : Resource<FixerDto> {
+    suspend fun handlePageResponse(
+        latestAmount: Float,
+        latestFrom: String,
+        latestTo: String
+    ): Resource<FixerDto> {
 
         if (latestAmount <= 0.0f) return Resource.Success(null)
 
