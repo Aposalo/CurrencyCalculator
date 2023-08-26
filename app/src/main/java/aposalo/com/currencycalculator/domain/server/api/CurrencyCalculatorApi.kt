@@ -3,9 +3,9 @@ package aposalo.com.currencycalculator.domain.server.api
 import aposalo.com.currencycalculator.domain.server.dto.Country
 import aposalo.com.currencycalculator.domain.server.dto.FixerDto
 import aposalo.com.currencycalculator.domain.server.dto.Rate
-import aposalo.com.currencycalculator.utils.Constants.Companion.CONVERT_ANNOTATION
-import aposalo.com.currencycalculator.utils.Constants.Companion.LATEST_ANNOTATION
-import aposalo.com.currencycalculator.utils.Constants.Companion.SYMBOLS_ANNOTATION
+import aposalo.com.currencycalculator.utils.CONVERT_ANNOTATION
+import aposalo.com.currencycalculator.utils.LATEST_ANNOTATION
+import aposalo.com.currencycalculator.utils.SYMBOLS_ANNOTATION
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query

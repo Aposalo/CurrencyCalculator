@@ -2,8 +2,8 @@ package aposalo.com.currencycalculator.activities
 
 import android.os.Bundle
 import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import aposalo.com.currencycalculator.adapters.CountriesAdapter
@@ -11,7 +11,8 @@ import aposalo.com.currencycalculator.databinding.ActivityCountryListBinding
 import aposalo.com.currencycalculator.domain.local.AppDatabase
 import aposalo.com.currencycalculator.domain.model.CountryModel
 import aposalo.com.currencycalculator.domain.model.CountrySymbols
-import aposalo.com.currencycalculator.utils.Constants
+import aposalo.com.currencycalculator.utils.CURRENCY_CHANGE
+import aposalo.com.currencycalculator.utils.CurrencyCalculatorTextWatcher
 import aposalo.com.currencycalculator.utils.Resource
 import aposalo.com.currencycalculator.utils.StateManager
 import io.sentry.Sentry
@@ -24,6 +25,8 @@ class ActivityCountryList : AppCompatActivity() {
     private lateinit var countriesAdapter : CountriesAdapter
     private lateinit var layout: String
 
+    private val tag = ActivityCountryList::class.java.simpleName
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCountryListBinding.inflate(layoutInflater)
@@ -34,6 +37,7 @@ class ActivityCountryList : AppCompatActivity() {
         viewModel.countriesRepository.data.observe(this) { response ->
             when(response) {
                 is Resource.Success -> {
+                    stopProgressBar()
                     response.data?.let { countries ->
                         val currencyList : ArrayList<CountrySymbols> = ArrayList()
                         countries.currencies.forEach { (k, v) ->
@@ -44,34 +48,45 @@ class ActivityCountryList : AppCompatActivity() {
                     }
                 }
                 is Resource.Error -> {
-                    Log.e(TAG, response.message!!)
+                    stopProgressBar()
+                    Log.e(tag, response.message!!)
                     Sentry.captureMessage(response.message)
                 }
-                is Resource.Loading -> {
-                    Log.d(TAG, "Countries are loaded.")
+                else -> {
+                    startProgressBar()
+                    Log.d(tag, "Countries are loaded.")
                 }
             }
         }
         viewModel.getCountries()
+        binding.searchCountries.addTextChangedListener(countriesTextWatcher)
+    }
 
-        binding.searchCountries.addTextChangedListener(object : TextWatcher{
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
+    private fun stopProgressBar() {
+        if (binding.progressBar.visibility == View.VISIBLE) {
+            binding.progressBar.visibility = View.GONE
+            binding.rvUCountriesLinearLayout.visibility = View.VISIBLE
+        }
+    }
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            }
+    private fun startProgressBar() {
+        if (binding.progressBar.visibility == View.GONE) {
+            binding.progressBar.visibility = View.VISIBLE
+            binding.rvUCountriesLinearLayout.visibility = View.GONE
+        }
+    }
 
-            override fun afterTextChanged(s: Editable?) {
-                viewModel.getCountries(s.toString())
-            }
-        })
+    private val countriesTextWatcher = object : CurrencyCalculatorTextWatcher {
+        override fun afterTextChanged(s: Editable) {
+            viewModel.getCountries(s.toString())
+        }
     }
 
     private fun adapterOnClick(countrySymbol: CountrySymbols) {
-        layout = if (intent != null && intent.hasExtra(Constants.CURRENCY_CHANGE)) {
-            intent.getStringExtra(Constants.CURRENCY_CHANGE) ?: String()
+        layout = if (intent != null && intent.hasExtra(CURRENCY_CHANGE)) {
+            intent.getStringExtra(CURRENCY_CHANGE) ?: String()
         }
-        else{
+        else {
             String()
         }
         val stateManager = StateManager(resources, this)
@@ -87,7 +102,5 @@ class ActivityCountryList : AppCompatActivity() {
             adapter = countriesAdapter
             layoutManager = LinearLayoutManager(this@ActivityCountryList)
         }
-
     }
-
 }

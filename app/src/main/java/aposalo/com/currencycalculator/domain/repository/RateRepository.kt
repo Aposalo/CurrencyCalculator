@@ -3,7 +3,7 @@ package aposalo.com.currencycalculator.domain.repository
 import aposalo.com.currencycalculator.domain.local.AppDatabase
 import aposalo.com.currencycalculator.domain.local.rate.LatestRateEntry
 import aposalo.com.currencycalculator.domain.server.api.authentication.ApiInstance
-import aposalo.com.currencycalculator.utils.Constants
+import aposalo.com.currencycalculator.utils.API_EXCEEDED_CALLS_CODE
 import io.sentry.Sentry
 
 class RateRepository(private var mDb : AppDatabase?) {
@@ -24,7 +24,7 @@ class RateRepository(private var mDb : AppDatabase?) {
             val newKey = k.removePrefix(latestRateFrom)
             convertedQuotes[newKey] = v
         }
-        return convertedQuotes;
+        return convertedQuotes
     }
 
     private suspend fun handleLatestRateInDatabase() {
@@ -33,7 +33,7 @@ class RateRepository(private var mDb : AppDatabase?) {
                 source = latestRateFrom
             )
             val code = response.code()
-            if(code == Constants.API_EXCEEDED_CALLS_CODE)
+            if(code == API_EXCEEDED_CALLS_CODE)
             {
                 Sentry.captureMessage("API exceeded calls, please change key")
             }

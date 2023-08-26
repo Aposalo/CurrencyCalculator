@@ -3,7 +3,6 @@ package aposalo.com.currencycalculator.activities
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
-import android.text.TextWatcher
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -11,17 +10,16 @@ import aposalo.com.currencycalculator.databinding.ActivityMainBinding
 import aposalo.com.currencycalculator.domain.local.AppDatabase
 import aposalo.com.currencycalculator.domain.model.CurrencyCalculatorModel
 import aposalo.com.currencycalculator.listeners.CalculatorListenerSetter
-import aposalo.com.currencycalculator.utils.Constants
-import aposalo.com.currencycalculator.utils.Constants.Companion.CURRENCY_TEXT_LABEL
-import aposalo.com.currencycalculator.utils.Constants.Companion.RESULT_TEXT_LABEL
-import aposalo.com.currencycalculator.utils.InternetConnectivity
+import aposalo.com.currencycalculator.utils.CURRENCY_CHANGE
+import aposalo.com.currencycalculator.utils.CURRENCY_TEXT_LABEL
+import aposalo.com.currencycalculator.utils.CurrencyCalculatorTextWatcher
+import aposalo.com.currencycalculator.utils.RESULT_TEXT_LABEL
 import aposalo.com.currencycalculator.utils.StateManager
+import aposalo.com.currencycalculator.utils.isOnline
 import aposalo.com.currencycalculator.workers.cleanDatabase.CleanDatabaseWorkRequest
 import aposalo.com.currencycalculator.workers.rateWorker.RateWorkerOneTimeWorkRequest
 import aposalo.com.currencycalculator.workers.rateWorker.RateWorkerPeriodicWorkRequest
 import com.google.android.play.core.review.ReviewManagerFactory
-
-const val TAG = "MainActivity"
 
 class MainActivity : AppCompatActivity() {
 
@@ -56,17 +54,7 @@ class MainActivity : AppCompatActivity() {
         stateManager = StateManager(resources, this, binding)
         val cleanDatabaseWorkRequest = CleanDatabaseWorkRequest(this)
         cleanDatabaseWorkRequest.startWork()
-        binding.resultTv.addTextChangedListener(object : TextWatcher {
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-            }
-
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-            }
-
-            override fun afterTextChanged(s: Editable) {
-                s.toString().updateCurrency()
-            }
-        })
+        binding.resultTv.addTextChangedListener(resultTextWatcher)
         binding.resultLayout.setOnClickListener(onClickCountryChange(RESULT_TEXT_LABEL))
         binding.currencyLayout.setOnClickListener(onClickCountryChange(CURRENCY_TEXT_LABEL))
         stateManager.restoreLastState()
@@ -75,6 +63,12 @@ class MainActivity : AppCompatActivity() {
         rateWorkerWorkRequest.startWork()
         val rateWorkerOneTimeWorkRequest = RateWorkerOneTimeWorkRequest(this)
         rateWorkerOneTimeWorkRequest.startWork()
+    }
+
+    private val resultTextWatcher = object : CurrencyCalculatorTextWatcher {
+        override fun afterTextChanged(s: Editable) {
+            s.toString().updateCurrency()
+        }
     }
 
     override fun onRestart() {
@@ -94,10 +88,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun onClickCountryChange (layout: String) : View.OnClickListener {
         return View.OnClickListener {
-            if (InternetConnectivity.isOnline(this)){
+            if (isOnline(this)) {
                 stateManager.saveLastState()
                 val intent = Intent(this@MainActivity, ActivityCountryList::class.java)
-                intent.putExtra(Constants.CURRENCY_CHANGE, layout)
+                intent.putExtra(CURRENCY_CHANGE, layout)
                 startActivity(intent)
             }
             else {

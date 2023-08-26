@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="search_padding">2.5dp</dimen>
+    <dimen name="padding_button_layout">16dp</dimen>
+    <dimen name="calculation_width">305dp</dimen>
+    <dimen name="calculation_text_size">32sp</dimen>
 </resources>

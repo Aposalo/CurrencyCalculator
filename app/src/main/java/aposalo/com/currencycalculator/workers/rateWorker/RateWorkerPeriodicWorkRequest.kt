@@ -6,7 +6,7 @@ import androidx.work.Data
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequest
 import androidx.work.PeriodicWorkRequestBuilder
-import aposalo.com.currencycalculator.utils.Constants
+import aposalo.com.currencycalculator.utils.RATE_WORKER
 import aposalo.com.currencycalculator.workers.WorkerRequest
 import java.util.concurrent.TimeUnit
 
@@ -25,7 +25,7 @@ class RateWorkerPeriodicWorkRequest(override val context: Context) : WorkerReque
 
     override fun startWork() {
         getWorkManagerInstance().enqueueUniquePeriodicWork(
-            Constants.RATE_WORKER,
+            RATE_WORKER,
             ExistingPeriodicWorkPolicy.UPDATE,
             periodicWorkRequest)
     }

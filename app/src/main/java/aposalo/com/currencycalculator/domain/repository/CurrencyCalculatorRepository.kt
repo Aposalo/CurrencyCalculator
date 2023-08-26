@@ -5,9 +5,9 @@ import aposalo.com.currencycalculator.domain.local.currency.CurrencyCalculatorEn
 import aposalo.com.currencycalculator.domain.local.rate.LatestRateEntry
 import aposalo.com.currencycalculator.domain.server.api.authentication.ApiInstance
 import aposalo.com.currencycalculator.domain.server.dto.FixerDto
-import aposalo.com.currencycalculator.utils.CalculationExtensions.Companion.getSolution
-import aposalo.com.currencycalculator.utils.Constants
-import aposalo.com.currencycalculator.utils.Constants.Companion.DELAY
+import aposalo.com.currencycalculator.utils.API_EXCEEDED_CALLS_CODE
+import aposalo.com.currencycalculator.utils.CalculationExtensions.getSolution
+import aposalo.com.currencycalculator.utils.DELAY
 import aposalo.com.currencycalculator.utils.Resource
 import io.sentry.Sentry
 import kotlinx.coroutines.delay
@@ -19,9 +19,9 @@ class CurrencyCalculatorRepository(private var mDb: AppDatabase?) {
     private val _dataCurrencyCalculatorFlow = MutableStateFlow<Resource<FixerDto>>(Resource.Success(null))
     val dataCurrencyCalculator = _dataCurrencyCalculatorFlow.asStateFlow()
 
-    private var latestFrom : String = ""
-    private var latestTo : String = ""
-    private var latestAmount : Float = 0.0f
+    private var latestFrom = String()
+    private var latestTo  = String()
+    private var latestAmount  = 0.0f
 
     suspend fun getCurrencyValue(from: String, to: String, amount: Float) {
         _dataCurrencyCalculatorFlow.emit(Resource.Loading())
@@ -66,7 +66,7 @@ class CurrencyCalculatorRepository(private var mDb: AppDatabase?) {
                 )
 
                 val code = response.code()
-                if(code == Constants.API_EXCEEDED_CALLS_CODE)
+                if(code == API_EXCEEDED_CALLS_CODE)
                 {
                     Sentry.captureMessage("API exceeded calls, please change key")
                     return Resource.Error("Error")

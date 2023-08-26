@@ -5,7 +5,7 @@ import aposalo.com.currencycalculator.domain.local.AppDatabase
 import aposalo.com.currencycalculator.domain.local.countries.CountryEntry
 import aposalo.com.currencycalculator.domain.server.api.authentication.ApiInstance
 import aposalo.com.currencycalculator.domain.server.dto.Country
-import aposalo.com.currencycalculator.utils.Constants.Companion.API_EXCEEDED_CALLS_CODE
+import aposalo.com.currencycalculator.utils.API_EXCEEDED_CALLS_CODE
 import aposalo.com.currencycalculator.utils.Resource
 import io.sentry.Sentry
 

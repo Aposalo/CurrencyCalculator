@@ -4,7 +4,7 @@ import android.content.res.Resources
 import android.view.View
 import aposalo.com.currencycalculator.R
 import aposalo.com.currencycalculator.databinding.ActivityMainBinding
-import aposalo.com.currencycalculator.utils.CalculationExtensions.Companion.getCalculation
+import aposalo.com.currencycalculator.utils.CalculationExtensions.getCalculation
 import com.google.android.material.button.MaterialButton
 
 class CalculatorListenerSetter(
@@ -17,7 +17,7 @@ class CalculatorListenerSetter(
 
     private fun clearCalculator() {
         binding.solutionTv.text = String()
-        binding.resultTv.text = resources.getString(R.string.init_value)
+        binding.resultTv.text = resources.getString(R.string.zero)
     }
 
     private fun setOnClickListenerButtons(){

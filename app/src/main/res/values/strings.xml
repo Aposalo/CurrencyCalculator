@@ -1,13 +1,27 @@
 <resources>
     <string name="app_name">Currency Calculator</string>
-    <string name="init_value">0</string>
     <string name="clear_button">CE</string>
     <string name="equal_button">=</string>
     <string name="delete_button">C</string>
     <string name="dot_button">.</string>
-    <string name="loader">...</string>
+    <string name="loader">…</string>
     <string name="GBP">GBP</string>
     <string name="EUR">EUR</string>
-    <string name="history_label">History</string>
-    <string name="search">Search...</string>
+    <string name="search">Search…</string>
+    <string name="open_bracket">(</string>
+    <string name="close_bracket">)</string>
+    <string name="divide">/</string>
+    <string name="seven">7</string>
+    <string name="eight">8</string>
+    <string name="nine">9</string>
+    <string name="multiply">*</string>
+    <string name="four">4</string>
+    <string name="five">5</string>
+    <string name="six">6</string>
+    <string name="minus">-</string>
+    <string name="one">1</string>
+    <string name="two">2</string>
+    <string name="three">3</string>
+    <string name="plus">+</string>
+    <string name="zero">0</string>
 </resources>
