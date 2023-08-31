@@ -14,22 +14,13 @@ class CurrencyCalculatorModel(mDb: AppDatabase?) : ViewModel() {
 
     private val currencyCalculatorRepository: CurrencyCalculatorRepository = CurrencyCalculatorRepository(mDb)
 
-
     private val _dataCurrencyCalculatorFlow = MutableStateFlow<Resource<FixerDto>>(Resource.Success(null))
     val dataCurrencyCalculator = _dataCurrencyCalculatorFlow.asStateFlow()
 
-    private var latestFrom = String()
-    private var latestTo  = String()
-    private var latestAmount  = 0.0f
-
     fun getUserPage(from: String, to: String,  amount: Float) {
         viewModelScope.launch {
-            _dataCurrencyCalculatorFlow.emit(Resource.Loading())
-            latestFrom = from
-            latestTo = to
-            latestAmount = amount
-            _dataCurrencyCalculatorFlow.emit(currencyCalculatorRepository.handlePageResponse(latestAmount, latestFrom,latestTo))
+            _dataCurrencyCalculatorFlow.emit(Resource.Loading())//for changing the result to ..., if there is a delay
+            _dataCurrencyCalculatorFlow.emit(currencyCalculatorRepository.handlePageResponse(amount, from, to))
         }
     }
-
 }

@@ -6,7 +6,10 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import aposalo.com.currencycalculator.databinding.ActivityMainBinding
+import aposalo.com.currencycalculator.listeners.CalculatorListenerSetter
 import aposalo.com.currencycalculator.utils.CURRENCY_CHANGE
+import aposalo.com.currencycalculator.utils.CURRENCY_TEXT_LABEL
+import aposalo.com.currencycalculator.utils.RESULT_TEXT_LABEL
 import aposalo.com.currencycalculator.utils.StateManager
 import aposalo.com.currencycalculator.utils.isOnline
 import aposalo.com.currencycalculator.workers.cleanDatabase.CleanDatabaseWorkRequest
@@ -31,6 +34,9 @@ open class MainActivityExtension: AppCompatActivity() {
         }
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.resultLayout.setOnClickListener(onClickCountryChange(RESULT_TEXT_LABEL))
+        binding.currencyLayout.setOnClickListener(onClickCountryChange(CURRENCY_TEXT_LABEL))
+        CalculatorListenerSetter(binding, resources)
         stateManager = StateManager(resources, this, binding)
         stateManager.restoreLastState()
         val cleanDatabaseWorkRequest = CleanDatabaseWorkRequest(this)
@@ -56,7 +62,7 @@ open class MainActivityExtension: AppCompatActivity() {
         super.onDestroy()
     }
 
-    fun onClickCountryChange (layout: String) : View.OnClickListener {
+    private fun onClickCountryChange (layout: String) : View.OnClickListener {
         stateManager.saveLastState()
         return View.OnClickListener {
             if (isOnline(this)) {

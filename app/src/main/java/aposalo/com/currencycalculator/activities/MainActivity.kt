@@ -8,11 +8,8 @@ import androidx.lifecycle.lifecycleScope
 import aposalo.com.currencycalculator.R
 import aposalo.com.currencycalculator.domain.local.AppDatabase
 import aposalo.com.currencycalculator.domain.model.CurrencyCalculatorModel
-import aposalo.com.currencycalculator.listeners.CalculatorListenerSetter
-import aposalo.com.currencycalculator.utils.CURRENCY_TEXT_LABEL
 import aposalo.com.currencycalculator.utils.CalculationExtensions.getSolution
 import aposalo.com.currencycalculator.utils.CurrencyCalculatorTextWatcher
-import aposalo.com.currencycalculator.utils.RESULT_TEXT_LABEL
 import aposalo.com.currencycalculator.utils.Resource
 import aposalo.com.currencycalculator.utils.isOnline
 import io.sentry.Sentry
@@ -32,9 +29,6 @@ class MainActivity : MainActivityExtension() {
         mDb = AppDatabase.getInstance(applicationContext)
         viewModel = CurrencyCalculatorModel(mDb = mDb)
         binding.resultTv.addTextChangedListener(resultTextWatcher)
-        binding.resultLayout.setOnClickListener(onClickCountryChange(RESULT_TEXT_LABEL))
-        binding.currencyLayout.setOnClickListener(onClickCountryChange(CURRENCY_TEXT_LABEL))
-        CalculatorListenerSetter(binding, resources)
         lifecycleScope.launch {
             viewModel.dataCurrencyCalculator.collectLatest { response ->
                 when (response) {
@@ -59,7 +53,7 @@ class MainActivity : MainActivityExtension() {
         }
     }
 
-    private suspend fun calculateCurrencyByRate():String {
+    private suspend fun calculateCurrencyByRate() : String {
         return try {
             val res = binding.resultTv.text.toString().toFloat()
             val resRate = mDb?.latestRateDao()?.getResult(
